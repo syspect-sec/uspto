@@ -1,0 +1,59 @@
+-- This query finds the PublicationID
+--
+SELECT a.ApplicationID, PublicationID, b.Kind from PAIR_REPORT as a
+JOIN APPLICATION as b ON
+a.ApplicationID = b.ApplicationID;
+
+==========================================
+
+- IssueDate is not present in many grant files "0000-00-00" as date???? why??
+- Applications have r1-r2 etc, and how are those processed? / what are they?  revision files?
+- are they complete revision files?  How to deal with them?
+- has ipgb20190813_wk33 been failing processing?
+
+- Look for MySQL exception types in Python
+- If it's a table lock condition, don't add 1 to the failed attempts counter
+- then the file will never have to be reprocessed due to table lock timeouts
+
+- need to prevent the removal of previous attempts from failing, remove the counter based return on fail
+
+- can move the insertion of a file_name into STARTED_FILES until after the file is finished processing
+- if bulk insertion is being used, and also move the cleaning of the database until after the file
+- has been processed
+
+- Error in the spacing of contatenated lines of the abstract
+
+======================================
+
+2. problems with year files 2002 - 2004 (pgb)
+    table grant
+        missing apptype
+        **** The apptype field is not available in XMLv2 grant datasets.  This is the application category such as design, plant or utility. However, the 'kind' field
+        is the same information, so I have added a function to convert the 'kind' to the same strings as 'appl-type' from XML4.  The comparison was made using XML2 data description file 'PatentGrantSGMLv19-Documentation.pdf' (page 84) and 'PatentGrantXMLv42-Documentation.pdf' page 6.  These documents are found in the documents/data_descriptions/ directory.
+    table inventor_g
+        all the country are listed as US and not accordingly
+        **** This has been changed.  The country data-field is specified to be included in the XML2 documents.  However, in practice it is not included in any of the XML2 grant data files.  So, I have added a check to see if there is a state included.  If the state is included and it's a US state code, then I add the country 'US' otherwise, I leave the field NULL.  The assignee country is included in all documents, however, the agent (attorney) address / country information is not.
+3. problems with year files 1976 - 2001
+    nearly all tables
+        grantid has an extra number digit (1-9) at the end -> lead mistmatch for table gracit_g
+        **** The WKU in DAT file records contains an 8 digit patent ID and a 9th digit for a "check-digit".  The check-digit os calculated as an error-correction tool.
+        The algo is included in an image and on the document GreenBookCover.psd (page 130 table 1-1)
+        **** This issue has been fixed
+
+    table inventor_g
+
+        country column has extra letter 'X' at the end
+        **** This is the correct data included in USPTO bulk data
+        **** The document GreenBookCover.psd (page 42) describes the country code is a 3 letter code for patents issued after to JULY 4th 1978 that includes 'X'.
+        **** This has been left as it is, but possible solutions include adding an extra column or altering the existing column
+
+        country column that are US are stated <null>
+        **** Inventor country (CNT) is not included in the record when a US record.
+        **** This should be fixed
+
+4. table cpcclass_g   from year 1976 - 2013 April
+    missing
+others
+    There are some other information are mismatching according to the USPTO website. I'm wondering if they have updated overtime and not updated through bulkdata.
+    there is a Class_links.log that is not processed. I'm wondering if this is important? because I want to know cpcclass or usclass as it came into part of my research.
+    I also came across that Harvard and other studies have also have bulkdata stored in their website. Have you ever got the chance to play with those data?

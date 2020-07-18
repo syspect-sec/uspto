@@ -1,0 +1,12 @@
+SGMLDECL "xml.dcl"
+
+PUBLIC "-//RTIS//DTD Patent Header V1.1 2000-10-02//EN" "..\dtds\patent-header.dtd"
+
+PUBLIC "-//OASIS//DTD XML Exchange Table Model 19990315//EN" "..\dtds\CALSxml.dtd"
+
+PUBLIC "-//PTO-OASIS//DTD XML Exchange Table Model 19990315//EN" "..\dtds\PTO-CALSxml.dtd"
+
+SYSTEM "pap-v16-2002-01-01.dtd" "..\dtds\pap-v16-2002-01-01.dtd"
+
+SYSTEM "u-specif.dtd" "..\dtds\u-specif.dtd"
+

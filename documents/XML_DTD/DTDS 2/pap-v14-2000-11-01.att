@@ -1,0 +1,1191 @@
+a-371-of-international inid-code   ""
+
+abs definitionURL   ""
+abs class   ""
+abs style   ""
+abs id   ""
+abs other   ""
+
+address st32-name   ""
+
+and definitionURL   ""
+and class   ""
+and style   ""
+and id   ""
+and other   ""
+
+annotation encoding   ""
+annotation class   ""
+annotation style   ""
+annotation id   ""
+annotation other   ""
+
+annotation-xml encoding   ""
+annotation-xml class   ""
+annotation-xml style   ""
+annotation-xml id   ""
+annotation-xml other   ""
+
+appendix-data inid-code   ""
+
+application-number st32-name   ""
+application-number inid-code   ""
+
+application-number-series-code st32-name   ""
+application-number-series-code inid-code   ""
+
+apply class   ""
+apply style   ""
+apply id   ""
+apply other   ""
+
+arccos definitionURL   ""
+arccos class   ""
+arccos style   ""
+arccos id   ""
+arccos other   ""
+
+arcsin definitionURL   ""
+arcsin class   ""
+arcsin style   ""
+arcsin id   ""
+arcsin other   ""
+
+arctan definitionURL   ""
+arctan class   ""
+arctan style   ""
+arctan id   ""
+arctan other   ""
+
+assignee st32-name   ""
+assignee inid-code   ""
+
+assignee-type st32-name   ""
+assignee-type inid-code   ""
+
+biological-deposit id   ""
+biological-deposit st32-name   ""
+
+brief-description-of-drawings st32-name   ""
+
+bvar class   ""
+bvar style   ""
+bvar id   ""
+bvar other   ""
+
+chemistry-chemdraw-file id   ""
+chemistry-chemdraw-file file   ""
+
+chemistry-cwu id   ""
+chemistry-cwu st32-name   ""
+
+chemistry-mol-file id   ""
+chemistry-mol-file file   ""
+
+ci type   ""
+ci class   ""
+ci style   ""
+ci id   ""
+ci other   ""
+
+citation st32-name   ""
+citation inid-code   ""
+
+cited-non-patent-literature st32-name   ""
+
+cited-patent-literature st32-name   ""
+
+claim id   ""
+claim st32-name   ""
+
+classification-ipc st32-name   ""
+classification-ipc inid-code   ""
+
+classification-ipc-edition st32-name   ""
+classification-ipc-edition inid-code   ""
+
+classification-ipc-primary st32-name   ""
+classification-ipc-primary inid-code   ""
+
+classification-ipc-secondary st32-name   ""
+classification-ipc-secondary inid-code   ""
+
+classification-us st32-name   ""
+classification-us inid-code   ""
+
+classification-us-primary st32-name   ""
+classification-us-primary inid-code   ""
+
+classification-us-secondary st32-name   ""
+classification-us-secondary inid-code   ""
+
+cn type   ""
+cn base   ""
+cn class   ""
+cn style   ""
+cn id   ""
+cn other   ""
+
+colspec colnum   ""
+colspec colname   ""
+colspec colwidth   ""
+colspec colsep   ""
+colspec rowsep   ""
+colspec align   ""
+colspec char   ""
+colspec charoff   ""
+
+compose definitionURL   ""
+compose class   ""
+compose style   ""
+compose id   ""
+compose other   ""
+
+condition class   ""
+condition style   ""
+condition id   ""
+condition other   ""
+
+conjugate definitionURL   ""
+conjugate class   ""
+conjugate style   ""
+conjugate id   ""
+conjugate other   ""
+
+continuation-in-part-of st32-name   ""
+continuation-in-part-of inid-code   ""
+
+continuation-of st32-name   ""
+continuation-of inid-code   ""
+
+continuations st32-name   ""
+continuations inid-code   ""
+
+continued-prosecution-application-flag st32-name   ""
+continued-prosecution-application-flag inid-code   ""
+
+continuing-reissue-of st32-name   ""
+continuing-reissue-of inid-code   ""
+
+continuity-data st32-name   ""
+continuity-data inid-code   ""
+
+copyright-statement id   ""
+
+corrected-republication-of inid-code   ""
+
+cos definitionURL   ""
+cos class   ""
+cos style   ""
+cos id   ""
+cos other   ""
+
+cosh definitionURL   ""
+cosh class   ""
+cosh style   ""
+cosh id   ""
+cosh other   ""
+
+cot definitionURL   ""
+cot class   ""
+cot style   ""
+cot id   ""
+cot other   ""
+
+coth definitionURL   ""
+coth class   ""
+coth style   ""
+coth id   ""
+coth other   ""
+
+country-code st32-name   ""
+country-code inid-code   ""
+
+cross-reference hytime   ""
+cross-reference target   ""
+
+cross-reference-to-related-applications st32-name   ""
+
+csc definitionURL   ""
+csc class   ""
+csc style   ""
+csc id   ""
+csc other   ""
+
+csch definitionURL   ""
+csch class   ""
+csch style   ""
+csch id   ""
+csch other   ""
+
+custom-character ly   ""
+custom-character lx   ""
+custom-character file   ""
+custom-character wi   ""
+custom-character he   ""
+custom-character id   ""
+
+declare type   ""
+declare scope   ""
+declare nargs   ""
+declare occurence   ""
+declare definitionURL   ""
+declare class   ""
+declare style   ""
+declare id   ""
+declare other   ""
+
+degree class   ""
+degree style   ""
+degree id   ""
+degree other   ""
+
+dependent-claim-reference hytime   ""
+dependent-claim-reference depends_on   ""
+
+deposit-accession-number st32-name   ""
+
+deposit-date st32-name   ""
+
+depository st32-name   ""
+
+detailed-description st32-name   ""
+
+determinant definitionURL   ""
+determinant class   ""
+determinant style   ""
+determinant id   ""
+determinant other   ""
+
+diff definitionURL   ""
+diff class   ""
+diff style   ""
+diff id   ""
+diff other   ""
+
+divide definitionURL   ""
+divide class   ""
+divide style   ""
+divide id   ""
+divide other   ""
+
+division-of st332-name   ""
+division-of inid-code   ""
+
+doc-number st32-name   ""
+doc-number inid-code   ""
+
+document-date st32-name   ""
+document-date inid-code   ""
+
+document-id st32-name   ""
+document-id inid-code   ""
+
+domestic-filing-data st32-name   ""
+domestic-filing-data inid-code   ""
+
+drawing-reference-character id   ""
+
+email data-format   ""
+
+entry colname   ""
+entry namest   ""
+entry nameend   ""
+entry morerows   ""
+entry colsep   ""
+entry rowsep   ""
+entry align   ""
+entry char   ""
+entry charoff   ""
+entry valign   ""
+
+eq definitionURL   ""
+eq class   ""
+eq style   ""
+eq id   ""
+eq other   ""
+
+exists definitionURL   ""
+exists class   ""
+exists style   ""
+exists id   ""
+exists other   ""
+
+exp definitionURL   ""
+exp class   ""
+exp style   ""
+exp id   ""
+exp other   ""
+
+factorial definitionURL   ""
+factorial class   ""
+factorial style   ""
+factorial id   ""
+factorial other   ""
+
+family-name st32-name   ""
+
+federal-research-statement st32-name   ""
+
+figure id   ""
+figure st32-name   ""
+
+filing-date st32-name   ""
+filing-date inid-code   ""
+
+first-named-inventor st32-name   ""
+first-named-inventor inid-code   ""
+
+fn definitionURL   ""
+fn class   ""
+fn style   ""
+fn id   ""
+fn other   ""
+
+footnote st32-name   ""
+footnote id   ""
+
+forall definitionURL   ""
+forall class   ""
+forall style   ""
+forall id   ""
+forall other   ""
+
+foreign-priority-data st32-name   ""
+foreign-priority-data inid-code   ""
+
+gcd definitionURL   ""
+gcd class   ""
+gcd style   ""
+gcd id   ""
+gcd other   ""
+
+geq definitionURL   ""
+geq class   ""
+geq style   ""
+geq id   ""
+geq other   ""
+
+given-name st32-name   ""
+
+grant-number hytime   ""
+
+gt definitionURL   ""
+gt class   ""
+gt style   ""
+gt id   ""
+gt other   ""
+
+heading lvl   ""
+heading align   ""
+
+ident definitionURL   ""
+ident class   ""
+ident style   ""
+ident id   ""
+ident other   ""
+
+image id   ""
+image he   ""
+image wi   ""
+image file   ""
+image lx   ""
+image ly   ""
+image imf   ""
+image ti   ""
+image st32-name   ""
+
+implies definitionURL   ""
+implies class   ""
+implies style   ""
+implies id   ""
+implies other   ""
+
+in definitionURL   ""
+in class   ""
+in style   ""
+in id   ""
+in other   ""
+
+int definitionURL   ""
+int class   ""
+int style   ""
+int id   ""
+int other   ""
+
+international-conventions st32-name   ""
+international-conventions inid-code   ""
+
+intersect definitionURL   ""
+intersect class   ""
+intersect style   ""
+intersect id   ""
+intersect other   ""
+
+interval closure   ""
+interval class   ""
+interval style   ""
+interval id   ""
+interval other   ""
+
+inventor st32-name   ""
+inventor inid-code   ""
+
+inventors st32-name   ""
+inventors inid-code   ""
+
+inverse definitionURL   ""
+inverse class   ""
+inverse style   ""
+inverse id   ""
+inverse other   ""
+
+ipc st32-name   ""
+ipc inid-code   ""
+
+kind-code st32-name   ""
+kind-code inid-code   ""
+
+lambda class   ""
+lambda style   ""
+lambda id   ""
+lambda other   ""
+
+leq definitionURL   ""
+leq class   ""
+leq style   ""
+leq id   ""
+leq other   ""
+
+limit definitionURL   ""
+limit class   ""
+limit style   ""
+limit id   ""
+limit other   ""
+
+list order   ""
+list class   ""
+list style   ""
+list id   ""
+list other   ""
+
+lists id   ""
+
+ln definitionURL   ""
+ln class   ""
+ln style   ""
+ln id   ""
+ln other   ""
+
+log definitionURL   ""
+log class   ""
+log style   ""
+log id   ""
+log other   ""
+
+logbase class   ""
+logbase style   ""
+logbase id   ""
+logbase other   ""
+
+lowlimit class   ""
+lowlimit style   ""
+lowlimit id   ""
+lowlimit other   ""
+
+lt definitionURL   ""
+lt class   ""
+lt style   ""
+lt id   ""
+lt other   ""
+
+maction actiontype   ""
+maction selection   ""
+maction class   ""
+maction style   ""
+maction id   ""
+maction other   ""
+
+maligngroup groupalign   ""
+maligngroup class   ""
+maligngroup style   ""
+maligngroup id   ""
+maligngroup other   ""
+
+malignmark edge   ""
+malignmark class   ""
+malignmark style   ""
+malignmark id   ""
+malignmark other   ""
+
+math class   ""
+math style   ""
+math id   ""
+math other   ""
+math macros   ""
+math mode   ""
+math type   ""
+math name   ""
+math height   ""
+math width   ""
+math baseline   ""
+math overflow   ""
+math altimg   ""
+math alttext   ""
+
+math-cwu id   ""
+math-cwu display   ""
+math-cwu st32-name   ""
+
+mathematica-file id   ""
+mathematica-file file   ""
+
+matrix class   ""
+matrix style   ""
+matrix id   ""
+matrix other   ""
+
+matrixrow class   ""
+matrixrow style   ""
+matrixrow id   ""
+matrixrow other   ""
+
+max definitionURL   ""
+max class   ""
+max style   ""
+max id   ""
+max other   ""
+
+mean definitionURL   ""
+mean class   ""
+mean style   ""
+mean id   ""
+mean other   ""
+
+median definitionURL   ""
+median class   ""
+median style   ""
+median id   ""
+median other   ""
+
+merror class   ""
+merror style   ""
+merror id   ""
+merror other   ""
+
+mfenced open   ""
+mfenced close   ""
+mfenced separators   ""
+mfenced class   ""
+mfenced style   ""
+mfenced id   ""
+mfenced other   ""
+
+mfrac linethickness   ""
+mfrac class   ""
+mfrac style   ""
+mfrac id   ""
+mfrac other   ""
+
+mi fontsize   ""
+mi fontweight   ""
+mi fontstyle   ""
+mi fontfamily   ""
+mi color   ""
+mi class   ""
+mi style   ""
+mi id   ""
+mi other   ""
+
+middle-name st32-name   ""
+
+min definitionURL   ""
+min class   ""
+min style   ""
+min id   ""
+min other   ""
+
+minus definitionURL   ""
+minus class   ""
+minus style   ""
+minus id   ""
+minus other   ""
+
+mmultiscripts subscriptshift   ""
+mmultiscripts superscriptshift   ""
+mmultiscripts class   ""
+mmultiscripts style   ""
+mmultiscripts id   ""
+mmultiscripts other   ""
+
+mn fontsize   ""
+mn fontweight   ""
+mn fontstyle   ""
+mn fontfamily   ""
+mn color   ""
+mn class   ""
+mn style   ""
+mn id   ""
+mn other   ""
+
+mo fontsize   ""
+mo fontweight   ""
+mo fontstyle   ""
+mo fontfamily   ""
+mo color   ""
+mo form   ""
+mo fence   ""
+mo separator   ""
+mo lspace   ""
+mo rspace   ""
+mo stretchy   ""
+mo symmetric   ""
+mo maxsize   ""
+mo minsize   ""
+mo largeop   ""
+mo movablelimits   ""
+mo accent   ""
+mo class   ""
+mo style   ""
+mo id   ""
+mo other   ""
+
+mode definitionURL   ""
+mode class   ""
+mode style   ""
+mode id   ""
+mode other   ""
+
+moment definitionURL   ""
+moment class   ""
+moment style   ""
+moment id   ""
+moment other   ""
+
+mover accent   ""
+mover class   ""
+mover style   ""
+mover id   ""
+mover other   ""
+
+mpadded width   ""
+mpadded height   ""
+mpadded depth   ""
+mpadded lspace   ""
+mpadded class   ""
+mpadded style   ""
+mpadded id   ""
+mpadded other   ""
+
+mphantom class   ""
+mphantom style   ""
+mphantom id   ""
+mphantom other   ""
+
+mprescripts class   ""
+mprescripts style   ""
+mprescripts id   ""
+mprescripts other   ""
+
+mroot class   ""
+mroot style   ""
+mroot id   ""
+mroot other   ""
+
+mrow class   ""
+mrow style   ""
+mrow id   ""
+mrow other   ""
+
+ms fontsize   ""
+ms fontweight   ""
+ms fontstyle   ""
+ms fontfamily   ""
+ms color   ""
+ms lquote   ""
+ms rquote   ""
+ms class   ""
+ms style   ""
+ms id   ""
+ms other   ""
+
+mspace width   ""
+mspace height   ""
+mspace depth   ""
+mspace class   ""
+mspace style   ""
+mspace id   ""
+mspace other   ""
+
+msqrt class   ""
+msqrt style   ""
+msqrt id   ""
+msqrt other   ""
+
+mstyle fontsize   ""
+mstyle fontweight   ""
+mstyle fontstyle   ""
+mstyle fontfamily   ""
+mstyle color   ""
+mstyle form   ""
+mstyle fence   ""
+mstyle separator   ""
+mstyle lspace   ""
+mstyle rspace   ""
+mstyle stretchy   ""
+mstyle symmetric   ""
+mstyle maxsize   ""
+mstyle minsize   ""
+mstyle largeop   ""
+mstyle movablelimits   ""
+mstyle accent   ""
+mstyle lquote   ""
+mstyle rquote   ""
+mstyle linethickness   ""
+mstyle scriptlevel   ""
+mstyle scriptsizemultiplier   ""
+mstyle scriptminsize   ""
+mstyle background   ""
+mstyle open   ""
+mstyle close   ""
+mstyle separators   ""
+mstyle subscriptshift   ""
+mstyle superscriptshift   ""
+mstyle accentunder   ""
+mstyle align   ""
+mstyle rowalign   ""
+mstyle columnalign   ""
+mstyle groupalign   ""
+mstyle alignmentscope   ""
+mstyle rowspacing   ""
+mstyle columnspacing   ""
+mstyle rowlines   ""
+mstyle columnlines   ""
+mstyle frame   ""
+mstyle framespacing   ""
+mstyle equalrows   ""
+mstyle equalcolumns   ""
+mstyle displaystyle   ""
+mstyle rowspan   ""
+mstyle columnspan   ""
+mstyle edge   ""
+mstyle actiontype   ""
+mstyle selection   ""
+mstyle class   ""
+mstyle style   ""
+mstyle id   ""
+mstyle other   ""
+
+msub subscriptshift   ""
+msub class   ""
+msub style   ""
+msub id   ""
+msub other   ""
+
+msubsup subscriptshift   ""
+msubsup superscriptshift   ""
+msubsup class   ""
+msubsup style   ""
+msubsup id   ""
+msubsup other   ""
+
+msup superscriptshift   ""
+msup class   ""
+msup style   ""
+msup id   ""
+msup other   ""
+
+mtable align   ""
+mtable rowalign   ""
+mtable columnalign   ""
+mtable groupalign   ""
+mtable alignmentscope   ""
+mtable rowspacing   ""
+mtable columnspacing   ""
+mtable rowlines   ""
+mtable columnlines   ""
+mtable frame   ""
+mtable framespacing   ""
+mtable equalrows   ""
+mtable equalcolumns   ""
+mtable displaystyle   ""
+mtable class   ""
+mtable style   ""
+mtable id   ""
+mtable other   ""
+
+mtd rowalign   ""
+mtd columnalign   ""
+mtd groupalign   ""
+mtd rowspan   ""
+mtd columnspan   ""
+mtd class   ""
+mtd style   ""
+mtd id   ""
+mtd other   ""
+
+mtext fontsize   ""
+mtext fontweight   ""
+mtext fontstyle   ""
+mtext fontfamily   ""
+mtext color   ""
+mtext class   ""
+mtext style   ""
+mtext id   ""
+mtext other   ""
+
+mtr rowalign   ""
+mtr columnalign   ""
+mtr groupalign   ""
+mtr class   ""
+mtr style   ""
+mtr id   ""
+mtr other   ""
+
+munder accentunder   ""
+munder class   ""
+munder style   ""
+munder id   ""
+munder other   ""
+
+munderover accent   ""
+munderover accentunder   ""
+munderover class   ""
+munderover style   ""
+munderover id   ""
+munderover other   ""
+
+name st32-name   ""
+
+name-prefix st32-name   ""
+
+name-suffix st32-name   ""
+
+neq definitionURL   ""
+neq class   ""
+neq style   ""
+neq id   ""
+neq other   ""
+
+non-provisional-of-provisional st32-name   ""
+non-provisional-of-provisional inid-code   ""
+
+none class   ""
+none style   ""
+none id   ""
+none other   ""
+
+not definitionURL   ""
+not class   ""
+not style   ""
+not id   ""
+not other   ""
+
+notin definitionURL   ""
+notin class   ""
+notin style   ""
+notin id   ""
+notin other   ""
+
+notprsubset definitionURL   ""
+notprsubset class   ""
+notprsubset style   ""
+notprsubset id   ""
+notprsubset other   ""
+
+notsubset definitionURL   ""
+notsubset class   ""
+notsubset style   ""
+notsubset id   ""
+notsubset other   ""
+
+object-reference id   ""
+
+or definitionURL   ""
+or class   ""
+or style   ""
+or id   ""
+or other   ""
+
+organization-name st32-name   ""
+
+paragraph id   ""
+paragraph lvl   ""
+paragraph st32-name   ""
+
+paragraph-federal-research-statement id   ""
+
+partialdiff definitionURL   ""
+partialdiff class   ""
+partialdiff style   ""
+partialdiff id   ""
+partialdiff other   ""
+
+party st32-name   ""
+
+patent-application-publication version   ""
+patent-application-publication distribution   ""
+
+pct-application st32-name   ""
+pct-application inid-code   ""
+
+pct-publication st32-name   ""
+pct-publication inid-code   ""
+
+plus definitionURL   ""
+plus class   ""
+plus style   ""
+plus id   ""
+plus other   ""
+
+power definitionURL   ""
+power class   ""
+power style   ""
+power id   ""
+power other   ""
+
+prior-publication inid-code   ""
+
+priority-application-number st32-name   ""
+priority-application-number inid-code   ""
+
+product definitionURL   ""
+product class   ""
+product style   ""
+product id   ""
+product other   ""
+
+program-listing id   ""
+program-listing xml:space   ""
+
+program-listing-deposit id   ""
+program-listing-deposit maximum-page-count   ""
+
+prsubset definitionURL   ""
+prsubset class   ""
+prsubset style   ""
+prsubset id   ""
+prsubset other   ""
+
+publication-filing-type inid-code   ""
+
+quotient definitionURL   ""
+quotient class   ""
+quotient style   ""
+quotient id   ""
+quotient other   ""
+
+reissue-of st32-name   ""
+reissue-of inid-code   ""
+
+reln class   ""
+reln style   ""
+reln id   ""
+reln other   ""
+
+rem definitionURL   ""
+rem class   ""
+rem style   ""
+rem id   ""
+rem other   ""
+
+root definitionURL   ""
+root class   ""
+root style   ""
+root id   ""
+root other   ""
+
+row rowsep   ""
+row valign   ""
+
+rule-47-flag st32-name   ""
+rule-47-flag inid-code   ""
+
+s-2 seq-no   ""
+
+sdev definitionURL   ""
+sdev class   ""
+sdev style   ""
+sdev id   ""
+sdev other   ""
+
+sec definitionURL   ""
+sec class   ""
+sec style   ""
+sec id   ""
+sec other   ""
+
+sech definitionURL   ""
+sech class   ""
+sech style   ""
+sech id   ""
+sech other   ""
+
+selector definitionURL   ""
+selector class   ""
+selector style   ""
+selector id   ""
+selector other   ""
+
+semantics definitionURL   ""
+semantics class   ""
+semantics style   ""
+semantics id   ""
+semantics other   ""
+
+sep class   ""
+sep style   ""
+sep id   ""
+sep other   ""
+
+sequence-cwu id   ""
+sequence-cwu st32-name   ""
+
+set class   ""
+set style   ""
+set id   ""
+set other   ""
+
+setdiff definitionURL   ""
+setdiff class   ""
+setdiff style   ""
+setdiff id   ""
+setdiff other   ""
+
+sin definitionURL   ""
+sin class   ""
+sin style   ""
+sin id   ""
+sin other   ""
+
+sinh definitionURL   ""
+sinh class   ""
+sinh style   ""
+sinh id   ""
+sinh other   ""
+
+subdoc-abstract st32-name   ""
+subdoc-abstract inid-code   ""
+
+subdoc-bibliographic-information st32-name   ""
+subdoc-bibliographic-information inid-code   ""
+
+subdoc-claims st32-name   ""
+
+subdoc-description st32-name   ""
+
+subdoc-drawings id   ""
+subdoc-drawings st32-name   ""
+
+subset definitionURL   ""
+subset class   ""
+subset style   ""
+subset id   ""
+subset other   ""
+
+substitution-for st32-name   ""
+substitution-for inid-code   ""
+
+sum definitionURL   ""
+sum class   ""
+sum style   ""
+sum id   ""
+sum other   ""
+
+summary-of-invention st32-name   ""
+
+table frame   ""
+table colsep   ""
+table rowsep   ""
+table pgwide   ""
+
+table-cwu id   ""
+table-cwu display   ""
+table-cwu st32-name   ""
+
+tan definitionURL   ""
+tan class   ""
+tan style   ""
+tan id   ""
+tan other   ""
+
+tanh definitionURL   ""
+tanh class   ""
+tanh style   ""
+tanh id   ""
+tanh other   ""
+
+tbody valign   ""
+
+technical-information st32-name   ""
+
+telephone data-format   ""
+
+tendsto definitionURL   ""
+tendsto type   ""
+tendsto class   ""
+tendsto style   ""
+tendsto id   ""
+tendsto other   ""
+
+tgroup cols   ""
+tgroup colsep   ""
+tgroup rowsep   ""
+tgroup align   ""
+
+thead valign   ""
+
+times definitionURL   ""
+times class   ""
+times style   ""
+times id   ""
+times other   ""
+
+title-of-invention st32-name   ""
+title-of-invention inid-code   ""
+
+transpose definitionURL   ""
+transpose class   ""
+transpose style   ""
+transpose id   ""
+transpose other   ""
+
+union definitionURL   ""
+union class   ""
+union style   ""
+union id   ""
+union other   ""
+
+uplimit class   ""
+uplimit style   ""
+uplimit id   ""
+uplimit other   ""
+
+usc102e-date st32-name   ""
+
+usc371-date st32-name   ""
+usc371-date inid-code   ""
+
+uspc st32-name   ""
+uspc inid-code   ""
+
+uspc-freeform st32-name   ""
+uspc-freeform inid-code   ""
+
+variance definitionURL   ""
+variance class   ""
+variance style   ""
+variance id   ""
+variance other   ""
+
+vector class   ""
+vector style   ""
+vector id   ""
+vector other   ""
+
+xor definitionURL   ""
+xor class   ""
+xor style   ""
+xor id   ""
+xor other   ""
+

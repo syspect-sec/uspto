@@ -1,0 +1,55 @@
+<classifications-cpc>
+  <main-cpc>
+    <classification-cpc>
+    <cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+    <section>A</section>
+    <class>61</class>
+    <subclass>B</subclass>
+    <main-group>5</main-group>
+    <subgroup>04525</subgroup>
+    <symbol-position>F</symbol-position>
+    <classification-value>I</classification-value>
+    <action-date><date>20200114</date></action-date>
+    <generating-office><country>US</country></generating-office>
+    <classification-status>B</classification-status>
+    <classification-data-source>H</classification-data-source>
+    <scheme-origination-code>C</scheme-origination-code>
+    </classification-cpc>
+  </main-cpc>
+
+  <further-cpc>
+    <classification-cpc>
+    <cpc-version-indicator><date>20130101</date></cpc-version-indicator>
+    <section>A</section>
+    <class>61</class>
+    <subclass>B</subclass>
+    <main-group>5</main-group>
+    <subgroup>0432</subgroup>
+    <symbol-position>L</symbol-position>
+    <classification-value>A</classification-value>
+    <action-date><date>20200114</date></action-date>
+    <generating-office><country>US</country></generating-office>
+    <classification-status>B</classification-status>
+    <classification-data-source>H</classification-data-source>
+    <scheme-origination-code>C</scheme-origination-code>
+    </classification-cpc>
+  </further-cpc>
+</classifications-cpc>
+
+<us-field-of-classification-search>
+<classification-national>
+<country>US</country>
+<main-classification>600523</main-classification>
+</classification-national>
+<classification-cpc-text>A61B 5/04525</classification-cpc-text>
+<classification-cpc-text>A61B 5/02438</classification-cpc-text>
+<classification-cpc-text>A61B 5/14551</classification-cpc-text>
+<classification-cpc-text>A61B 5/7264</classification-cpc-text>
+<classification-cpc-text>A61B 7/003</classification-cpc-text>
+<classification-cpc-text>A61B 2560/0412</classification-cpc-text>
+<classification-cpc-text>A61B 5/113</classification-cpc-text>
+<classification-cpc-text>A61B 2562/0219</classification-cpc-text>
+<classification-cpc-text>A61B 5/02444</classification-cpc-text>
+<classification-cpc-text>A61B 5/0432</classification-cpc-text>
+<classification-cpc-text>A61B 5/6898</classification-cpc-text>
+</us-field-of-classification-search>

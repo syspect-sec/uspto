@@ -1,0 +1,62 @@
+Application XML1
+================
+
+Things I have already checked and validated
+1. AGENT_A : Address, LastName, FirstName, Country Are NOT included in raw data
+2. ASSIGNEE_A : Most City, State, Country are not available from raw data
+3. INVENTOR_A : No nationality or residence is included in raw data
+4. APPLICANT_A : No applicant data is available for XML1
+
+** Maybe INVENTOR_A nationality and residence can be removed as table fields
+
+Application XML4
+================
+
+1. AGENT_A : NO agent data is available in XML4 application raw data
+2. ASSIGNEE_A : Address is not available in XML4 application
+3. ASSIGNEE_A, sometimes there is no orgname, there is only firstname / lastname
+4. USCLASS_A : *** there are VERY FEW usclass available in some XML4 application raw data
+5. USCLASS_A : *** There is not discernable way to interpret the US class in 2010 files.
+  There are leading spaces, sometimes no spaces, sometimes dividing spaces.  No documentation.
+
+NOTE: possible to get the application USCLASS from the office action API?
+
+Grant APS
+=========
+
+1. FOREIGNPRIORITY_G : There is no `kind` available (can be removed from table?)
+2. FORPATCIT_G : There is no `kind` `category`, or `name` available in raw data
+3. GRACIT_G : No `kind`, category, available in raw data
+4. GRANT : app_type is single digit ID, not sure the meaning
+5. APPLICANT_G : There is no applicant data available in raw data
+
+Grant XML2
+==========
+
+1. FOREIGNPRIORITY_G : There is no `kind` available (can be removed from table?)
+2. Grant length is available in some grant XML but it's 0 in database instead of NULL when not available
+4. INVENTOR_G : Nationality and Residence are available but not being parsed
+5. GRACIT_G : tag combines US and non-us patcit.  How to tell the difference?  Some don't have `kind`, none have a country.
+  the manual says that US citations are first.  The ones without a `kind` are always last... but some without `kind`
+  also seem to have a US patent number?
+6. APPLICANT_G : XML2 grants do not have any applicant data available
+
+Grant XML4
+==========
+
+1. Grant length is available sometimes, but it's 0 in the database instead of null?
+2. AGENT_G if no country provided then unknown is provided
+3. GRACIT_G many citation records do not have name.
+
+ST.32
+=====
+<!--Assignee type code:
+01 Unassigned
+02 United States company or corporation
+03 Foreign company or corporation
+04 United States individual
+05 Foreign individual
+06 United States government
+07 Foreign government
+08 County government (US)
+09 State government (US)-->

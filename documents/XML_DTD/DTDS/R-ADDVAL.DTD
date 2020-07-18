@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DOCTYPE our-added-value [ -->
+
+<!-- *************************************************************** -->
+<!-- * DOCUMENT TYPE DEFINITION FOR UNITED STATES PATENT           * -->
+<!-- * APPLICATION HEADER. Reference this DTD as                   * -->
+<!-- * PUBLIC "-//RTIS//DTD Patent Header V1.1 2000-10-02//EN"     * -->
+<!-- *                                                             * -->
+<!-- * This DTD is used internanally by RTIS to provide processing * -->
+<!-- * information needed by the Patent Application Conversion     * -->
+<!-- * programs to produce the XML Patent Application files.       * -->
+<!-- *************************************************************** -->
+
+<!-- *************************************************************** -->
+<!-- * Change Log                                                  * -->
+<!-- * Latest Revision: 12/5/00 3:16PM                             * -->
+<!-- *                                                             * -->
+<!-- * 05DEC00                                                     * -->
+<!-- *   1) Added otional element <datfile-path> to                * -->
+<!-- *      <our-added-value>                                      * -->
+<!-- * 31OCT00                                                     * -->
+<!-- *   1) Changed <patent-header> to <our-added-value>           * -->
+<!-- *   2) Added element <publication-info>                       * -->
+<!-- *   3) Changed <document-number> to <pub-number>              * -->
+<!-- *   4) Changed <document-date> to <pub-date>                  * -->
+<!-- *                                                             * -->
+<!-- * 04OCT00                                                     * -->
+<!-- *   1) Original Date                                          * -->
+<!-- *   2) Changed <assignee-code> to <assignee-type>             * -->
+<!-- *************************************************************** -->
+
+<!ELEMENT our-added-value (our-production-number?, application-number,
+                           publication-info, assignee-type?,
+                           drawing-sheets?, datfile-path?)             >
+
+<!ELEMENT publication-info (pub-number, kind-code, pub-date,
+                            country-code?)                             >
+
+<!ELEMENT pub-number (#PCDATA)                                         >
+
+<!ELEMENT kind-code (#PCDATA)                                          >
+
+<!ELEMENT drawing-sheets (#PCDATA)                                     >
+
+<!ELEMENT our-production-number (#PCDATA)                              >
+
+<!ELEMENT application-number (#PCDATA)                                 >
+
+<!ELEMENT assignee-type (#PCDATA)                                      >
+
+<!ELEMENT pub-date (#PCDATA)                                           >
+
+<!ELEMENT country-code (#PCDATA)                                       >
+
+<!ELEMENT datfile-path (#PCDATA)                                       >
+
+<!-- ************** End of PATENT-HEADER DTD *********************** --> 

@@ -1,0 +1,35 @@
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Config files
+######################
+*.cnf
+
+# Logs
+######################
+LOG/old_log_files
+LOG/old_link_files
+*.log
+
+# CSV Files in /CSV directory
+######################
+/CSV/CSV_A/*
+/CSV/CSV_G/*
+/CSV/CSV_P/*
+/CSV/CSV_C/*
+
+
+# Temp Storage Directory
+########################
+/TMP/*
+
+# Ignnore Python .pyc files
+###########################
+*.pyc

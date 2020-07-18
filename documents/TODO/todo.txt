@@ -1,0 +1,66 @@
+# Contact USPTO about their data ingetrity problems. Suggest munging the data properly
+# and then reissuing even the old data as xml instead of .dat.  The biggest issues are
+# Dates 0000-00-00 and also some other data fields (cpcclass) have data too long for
+# the documentation
+
+# Test the mysql insert statement consider adding support for other databases (blazingdb??)
+
+# Ensure and improve the idenfication of malformed data as it passes into the database
+# for all xml data configurations and records including application, grant, and PAIR
+
+# Look at building a front-end for the python UI using tinkr or other front end.
+# Web front-end
+# Build scripts that create statistical tables to be run after the initial script and include an updater in
+# the updater script.
+
+# Create a cmd line argument that will reset the entire system to fresh
+-remove download files
+-remove all CSV files
+-delete and refresh the schema
+
+# Are the zip, and extracted xml, or other tmp files being discraded to free memory efficiently properly?
+
+# Write a function that can create separate threads for the GPU
+https://stackoverflow.com/questions/5957554/python-gpu-programming
+https://www.youtube.com/watch?v=jKV1m8APttU
+https://www.youtube.com/watch?v=dPQnFXD7DxM
+
+# TODO: make a config file with: number_of_threads, database config, and other required info.  Read the config file into the program at runtime.
+
+# TODO: withdrawn patent file into database
+# TODO: UPC to CPC concordance table
+# TODO: UPC class names and definitions
+# TODO:
+
+# TODO: FREF .. APS manual missed ICL as a possible datatype.
+Also OCL is not required.  It's not included all the time.
+
+#TODO: how to fix class numbers like this????: Mark as malformed and build scraper to fix later.
+# Sometimes length too long (period missing)
+
+XCL  12356821
+
+# Sometimes length too short (this case, class is first two, subclass is last 3)
+XCL 29234
+
+TODO: XCL/OCL class with array length 3 when split(" ")
+TODO: ICL with only 4 characters.
+
+# TODO: malformed class, main class is 29.  lstrip()????? to find the non-existant leading zero??
+OCL   29596
+XCL   29606
+XCL   29609
+XCL  310 42
+XCL  310259
+EDF  7
+ICL  H02K 1509
+FSC   29
+FSS  596;598;609;606
+FSC  310
+FSS  42;43;259
+
+#TODO: check this patent number 61675695 class parsing - SHOULD BE FIXED NOW
+
+#TODO: CLMS not found in 2001 file, but may be included in other files. need to parse.
+#TODO: DETD not found in 2001 files, but may be included in other year files. need to parse.
+#TODO: BSUM not found in 2001 file, but may be included in other year files.  Need to parse.
