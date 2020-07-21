@@ -58,7 +58,6 @@ def process_PAIR_content(args_array):
                 USPTOStorePAIRData.store_PAIR_data(processed_data_array, args_array)
             line_cnt += 1
 
-
     # If not sandbox mode, then delete the .zip file
     if args_array['sandbox'] == False and os.path.exists(args_array['temp_zip_file_name']):
         # Print message to stdout
@@ -120,6 +119,8 @@ def set_table_name_from_type(pair_type):
     elif pair_type == "correspondence": return "uspto.CORRESPONDENCE_P"
     else: return None
 
+# Extracts a line list into dictionary with keys
+# named for the database columns
 def extract_csv_line(args_array, line):
 
     #print(line)

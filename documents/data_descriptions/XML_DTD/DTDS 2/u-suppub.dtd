@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- (u-suppub.dtd) 
+Revision history
+
+******************************************
+Date:        6/28/00
+Version:     0.0.1
+Author:      AWB    
+Description: 
+1. added i4i's UNICODE definitions
+2. supp-pub.version: added class attribute, value "version"
+******************************************
+Date:        6/28/00
+Version:     0.0.2
+Author:      AWB    
+Description: 
+1. prior-publication  document-id: changed document-id to one-or-more (+)
+******************************************
+Date:        8/3/00
+Version:     0.0.3
+Author:      AWB    
+Description: 
+1. added element "international-conventions" and its children
+******************************************
+Date:        9/8/00
+Version:     0.0.4
+Author:      AWB    
+Description: 
+1. made data-format attribute for application-number 8 digits instead of 7
+2. made usc371-date optional
+3. kept usc102e-date as #PCDATA.  PALM/PGPUB must provide either a date if exists, or "none"
+******************************************
+Date:        9/26/00
+Version:     0.0.5
+Author:      AWB    
+Description: 
+1. Added entity UNKNOWN, Unicode value of 9608.
+******************************************
+-->
+
+<!--PUBLIC "-//USPTO//DTD TEAM Project supplemental-pub-data-2000-09-26 Doctype//EN"-->
+
+<!-- General unknown UNICODE characters will be replaced by the following entity reference -->
+<!-- FYI, the name will be in ALL CAPS for ease of finding when looking at XML files in text editors -->
+<!ENTITY UNKNOWN "&#9608;">
+
+<!-- Insert UNICODE/ISO character sets here -->
+<!-- ISOgrk1 -->
+<!-- This version of the entity set can be used with any SGML document
+     which uses ISO 10646 as its document character set. 
+     This includes XML documents and ISO HTML documents.
+     
+     Creator: Rick Jelliffe, from HTMLlat1
+     
+     Version: 1997-07-07
+-->
+<!-- Added to conform to XML spec. Do NOT open and save using Near and Far, 
+	these escape sequences will be replaced with literals. BA 5/3/00 -->
+<!ENTITY apos "&#39;"> 
+
+
+<!-- Portions (c) International Organization for Standardization 1986
+     Permission to copy in any form is granted for use with
+     conforming SGML systems and applications as defined in
+     ISO 8879, provided this notice is included in all copies.
+-->
+
+<!ENTITY nbsp   "&#160;">
+<!ENTITY iexcl  "&#161;">
+<!ENTITY cent   "&#162;">
+<!ENTITY pound  "&#163;">
+<!ENTITY curren "&#164;">
+<!ENTITY yen    "&#165;">
+<!ENTITY brvbar "&#166;">
+<!ENTITY sect   "&#167;">
+<!ENTITY uml    "&#168;">
+<!ENTITY copy   "&#169;">
+<!ENTITY ordf   "&#170;">
+<!ENTITY laquo  "&#171;">
+<!ENTITY not    "&#172;">
+<!ENTITY shy    "&#173;">
+<!ENTITY reg    "&#174;">
+<!ENTITY macr   "&#175;">
+<!ENTITY deg    "&#176;">
+<!ENTITY plusmn "&#177;">
+<!ENTITY sup2   "&#178;">
+<!ENTITY sup3   "&#179;">
+<!ENTITY acute  "&#180;">
+<!ENTITY micro  "&#181;">
+<!ENTITY para   "&#182;">
+<!ENTITY middot "&#183;">
+<!ENTITY cedil  "&#184;">
+<!ENTITY sup1   "&#185;">
+<!ENTITY ordm   "&#186;">
+<!ENTITY raquo  "&#187;">
+<!ENTITY frac14 "&#188;">
+<!ENTITY frac12 "&#189;">
+<!ENTITY frac34 "&#190;">
+<!ENTITY iquest "&#191;">
+<!ENTITY Agrave "&#192;">
+<!ENTITY Aacute "&#193;">
+<!ENTITY Acirc  "&#194;">
+<!ENTITY Atilde "&#195;">
+<!ENTITY Auml   "&#196;">
+<!ENTITY Aring  "&#197;">
+<!ENTITY AElig  "&#198;">
+<!ENTITY Ccedil "&#199;">
+<!ENTITY Egrave "&#200;">
+<!ENTITY Eacute "&#201;">
+<!ENTITY Ecirc  "&#202;">
+<!ENTITY Euml   "&#203;">
+<!ENTITY Igrave "&#204;">
+<!ENTITY Iacute "&#205;">
+<!ENTITY Icirc  "&#206;">
+<!ENTITY Iuml   "&#207;">
+<!ENTITY ETH    "&#208;">
+<!ENTITY Ntilde "&#209;">
+<!ENTITY Ograve "&#210;">
+<!ENTITY Oacute "&#211;">
+<!ENTITY Ocirc  "&#212;">
+<!ENTITY Otilde "&#213;">
+<!ENTITY Ouml   "&#214;">
+<!ENTITY times  "&#215;">
+<!ENTITY Oslash "&#216;">
+<!ENTITY Ugrave "&#217;">
+<!ENTITY Uacute "&#218;">
+<!ENTITY Ucirc  "&#219;">
+<!ENTITY Uuml   "&#220;">
+<!ENTITY Yacute "&#221;">
+<!ENTITY THORN  "&#222;">
+<!ENTITY szlig  "&#223;">
+<!ENTITY agrave "&#224;">
+<!ENTITY aacute "&#225;">
+<!ENTITY acirc  "&#226;">
+<!ENTITY atilde "&#227;">
+<!ENTITY auml   "&#228;">
+<!ENTITY aring  "&#229;">
+<!ENTITY aelig  "&#230;">
+<!ENTITY ccedil "&#231;">
+<!ENTITY egrave "&#232;">
+<!ENTITY eacute "&#233;">
+<!ENTITY ecirc  "&#234;">
+<!ENTITY euml   "&#235;">
+<!ENTITY igrave "&#236;">
+<!ENTITY iacute "&#237;">
+<!ENTITY icirc  "&#238;">
+<!ENTITY iuml   "&#239;">
+<!ENTITY eth    "&#240;">
+<!ENTITY ntilde "&#241;">
+<!ENTITY ograve "&#242;">
+<!ENTITY oacute "&#243;">
+<!ENTITY ocirc  "&#244;">
+<!ENTITY otilde "&#245;">
+<!ENTITY ouml   "&#246;">
+<!ENTITY divide "&#247;">
+<!ENTITY oslash "&#248;">
+<!ENTITY ugrave "&#249;">
+<!ENTITY uacute "&#250;">
+<!ENTITY ucirc  "&#251;">
+<!ENTITY uuml   "&#252;">
+<!ENTITY yacute "&#253;">
+<!ENTITY thorn  "&#254;">
+<!ENTITY yuml   "&#255;">
+
+
+<!-- Mathematical, Greek and Symbolic characters for HTML -->
+
+<!-- Portions (c) International Organization for Standardization 1986:
+     Permission to copy in any form is granted for use with
+     conforming SGML systems and applications as defined in
+     ISO 8879, provided this notice is included in all copies.
+-->
+
+<!-- Relevant ISO entity set is given unless names are newly introduced.
+     New names (i.e., not in ISO 8879 list) do not clash with any
+     existing ISO 8879 entity names. ISO 10646 character numbers
+     are given for each character, in hex. CDATA values are decimal
+     conversions of the ISO 10646 values and refer to the document
+     character set. Names are Unicode 2.0 names. 
+
+-->
+
+<!-- Latin Extended-B -->
+<!ENTITY fnof     "&#402;">
+
+<!-- Greek -->
+<!ENTITY Alpha    "&#913;">
+<!ENTITY Beta     "&#914;">
+<!ENTITY Gamma    "&#915;">
+<!ENTITY Delta    "&#916;">
+<!ENTITY Epsilon  "&#917;">
+<!ENTITY Zeta     "&#918;">
+<!ENTITY Eta      "&#919;">
+<!ENTITY Theta    "&#920;">
+<!ENTITY Iota     "&#921;">
+<!ENTITY Kappa    "&#922;">
+<!ENTITY Lambda   "&#923;">
+<!ENTITY Mu       "&#924;">
+<!ENTITY Nu       "&#925;">
+<!ENTITY Xi       "&#926;">
+<!ENTITY Omicron  "&#927;">
+<!ENTITY Pi       "&#928;">
+<!ENTITY Rho      "&#929;">
+<!-- (there is no Sigmaf, and no u+03A2 character either) -->
+<!ENTITY Sigma    "&#931;">
+<!ENTITY Tau      "&#932;">
+<!ENTITY Upsilon     "&#933;">
+<!ENTITY Phi      "&#934;">
+<!ENTITY Chi      "&#935;">
+<!ENTITY Psi      "&#936;">
+<!ENTITY Omega    "&#937;">
+
+<!ENTITY alpha    "&#945;">
+<!ENTITY beta     "&#946;">
+<!ENTITY gamma    "&#947;">
+<!ENTITY delta    "&#948;">
+<!ENTITY epsilon     "&#949;">
+<!ENTITY zeta     "&#950;">
+<!ENTITY eta      "&#951;">
+<!ENTITY theta    "&#952;">
+<!ENTITY iota     "&#953;">
+<!ENTITY kappa    "&#954;">
+<!ENTITY lambda   "&#955;">
+<!ENTITY mu       "&#956;">
+<!ENTITY nu       "&#957;">
+<!ENTITY xi       "&#958;">
+<!ENTITY omicron  "&#959;">
+<!ENTITY pi       "&#960;">
+<!ENTITY rho      "&#961;">
+<!ENTITY sigmaf   "&#962;">
+<!ENTITY sigma    "&#963;">
+<!ENTITY tau      "&#964;">
+<!ENTITY upsilon     "&#965;">
+<!ENTITY phi      "&#966;">
+<!ENTITY chi      "&#967;">
+<!ENTITY psi      "&#968;">
+<!ENTITY omega    "&#969;">
+<!ENTITY thetasym    "&#977;">
+<!ENTITY upsih    "&#978;">
+<!ENTITY piv      "&#982;">
+
+<!-- General Punctuation -->
+<!ENTITY bull     "&#8226;">
+<!-- bullet is NOT the same as bullet operator, u+2219 -->
+<!ENTITY hellip   "&#8230;">
+<!ENTITY prime    "&#8242;">
+<!ENTITY Prime    "&#8243;">
+<!ENTITY oline    "&#8254;">
+<!ENTITY frasl    "&#8260;">
+
+<!-- Letterlike Symbols -->
+<!ENTITY weierp   "&#8472;">
+<!ENTITY image    "&#8465;">
+<!ENTITY real     "&#8476;">
+<!ENTITY trade    "&#8482;">
+<!ENTITY alefsym  "&#8501;">
+<!-- alef symbol is NOT the same as hebrew letter alef, u+05D0 although the same glyph
+     could be used to depict both characters -->
+
+<!-- Arrows -->
+<!ENTITY larr     "&#8592;">
+<!ENTITY uarr     "&#8593;">
+<!ENTITY rarr     "&#8594;">
+<!ENTITY darr     "&#8595;">
+<!ENTITY harr     "&#8596;">
+<!ENTITY crarr    "&#8629;">
+<!ENTITY lArr     "&#8656;">
+<!-- Unicode does not say that lArr is the same as the 'is implied by' arrow but also 
+     does not have any other character for that function. So ? lArr can be used for 
+     'is implied by' as ISOtech suggests -->
+<!ENTITY uArr     "&#8657;">
+<!ENTITY rArr     "&#8658;">
+<!-- Unicode does not say this is the 'implies' character but does not have another 
+     character with this function so ? rArr can be used for 'implies' as ISOtech suggests -->
+<!ENTITY dArr     "&#8659;">
+<!ENTITY hArr     "&#8660;">
+
+<!-- Mathematical Operators -->
+<!ENTITY forall   "&#8704;">
+<!ENTITY part     "&#8706;">
+<!ENTITY exist    "&#8707;">
+<!ENTITY empty    "&#8709;">
+<!ENTITY nabla    "&#8711;">
+<!ENTITY isin     "&#8712;">
+<!ENTITY notin    "&#8713;">
+<!ENTITY ni       "&#8715;">
+<!-- should there be a more memorable name than 'ni'? -->
+<!ENTITY prod     "&#8719;">
+<!-- prod is NOT the same character as u+03A0 'greek capital letter pi' though the same 
+     glyph might be used for both -->
+<!ENTITY sum      "&#8721;">
+<!-- sum is NOT the same character as u+03A3 'greek capital letter sigma' though the same 
+     glyph might be used for both -->
+<!ENTITY minus    "&#8722;">
+<!ENTITY lowast   "&#8727;">
+<!ENTITY radic    "&#8730;">
+<!ENTITY prop     "&#8733;">
+<!ENTITY infin    "&#8734;">
+<!ENTITY ang      "&#8736;">
+<!ENTITY and      "&#8869;">
+<!ENTITY or       "&#8870;">
+<!ENTITY cap      "&#8745;">
+<!ENTITY cup      "&#8746;">
+<!ENTITY int      "&#8747;">
+<!ENTITY there4   "&#8756;">
+<!ENTITY sim      "&#8764;">
+<!-- tilde operator is NOT the same character as the tilde, u+007E, although the same 
+     glyph might be used to represent both  -->
+<!ENTITY cong     "&#8773;">
+<!ENTITY asymp    "&#8776;">
+<!ENTITY ne       "&#8800;">
+<!ENTITY equiv    "&#8801;">
+<!ENTITY le       "&#8804;">
+<!ENTITY ge       "&#8805;">
+<!ENTITY sub      "&#8834;">
+<!ENTITY sup      "&#8835;">
+<!-- note that nsup, 'not a superset of, u+2283' is not covered by the Symbol font 
+     encoding and is not included. Should it be, for symmetry? It is in ISOamsn  --> 
+<!ENTITY nsub     "&#8836;">
+<!ENTITY sube     "&#8838;">
+<!ENTITY supe     "&#8839;">
+<!ENTITY oplus    "&#8853;">
+<!ENTITY otimes   "&#8855;">
+<!ENTITY perp     "&#8869;">
+<!ENTITY sdot     "&#8901;">
+<!-- dot operator is NOT the same character as u+00B7 middle dot -->
+
+<!-- Miscellaneous Technical -->
+<!ENTITY lceil    "&#8968;">
+<!ENTITY rceil    "&#8969;">
+<!ENTITY lfloor   "&#8970;">
+<!ENTITY rfloor   "&#8971;">
+<!ENTITY lang     "&#9001;">
+<!-- lang is NOT the same character as u+003C 'less than' 
+     or u+2039 'single left-pointing angle quotation mark' -->
+<!ENTITY rang     "&#9002;">
+<!-- rang is NOT the same character as u+003E 'greater than' 
+     or u+203A 'single right-pointing angle quotation mark' -->
+
+<!-- Geometric Shapes -->
+<!ENTITY loz      "&#9674;">
+
+<!-- Miscellaneous Symbols -->
+<!ENTITY spades   "&#9824;">
+<!-- black here seems to mean filled as opposed to hollow -->
+<!ENTITY clubs    "&#9827;">
+<!ENTITY hearts   "&#9829;">
+<!ENTITY diams    "&#9830;">
+
+
+<!-- Special characters for HTML -->
+
+<!-- Portions (c) International Organization for Standardization 1986:
+     Permission to copy in any form is granted for use with
+     conforming SGML systems and applications as defined in
+     ISO 8879, provided this notice is included in all copies.
+-->
+
+<!-- Relevant ISO entity set is given unless names are newly introduced.
+     New names (i.e., not in ISO 8879 list) do not clash with any
+     existing ISO 8879 entity names. ISO 10646 character numbers
+     are given for each character, in hex. CDATA values are decimal
+     conversions of the ISO 10646 values and refer to the document
+     character set. Names are Unicode 2.0 names. 
+
+-->
+
+
+<!-- Latin Extended-A -->
+<!ENTITY OElig   "&#338;">
+<!ENTITY oelig   "&#339;">
+<!-- ligature is a misnomer, this is a separate character in some languages -->
+<!ENTITY Scaron  "&#352;">
+<!ENTITY scaron  "&#353;">
+<!ENTITY Yuml    "&#376;">
+
+<!-- Spacing Modifier Letters -->
+<!ENTITY circ    "&#710;">
+<!ENTITY tilde   "&#732;">
+
+<!-- General Punctuation -->
+<!ENTITY ensp    "&#8194;">
+<!ENTITY emsp    "&#8195;">
+<!ENTITY thinsp  "&#8201;">
+<!ENTITY zwnj    "&#8204;">
+<!ENTITY zwj     "&#8205;">
+<!ENTITY lrm     "&#8206;">
+<!ENTITY rlm     "&#8207;">
+<!ENTITY ndash   "&#8211;">
+<!ENTITY mdash   "&#8212;">
+<!ENTITY lsquo   "&#8216;">
+<!ENTITY rsquo   "&#8217;">
+<!ENTITY sbquo   "&#8218;">
+<!ENTITY ldquo   "&#8220;">
+<!ENTITY rdquo   "&#8221;">
+<!ENTITY bdquo   "&#8222;">
+<!ENTITY dagger  "&#8224;">
+<!ENTITY Dagger  "&#8225;">
+<!ENTITY permil  "&#8240;">
+<!ENTITY lsaquo  "&#8249;">
+<!-- lsaquo is proposed but not yet ISO standardised -->
+<!ENTITY rsaquo  "&#8250;">
+<!-- rsaquo is proposed but not yet ISO standardised -->
+
+<!ELEMENT supplemental-pub-data  (supp.title-block,supp.data-block) >
+
+<!ATTLIST supplemental-pub-data
+	       id  ID    #REQUIRED 
+	       label  CDATA    #FIXED "[Supplemental Publication Data:] "
+	       
+	       class  CDATA    #FIXED "legal-instrument" >
+
+<!ELEMENT supp.title-block  (supp.title,supp.version) >
+
+<!ATTLIST supp.title-block
+	       label  CDATA    #FIXED "[Title Block:] "
+	       class  CDATA    #FIXED "template-id" >
+
+<!ELEMENT supp.title   EMPTY  >
+
+<!ATTLIST supp.title
+	       label  CDATA    #FIXED "[Title:] "
+	       class  CDATA    #FIXED "title"
+	       text  CDATA    #FIXED "SUPPLEMENTAL PUBLICATION DATA"
+		>
+
+<!ELEMENT supp.version   (#PCDATA)  >
+
+<!ATTLIST supp.version
+	       class  CDATA    #FIXED "version"
+	       distribution  CDATA    #FIXED "2000-09-27"
+	       label  CDATA    #FIXED "[Version:] "
+	       version  CDATA    #FIXED "[Electronic Version 0.0.5 "
+		>
+
+<!ELEMENT supp.data-block  (application-number,domestic-filing-data,
+	       projected-publication-date,representative-figure?,classification-us,
+	       classification-ipc,prior-publication?,international-conventions?,
+	       sequence-listing-available?) >
+
+<!ATTLIST supp.data-block
+	       label  CDATA    #FIXED "[Supplemental Data Block:] "
+		>
+
+<!ELEMENT application-number  (#PCDATA) >
+
+<!ATTLIST application-number
+	       label  CDATA    #FIXED "[Application No:] "
+	       class  CDATA    #FIXED "primitive"
+	       data-format  CDATA    #FIXED "##/###,###|########|##/######"
+		>
+
+<!ELEMENT domestic-filing-data  (application-number,application-number-series-code,
+	       filing-date,continued-prosecution-application-flag?,rule-47-flag?) >
+
+<!ATTLIST domestic-filing-data
+	       label  CDATA    #FIXED "[Domestic Filing Data:] "
+		>
+
+<!ELEMENT application-number-series-code  (#PCDATA) >
+
+<!ATTLIST application-number-series-code
+	       label  CDATA    #FIXED "[Application Number Series Code:] "
+		>
+
+<!ELEMENT filing-date  (#PCDATA) >
+
+<!ATTLIST filing-date
+	       label  CDATA    #FIXED "[Filing Date:] " >
+
+<!ELEMENT continued-prosecution-application-flag   EMPTY  >
+
+<!ATTLIST continued-prosecution-application-flag
+	       label  CDATA    #FIXED "[Continued Prosecution Application Flag:] "
+		>
+
+<!ELEMENT rule-47-flag   EMPTY  >
+
+<!ATTLIST rule-47-flag
+	       label  CDATA    #FIXED "[Rule 47 Flag:] " >
+
+<!ELEMENT projected-publication-date  (#PCDATA) >
+
+<!ATTLIST projected-publication-date
+	       label  CDATA    #FIXED "[Projected Publication Date:] "
+		>
+
+<!ELEMENT representative-figure  (#PCDATA) >
+
+<!ATTLIST representative-figure
+	       label  CDATA    #FIXED "[Representative Figure:] "
+		>
+
+<!ELEMENT classification-us  (classification-us-primary,classification-us-secondary*) >
+
+<!ATTLIST classification-us
+	       label  CDATA    #FIXED "[US Classification:] "
+	       class  CDATA    #FIXED "classification" >
+
+<!ELEMENT classification-us-primary  (uspc) >
+
+<!ATTLIST classification-us-primary
+	       label  CDATA    #FIXED "[US Classification (Primary):] "
+	       
+	       class  CDATA    #FIXED "classification" >
+
+<!ELEMENT uspc  (class,subclass) >
+
+<!ATTLIST uspc
+	       label  CDATA    #FIXED "[US Patent Classification:] "
+		>
+
+<!ELEMENT class  (#PCDATA) >
+
+<!ATTLIST class
+	       label  CDATA    #FIXED "[Class:] " >
+
+<!ELEMENT subclass  (#PCDATA) >
+
+<!ATTLIST subclass
+	       label  CDATA    #FIXED "[Subclass:] " >
+
+<!ELEMENT classification-us-secondary  (uspc | uspc-freeform) >
+
+<!ATTLIST classification-us-secondary
+	       label  CDATA    #FIXED "[US Classification (Secondary):] "
+	       
+	       class  CDATA    #FIXED "classification" >
+
+<!ELEMENT uspc-freeform  (#PCDATA) >
+
+<!ATTLIST uspc-freeform
+	       label  CDATA    #FIXED "[US Patent Classification, freeform:] "
+	       
+	       class  CDATA    #FIXED "primitiv" >
+
+<!ELEMENT classification-ipc  (classification-ipc-primary?,
+	       classification-ipc-secondary*,classification-ipc-edition) >
+
+<!ATTLIST classification-ipc
+	       label  CDATA    #FIXED "[IPC Classification:] "
+	       class  CDATA    #FIXED "classification" >
+
+<!ELEMENT classification-ipc-primary  (ipc) >
+
+<!ATTLIST classification-ipc-primary
+	       label  CDATA    #FIXED "[IPC Classification (Primary):] "
+	       
+	       class  CDATA    #FIXED "classification" >
+
+<!ELEMENT ipc  (#PCDATA) >
+
+<!ATTLIST ipc
+	       label  CDATA    #FIXED "[International Patent Classification:] "
+	       
+	       class  CDATA    #FIXED "primitiv" >
+
+<!ELEMENT classification-ipc-secondary  (ipc) >
+
+<!ATTLIST classification-ipc-secondary
+	       label  CDATA    #FIXED "[IPC Classification (Secondary):] "
+	       
+	       class  CDATA    #FIXED "classification" >
+
+<!ELEMENT classification-ipc-edition  (#PCDATA) >
+
+<!ATTLIST classification-ipc-edition
+	       label  CDATA    #FIXED "[IPC Classification Edition:] "
+	       
+	       class  CDATA    #FIXED "primitiv" >
+
+<!ELEMENT prior-publication  (document-id+) >
+
+<!ATTLIST prior-publication
+	       label  CDATA    #FIXED "[Prior Publication:] " >
+
+<!ELEMENT document-id  (doc-number,kind-code?,document-date?,country-code?) >
+
+<!ATTLIST document-id
+	       label  CDATA    #FIXED "[Document ID:] "
+	       class  CDATA    #FIXED "primitiv" >
+
+<!ELEMENT doc-number  (#PCDATA) >
+
+<!ATTLIST doc-number
+	       label  CDATA    #FIXED "[Doc Number:] "
+	       class  CDATA    #FIXED "primitiv" >
+
+<!ELEMENT kind-code  (#PCDATA) >
+
+<!ATTLIST kind-code
+	       label  CDATA    #FIXED "[KIND Code:] "
+	       class  CDATA    #FIXED "primitiv" >
+
+<!ELEMENT document-date  (#PCDATA) >
+
+<!ATTLIST document-date
+	       label  CDATA    #FIXED "[Document Date:] "
+	       class  CDATA    #FIXED "primitive" >
+
+<!ELEMENT country-code  (#PCDATA) >
+
+<!ATTLIST country-code
+	       label  CDATA    #FIXED "[Country Code:] "
+	       class  CDATA    #FIXED "primitiv" >
+
+<!ELEMENT international-conventions  (pct-application,usc371-date?,usc102e-date,
+	       pct-publication?) >
+
+<!ATTLIST international-conventions
+	       label  CDATA    #FIXED "[International Conventions:] "
+	       
+	       st32-name  CDATA    #FIXED "B800"
+	       inid-code  CDATA    #IMPLIED  >
+
+<!ELEMENT pct-application  (document-id) >
+
+<!ATTLIST pct-application
+	       label  CDATA    #FIXED "[PCT Application:] "
+	       st32-name  CDATA    #FIXED "B860"
+	       inid-code  CDATA    #IMPLIED  >
+
+<!ELEMENT usc371-date  (#PCDATA) >
+
+<!ATTLIST usc371-date
+	       label  CDATA    #FIXED "[USC371 Date:] "
+	       st32-name  CDATA    #FIXED "B863"
+	       inid-code  CDATA    #IMPLIED  >
+
+<!ELEMENT usc102e-date  (#PCDATA) >
+
+<!ATTLIST usc102e-date
+	       label  CDATA    #FIXED "[USC102e Date:] "
+	       st32-name  CDATA    #FIXED "B864" >
+
+<!ELEMENT pct-publication  (document-id) >
+
+<!ATTLIST pct-publication
+	       label  CDATA    #FIXED "[PCT Publication:] "
+	       st32-name  CDATA    #FIXED "B871"
+	       inid-code  CDATA    #IMPLIED  >
+
+<!ELEMENT sequence-listing-available  (publish-sequence-listing) >
+
+<!ATTLIST sequence-listing-available
+	       label  CDATA    #FIXED "[Sequence Listing Available:] "
+		>
+
+<!ELEMENT publish-sequence-listing   EMPTY  >
+
+<!ATTLIST publish-sequence-listing
+	       label  CDATA    #FIXED "[Publish Sequence Listing:] "
+	       
+	       value (yes | no)  "yes" >
+

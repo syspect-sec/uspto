@@ -1,0 +1,38 @@
+<!-- Reference the following entity declarations by including within the parent DTD:
+
+	<!ENTITY % USPTOentities SYSTEM "pap-v16-01-01.ent"                                          >
+	%USPTOentities;
+
+	This file (pap-v16-01-01.ent) must be local (in the same directory)
+	as the parent DTD. It is used to remove the entity file declarations from
+	the parent DTD, and allows variable SYSTEM path definitions or PUBLIC
+	identifiers for catalog resolution, without altering the DTD.
+-->
+
+<!ENTITY % mathpac      SYSTEM "c:\PG-PUB-2\dtds\mathml.dtd"            >%mathpac;
+<!ENTITY % ent-mmlalias SYSTEM "c:\pg-pub-2\entities\mmlalias.ent" >%ent-mmlalias;
+<!ENTITY % ent-mmlextra SYSTEM "c:\pg-pub-2\entities\mmlextra.ent" >%ent-mmlextra;
+<!ENTITY % calstblx     SYSTEM "c:\pg-pub-2\dtds\CALSxml.dtd"      >%calstblx;
+<!ENTITY % uspto        SYSTEM "c:\pg-pub-2\entities\uspto.ent"    >%uspto;
+<!ENTITY % ent-isoamsa  SYSTEM "c:\pg-pub-2\entities\isoamsa.ent"  >%ent-isoamsa;
+<!ENTITY % ent-isoamsb  SYSTEM "c:\pg-pub-2\entities\isoamsb.ent"  >%ent-isoamsb;
+<!ENTITY % ent-isoamsc  SYSTEM "c:\pg-pub-2\entities\isoamsc.ent"  >%ent-isoamsc;
+<!ENTITY % ent-isoamsn  SYSTEM "c:\pg-pub-2\entities\isoamsn.ent"  >%ent-isoamsn;
+<!ENTITY % ent-isoamso  SYSTEM "c:\pg-pub-2\entities\isoamso.ent"  >%ent-isoamso;
+<!ENTITY % ent-isoamsr  SYSTEM "c:\pg-pub-2\entities\isoamsr.ent"  >%ent-isoamsr;
+<!ENTITY % ent-isogrk3  SYSTEM "c:\pg-pub-2\entities\isogrk3.ent"  >%ent-isogrk3;
+<!ENTITY % ent-isogrk4  SYSTEM "c:\pg-pub-2\entities\isogrk4.ent"  >%ent-isogrk4;
+<!ENTITY % ent-isomfrk  SYSTEM "c:\pg-pub-2\entities\isomfrk.ent"  >%ent-isomfrk;
+<!ENTITY % ent-isomopf  SYSTEM "c:\pg-pub-2\entities\isomopf.ent"  >%ent-isomopf;
+<!ENTITY % ent-isomscr  SYSTEM "c:\pg-pub-2\entities\isomscr.ent"  >%ent-isomscr;
+<!ENTITY % ent-isotech  SYSTEM "c:\pg-pub-2\entities\isotech.ent"  >%ent-isotech;
+<!ENTITY % ent-isobox   SYSTEM "c:\pg-pub-2\entities\isobox.ent"   >%ent-isobox;
+<!ENTITY % ent-isocyr1  SYSTEM "c:\pg-pub-2\entities\isocyr1.ent"  >%ent-isocyr1;
+<!ENTITY % ent-isocyr2  SYSTEM "c:\pg-pub-2\entities\isocyr2.ent"  >%ent-isocyr2;
+<!ENTITY % ent-isodia   SYSTEM "c:\pg-pub-2\entities\isodia.ent"   >%ent-isodia;
+<!ENTITY % ent-isogrk1  SYSTEM "c:\pg-pub-2\entities\isogrk1.ent"  >%ent-isogrk1;
+<!ENTITY % ent-isogrk2  SYSTEM "c:\pg-pub-2\entities\isogrk2.ent"  >%ent-isogrk2;
+<!ENTITY % ent-isolat1  SYSTEM "c:\pg-pub-2\entities\isolat1.ent"  >%ent-isolat1;
+<!ENTITY % ent-isolat2  SYSTEM "c:\pg-pub-2\entities\isolat2.ent"  >%ent-isolat2;
+<!ENTITY % ent-isonum   SYSTEM "c:\pg-pub-2\entities\isonum.ent"   >%ent-isonum;
+<!ENTITY % ent-isopub   SYSTEM "c:\pg-pub-2\entities\isopub.ent"   >%ent-isopub;

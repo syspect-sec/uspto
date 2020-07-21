@@ -92,6 +92,9 @@ def start_thread_processes(links_array, args_array, database_args):
     link_queue = multiprocessing.Queue()
     # Put all the links into the queue
     #TODO write classification parser and also append to queue
+    for link in links_array['classifications']:
+        link.append("class")
+        link_queue.put(link)
     for link in links_array['grants']:
         link.append("grant")
         link_queue.put(link)
@@ -101,8 +104,8 @@ def start_thread_processes(links_array, args_array, database_args):
     for link in links_array['PAIR']:
         link.append("PAIR")
         link_queue.put(link)
-    for link in links_array['classifications']:
-        link.append("class")
+    for link in links_array['legal']:
+        link.append("legal")
         link_queue.put(link)
 
     print("Starting " + str(number_of_threads) + " process(es)... ")
@@ -538,6 +541,7 @@ if __name__=="__main__":
     application_process_log_file = working_directory + "/LOG/application_links.log"
     application_pair_process_log_file = working_directory + "/LOG/application_pair_links.log"
     pair_process_log_file = working_directory + "/LOG/pair_links.log"
+    legal_process_log_file = working_directory + "/LOG/legal_links.log"
     classification_process_log_file = working_directory + "/LOG/class_links.log"
     us_classification_text_filename = working_directory + "/installation/CLS/usclass.txt"
     cpc_classification_text_filename = working_directory + "/installation/CLS/cpcclass.csv"
@@ -566,6 +570,7 @@ if __name__=="__main__":
         "/CSV/CSV_G",
         "/CSV/CSV_P",
         "/CSV/CSV_C",
+        "/CSV/CSV_L",
         "/LOG",
         "/TMP",
         "/TMP/downloads",
@@ -580,6 +585,7 @@ if __name__=="__main__":
         "reedtech_bulk_data_url" : "https://patents.reedtech.com/",
         "uspto_classification_data_url" : 'https://www.uspto.gov/web/patents/classification/selectnumwithtitle.htm',
         "uspto_PAIR_data_url" : "https://bulkdata.uspto.gov/data/patent/pair/economics/2017/",
+        "uspto_legal_data_url" : "https://bulkdata.uspto.gov/data/patent/litigation/2016/",
         "sandbox" : sandbox,
         "log_level" : log_level,
         "stdout_level" : stdout_level,
@@ -601,6 +607,7 @@ if __name__=="__main__":
         "grant_process_log_file" : grant_process_log_file,
         "application_process_log_file" : application_process_log_file,
         "application_pair_process_log_file" : application_pair_process_log_file,
+        "legal_process_log_file" : legal_process_log_file,
         "pair_process_log_file" : pair_process_log_file,
         "temp_directory" : app_temp_dirpath,
         "csv_directory" : app_csv_dirpath,
@@ -643,11 +650,11 @@ if __name__=="__main__":
 
                 # Read list of all required files into array from log files
                 # An array is returned with list of links for each type of data to processs
-                # (1) TODO UPC Classification Information Data
-                # (2) TODO USC to CPC Concordence Data
-                # (3) Patent Grant Biliographic Documents
-                # (4) Application Bibiographic Documents
-                # (5) PAIR Data
+                # (1) Patent Classification Data
+                # (2) Patent Grant Documents
+                # (3) Application Documents
+                # (4) PAIR Data
+                # (5) Patent Legal Case Data
 
                 # Collect all links by passing in log files
                 # TODO: add classification parsing and PAIR link processing
@@ -661,16 +668,18 @@ if __name__=="__main__":
                     all_files_processed = "Error"
 
                 # Else if the read list of unprocessed links is not empty
-                elif len(all_links_array["grants"]) != 0 or len(all_links_array["applications"]) != 0 or len(all_links_array["PAIR"]) != 0 or len(all_links_array["classifications"]) != 0:
+                elif len(all_links_array["grants"]) != 0 or len(all_links_array["applications"]) != 0 or len(all_links_array["PAIR"]) != 0 or len(all_links_array["classifications"]) != 0 or len(all_links_array["legal"]) != 0:
                     # TODO update with classifcation data and PAIR data output
                     print(str(len(all_links_array["grants"])) + " grant links will be collected. Start time: " + time.strftime("%c"))
                     print(str(len(all_links_array["applications"])) + " application links will be collected. Start time: " + time.strftime("%c"))
                     print(str(len(all_links_array["classifications"])) + " classification links will be collected. Start time: " + time.strftime("%c"))
                     print(str(len(all_links_array["PAIR"])) + " PAIR links will be collected. Start time: " + time.strftime("%c"))
+                    print(str(len(all_links_array["legal"])) + " legal links will be collected. Start time: " + time.strftime("%c"))
                     logger.info(str(len(all_links_array["grants"])) + " grant links will be collected. Start time: " + time.strftime("%c"))
                     logger.info(str(len(all_links_array["applications"])) + " application links will be collected. Start time: " + time.strftime("%c"))
                     logger.info(str(len(all_links_array["classifications"])) + " classification links will be collected. Start time: " + time.strftime("%c"))
                     logger.info(str(len(all_links_array["PAIR"])) + " PAIR links will be collected. Start time: " + time.strftime("%c"))
+                    logger.info(str(len(all_links_array["legal"])) + " legal links will be collected. Start time: " + time.strftime("%c"))
 
                     # Start the threading processes for the stack of links to process
                     start_thread_processes(all_links_array, args_array, database_args)

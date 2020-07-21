@@ -673,6 +673,82 @@ CREATE TABLE IF NOT EXISTS `uspto`.`FOREIGNPRIORITY_G` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
+-- Table `uspto`.`CASES_L`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `uspto`.`CASE_L` ;
+
+CREATE TABLE IF NOT EXISTS `uspto`.`CASE_L` (
+  `CaseID` VARCHAR(15) NOT NULL,
+  `PacerID` VARCHAR(10) NOT NULL,
+  `CourtTitle` VARCHAR(150) DEFAULT NULL,
+  `DistrictID` VARCHAR(15) DEFAULT NULL,
+  `CaseTitle` VARCHAR(250) DEFAULT NULL,
+  `AssignedTo` VARCHAR(100) DEFAULT NULL,
+  `ReferredTo` VARCHAR(100) DEFAULT NULL,
+  `Cause` VARCHAR(100) DEFAULT NULL,
+  `JurisdictionBasis` VARCHAR(30) DEFAULT NULL,
+  `FiledDate` DATE DEFAULT NULL,
+  `CloseDate` DATE DEFAULT NULL,
+  `LastFileDate` DATE DEFAULT NULL,
+  `JuryDemand` VARCHAR(20) DEFAULT NULL,
+  `Demand` VARCHAR(20) DEFAULT NULL,
+  `LeadCase` VARCHAR(100) DEFAULT NULL,
+  `RelatedCase` TEXT DEFAULT NULL,
+  `Settlement` TEXT DEFAULT NULL,
+  `CaseIDRaw` VARCHAR(50) DEFAULT NULL,
+  `CaseType1` VARCHAR(20) DEFAULT NULL,
+  `CaseType2` VARCHAR(20) DEFAULT NULL,
+  `CaseType3` VARCHAR(20) DEFAULT NULL,
+  `CaseTypeNote` VARCHAR(30) DEFAULT NULL,
+  `FileName` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`CaseID`, `FileName`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `uspto`.`ATTORNEY_L`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `uspto`.`ATTORNEY_L` ;
+
+CREATE TABLE IF NOT EXISTS `uspto`.`ATTORNEY_L` (
+  `CaseID` VARCHAR(15) NOT NULL,
+  `CaseIDRaw` VARCHAR(50) DEFAULT NULL,
+  `PartyType` VARCHAR(30) DEFAULT NULL,
+  `Name` VARCHAR(100) NOT NULL,
+  `ContactInfo` VARCHAR(300) DEFAULT NULL,
+  `Position` VARCHAR(200) DEFAULT NULL,
+  `FileName` VARCHAR(45) DEFAULT NULL
+)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `uspto`.`PARTY_L`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `uspto`.`PARTY_L` ;
+
+CREATE TABLE IF NOT EXISTS `uspto`.`PARTY_L` (
+  `CaseID` VARCHAR(15) NOT NULL,
+  `PartyType` VARCHAR(50) NOT NULL,
+  `Name` VARCHAR(1000) NOT NULL,
+  `FileName` VARCHAR(45) NOT NULL
+)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table `uspto`.`PATENT_L`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `uspto`.`PATENT_L` ;
+
+CREATE TABLE IF NOT EXISTS `uspto`.`PATENT_L` (
+  `CaseID` VARCHAR(15) NOT NULL,
+  `PacerID` VARCHAR(10) NOT NULL,
+  `NOS` VARCHAR(10) DEFAULT NULL,
+  `PatentID` VARCHAR(20) NOT NULL,
+  `PatentDocType` VARCHAR(30) DEFAULT NULL,
+  `FileName` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`CaseID`, `PatentID`, `FileName`))
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
 -- Table `uspto`.`STARTED_FILES`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `uspto`.`STARTED_FILES` ;

@@ -129,6 +129,7 @@ def write_link_arrays_to_file(all_links_array, args_array):
     application_process_file = open(args_array['application_process_log_file'], "w")
     classification_process_file = open(args_array['classification_process_log_file'], "w")
     pair_process_file = open(args_array['pair_process_log_file'], "w")
+    legal_process_file = open(args_array['legal_process_log_file'], "w")
 
     # Write all grant and application links to separate files
     for item in all_links_array["grants"]:
@@ -138,16 +139,19 @@ def write_link_arrays_to_file(all_links_array, args_array):
     for item in all_links_array["classifications"]:
         classification_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
     for item in all_links_array["PAIR"]:
-        pair_process_file.write(item + ",PAIR,Unprocessed\n")
+        pair_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+    for item in all_links_array["legal"]:
+        legal_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
 
     # Close files
     grant_process_file.close()
     application_process_file.close()
     classification_process_file.close()
     pair_process_file.close()
+    legal_process_file.close()
 
     logger.info('Finished writing all .zip filepaths to file ' + time.strftime("%c"))
-    print("Finished writing all patent grant and application links to files. Finshed Time: " + time.strftime("%c"))
+    print("Finished writing all patent data links to files. Finshed Time: " + time.strftime("%c"))
 
 # Write all log links to files
 def update_link_arrays_to_file(all_links_array, args_array):
@@ -269,11 +273,23 @@ def collect_all_unstarted_links_from_file(args_array):
                 if line.split(",")[2].replace("\n", "") != "Processed":
                     pair_temp_array.append(line.split(","))
 
+        # Read all required legal links into array
+        with open(args_array['legal_process_log_file'], "r") as legal_process_file:
+            for line in legal_process_file:
+                if line.split(",")[2].replace("\n", "") != "Processed":
+                    legal_temp_array.append(line.split(","))
+
         print('Finished reading all required links to download and parse ' + time.strftime("%c"))
         logger.info('Finished reading all required links to download and parse ' + time.strftime("%c"))
 
         # Return the array to main function
-        return({"grants" : grant_temp_array, "applications" : application_temp_array, "classifications" : classification_temp_array, "PAIR" : pair_temp_array})
+        return({
+            "grants" : grant_temp_array,
+            "applications" : application_temp_array,
+            "classifications" : classification_temp_array,
+            "PAIR" : pair_temp_array,
+            "legal" : legal_temp_array
+        })
 
     except Exception as e:
         print("Failed to get all links from log files " + time.strftime("%c"))
@@ -292,7 +308,7 @@ def build_or_update_link_files(args_array):
     # Check if links log files exists already
     # If not exists, then find and write all links to file
     #TODO: what if only one log file is missing??  How could that happen??
-    if not os.path.isfile(args_array['grant_process_log_file']) or not os.path.isfile(args_array['application_process_log_file']) or not os.path.isfile(args_array['classification_process_log_file']):
+    if not os.path.isfile(args_array['grant_process_log_file']) or not os.path.isfile(args_array['application_process_log_file']) or not os.path.isfile(args_array['classification_process_log_file'] not os.path.isfile(args_array['legal_process_log_file'])):
 
         print("No existing link file lists found. Creating them now.  " + time.strftime("%c"))
         logger.info('No existing link file lists found. Creating them now. ' + time.strftime("%c"))

@@ -164,6 +164,8 @@ def process_link_file(args_array):
             file_processed_success = USPTOProcessXMLGrant.process_XML_grant_content(args_array)
         elif args_array['uspto_xml_format'] == "PAIR":
             file_processed_success = USPTOProcessPAIRData.process_PAIR_content(args_array)
+        elif args_array['uspto_xml_format'] == "LEGAL":
+            file_processed_success = USPTOProcessLEGALData.process_legal_content(args_array)
         elif "CLS" in args_array['uspto_xml_format']:
             file_processed_success = USPTOProcessClassification.process_class_content(args_array)
 
@@ -192,6 +194,7 @@ def get_all_links(args_array):
     # PG = Patent Grants
     # PA = Patent Applications
     # PP = PAIR
+    # PL = Patent Legal Data
     # Uses args_array['command_args'] 'biblio' or 'full'
     # to dermine which links to select
 
@@ -206,7 +209,7 @@ def get_all_links(args_array):
     url_source_UPC_class = args_array["uspto_classification_data_url"]
 
     # TODO: fix the classification parser
-    print('Started grabbing patent classification links... ' + time.strftime("%c"))
+    print('Started grabbing patent classification bulk-data links... ' + time.strftime("%c"))
     classification_linklist = []
     classification_linklist.append([args_array['us_classification_text_filename'], "USCLS"])
     classification_linklist.append([args_array['cpc_classification_text_filename'], "CPCCLS"])
@@ -233,12 +236,25 @@ def get_all_links(args_array):
     pair_linklist = PAIR_links_parser(args_array['uspto_PAIR_data_url'])
     print('Finished grabbing PAIR bulk-data links... ' + time.strftime("%c"))
     # Log finished building all zip filepaths
-    logger.info('Finished grabbing PAIR bibliographic links: ' + time.strftime("%c"))
+    logger.info('Finished grabbing PAIR bulk-data links: ' + time.strftime("%c"))
+
+    print('Started grabbing patent legal bulk-data links... ' + time.strftime("%c"))
+    # Get all patent legal data
+    legal_linklist = legal_links_parser(args_array['uspto_legal_data_url'])
+    print('Finished grabbing PAIR bulk-data links... ' + time.strftime("%c"))
+    # Log finished building all zip filepaths
+    logger.info('Finished grabbing patent legal bulk-data links: ' + time.strftime("%c"))
 
     # Return the array of arrays of required links
-    return {"grants" : grant_linklist, "applications" : application_linklist, "classifications" : classification_linklist, "PAIR" : pair_linklist}
+    return {
+        "grants" : grant_linklist,
+        "applications" : application_linklist,
+        "classifications" : classification_linklist,
+        "PAIR" : pair_linklist,
+        "legal" : legal_linklist
+    }
 
-# Parse USPTO bulk-data site to get document links
+# Parse USPTO bulk-data site to get PAIR data links
 def PAIR_links_parser(bulk_source_url):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
@@ -255,8 +271,30 @@ def PAIR_links_parser(bulk_source_url):
     content = urllib.request.urlopen(bulk_source_url, context=context).read()
     soup = BeautifulSoup(content, "html.parser")
     for link in soup.find_all('a', href=True):
-        if ".csv.zip" in link['href'] and is_parsable(link['href']):
-            link_array.append(bulk_source_url + link['href'])
+        if ".csv.zip" in link['href'] and is_parsable_PAIR_link(link['href']):
+            link_array.append(bulk_source_url + link['href'], "PAIR")
+    # Return the final array of links
+    return link_array
+
+# Parse USPTO bulk-data site to get legal data links
+def legal_links_parser(bulk_source_url):
+
+    logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+    print("Grabbing legal data links from USPTO bulk data source...")
+
+    # Define array to hold all links found
+    link_array = []
+    temp_zip_file_link_array = []
+    final_zip_file_link_array = []
+
+    # Set the context for SSL (not checking!)
+    context = ssl.SSLContext()
+    # First collect all links on USPTO bulk data page
+    content = urllib.request.urlopen(bulk_source_url, context=context).read()
+    soup = BeautifulSoup(content, "html.parser")
+    for link in soup.find_all('a', href=True):
+        if ".csv.zip" in link['href'] and is_parsable_legal_link(link['href']):
+            link_array.append(bulk_source_url + link['href'], "LEGAL")
     # Return the final array of links
     return link_array
 
@@ -390,7 +428,7 @@ def is_duplicate_link(type, link):
 
 
 # Checks if PAIR .zip link is in the list currently able to parse
-def is_parsable(link):
+def is_parsable_PAIR_link(link):
     # Links that are parsable
     parsable_links = [
         "continuity_children.csv.zip",
@@ -399,6 +437,22 @@ def is_parsable(link):
         #"event_codes.csv.zip",
         #"status_codes.csv.zip",
         "correspondence_address.csv.zip"
+    ]
+    # Get the filename from link
+    link = link.split("/")[-1]
+    if link in parsable_links: return True
+    else: return False
+
+# Checks if legal .zip link is in the list currently able to parse
+def is_parsable_legal_link(link):
+    # Links that are parsable
+    parsable_links = [
+        "attorneys.csv.zip",
+        "cases.csv.zip",
+        #"documents.csv.zip",
+        #"names.csv.zip",
+        #"pacer_cases.csv.zip",
+        "patents.csv.zip"
     ]
     # Get the filename from link
     link = link.split("/")[-1]

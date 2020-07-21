@@ -294,6 +294,52 @@ def open_csv_files(file_type, file_name, csv_directory):
         csv_writer_array['cpcclass']['csv_writer'].writeheader()
         csv_writer_array['uscpc']['csv_writer'].writeheader()
 
+    # If the legal CSV file will be written
+    elif file_type == "legal":
+
+        # Create array of field names for each legal table
+        # and append to array to be passed back with args array
+        field_names_array['cases'] = ['CaseID', 'PacerID', 'CourtTitle', 'DistrictID', 'CaseTitle', 'AssignedTo', 'ReferredTo', 'Cause', 'JurisdictionBasis', 'FileDate', 'CloseDate', 'LastFileDate', 'JuryDemand', 'Demand', 'LeadCase', 'RelatedCase', 'Settlement', 'CaseIDRaw', 'CaseType1', 'CaseType2', 'CaseType3', 'CaseTypeNote', 'FileName']
+        field_names_array['pacercases'] = ['USClass', 'CPCClass', 'Position', 'FileName']
+        field_names_array['names'] = ['CaseID', 'PartyType', 'Name', 'FileName']
+        field_names_array['attorneys'] = ['CaseID', 'CaseIDRaw', 'PartyType', 'Name', 'ContactInfo', 'Position', 'FileName']
+        field_names_array['patents'] = ['CaseID', 'PacerID', 'NOS', 'PatentID', 'PatentDocType', 'FileName']
+
+        # Define all the dicionaries to hold the csv data
+        csv_writer_array['cases'] = {}
+        csv_writer_array['pacercases'] = {}
+        csv_writer_array['names'] = {}
+        csv_writer_array['attorneys'] = {}
+        csv_writer_array['patents'] = {}
+
+        # Define all the .csv filenames fullpath and append to array
+        csv_writer_array['cases']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
+        csv_writer_array['pacercases']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
+        csv_writer_array['names']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
+        csv_writer_array['attorneys']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
+        csv_writer_array['patents']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
+
+        # Define all the dictionaries to hold the csv data
+        csv_writer_array['cases']['file'] = open(csv_writer_array['cases']['csv_file_name'], 'w')
+        csv_writer_array['pacercases']['file'] = open(csv_writer_array['pacercases']['csv_file_name'], 'w')
+        csv_writer_array['names']['file'] = open(csv_writer_array['names']['csv_file_name'], 'w')
+        csv_writer_array['attorneys']['file'] = open(csv_writer_array['attorneys']['csv_file_name'], 'w')
+        csv_writer_array['patents']['file'] = open(csv_writer_array['patents']['csv_file_name'], 'w')
+
+        # Open all CSV files to write to and append to array
+        csv_writer_array['cases']['csv_writer'] = csv.DictWriter(csv_writer_array['cases']['file'], fieldnames = field_names_array['cases'], delimiter = '|', lineterminator = "\n")
+        csv_writer_array['pacercases']['csv_writer'] = csv.DictWriter(csv_writer_array['pacercases']['file'], fieldnames = field_names_array['pacercases'], delimiter = '|', lineterminator = "\n")
+        csv_writer_array['names']['csv_writer'] = csv.DictWriter(csv_writer_array['names']['file'], fieldnames = field_names_array['names'], delimiter = '|', lineterminator = "\n")
+        csv_writer_array['attorneys']['csv_writer'] = csv.DictWriter(csv_writer_array['attorneys']['file'], fieldnames = field_names_array['attorneys'], delimiter = '|', lineterminator = "\n")
+        csv_writer_array['patents']['csv_writer'] = csv.DictWriter(csv_writer_array['patents']['file'], fieldnames = field_names_array['patents'], delimiter = '|', lineterminator = "\n")
+
+        # Write header for all application csv files
+        csv_writer_array['cases']['csv_writer'].writeheader()
+        csv_writer_array['pacercases']['csv_writer'].writeheader()
+        csv_writer_array['names']['csv_writer'].writeheader()
+        csv_writer_array['attorneys']['csv_writer'].writeheader()
+        csv_writer_array['patents']['csv_writer'].writeheader()
+
     print('[Opened all .csv files for ' + file_type + ' ' + file_name + ' storage Time: {0}]'.format(time.strftime('%c')))
     logger.info('Opened all .csv files for ' + file_type + ' ' + file_name + ' storage Time: {0}]'.format(time.strftime('%c')))
 

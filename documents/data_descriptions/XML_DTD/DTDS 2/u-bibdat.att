@@ -1,0 +1,246 @@
+a-371-of-international label   ""
+
+address label   ""
+
+address-1 class   ""
+address-1 label   ""
+
+address-2 class   ""
+address-2 label   ""
+
+and-which-is-a label   ""
+
+application-confirmation-number label   ""
+
+application-filing-date label   ""
+application-filing-date class   ""
+application-filing-date data-format   ""
+
+application-number label   ""
+application-number class   ""
+application-number data-format   ""
+
+application-reference label   ""
+application-reference hytime   ""
+application-reference class   ""
+application-reference status-of-application   ""
+
+application-type label   ""
+application-type class   ""
+application-type values   ""
+
+assignee label   ""
+assignee certification   ""
+assignee certification-notation   ""
+assignee alt   ""
+assignee class   ""
+
+attorney-docket-number label   ""
+attorney-docket-number class   ""
+
+attorney-or-agent label   ""
+attorney-or-agent class   ""
+
+authority-applicant label   ""
+
+bibd-transmittal id   ""
+bibd-transmittal label   ""
+bibd-transmittal class   ""
+
+bibd.appointment-block label   ""
+
+bibd.bibdata-block label   ""
+
+bibd.template-title-block label   ""
+bibd.template-title-block class   ""
+
+bibd.title label   ""
+bibd.title class   ""
+bibd.title text   ""
+
+bibd.version label   ""
+bibd.version class   ""
+bibd.version version   ""
+bibd.version distribution   ""
+
+botanic-information label   ""
+
+citizenship class   ""
+citizenship label   ""
+
+city class   ""
+city label   ""
+
+continuation-in-part-of label   ""
+
+continuation-of label   ""
+
+continuing-reissue-of label   ""
+
+continuity-data id   ""
+continuity-data label   ""
+
+continuity-information label   ""
+
+correspondence-address label   ""
+
+country class   ""
+country label   ""
+
+country-code label   ""
+country-code class   ""
+
+customer-number-correspondence label   ""
+customer-number-correspondence class   ""
+
+customer-number-representative label   ""
+customer-number-representative class   ""
+
+division-of label   ""
+
+doc-number label   ""
+doc-number class   ""
+
+document-date label   ""
+document-date class   ""
+
+document-id label   ""
+document-id class   ""
+
+email label   ""
+email class   ""
+email data-format   ""
+
+family-name class   ""
+family-name label   ""
+
+fax label   ""
+fax class   ""
+
+filing-as-small-entity class   ""
+filing-as-small-entity label   ""
+filing-as-small-entity paper   ""
+filing-as-small-entity paper-notation   ""
+filing-as-small-entity reftype   ""
+filing-as-small-entity alt   ""
+
+filing-date label   ""
+
+first-named-inventor label   ""
+first-named-inventor class   ""
+
+foreign-invention-claim label   ""
+foreign-invention-claim certified-copy   ""
+foreign-invention-claim certified-copy-notation   ""
+foreign-invention-claim alt   ""
+
+foreign-priority-benefits label   ""
+
+given-name class   ""
+given-name label   ""
+
+inventor label   ""
+inventor class   ""
+
+inventor-block label   ""
+inventor-block class   ""
+
+is-a label   ""
+
+kind-code label   ""
+kind-code class   ""
+
+latin-name label   ""
+
+middle-name class   ""
+middle-name label   ""
+
+military-service label   ""
+
+name label   ""
+name class   ""
+
+name-1 class   ""
+name-1 label   ""
+
+name-2 class   ""
+name-2 label   ""
+
+name-prefix class   ""
+name-prefix label   ""
+
+name-suffix class   ""
+name-suffix label   ""
+
+non-provisional-of-provisional label   ""
+
+organization-name class   ""
+organization-name label   ""
+
+parent label   ""
+
+patent-reference label   ""
+patent-reference hytime   ""
+patent-reference class   ""
+
+pct-information label   ""
+
+postalcode class   ""
+postalcode label   ""
+
+previous-publication-information label   ""
+
+priority-claimed label   ""
+priority-claimed class   ""
+
+priority-not-claimed label   ""
+priority-not-claimed class   ""
+
+publication-filing-type label   ""
+publication-filing-type values   ""
+
+publication-request-block label   ""
+
+reexamination-of label   ""
+
+referenced-documents label   ""
+
+reissue-of label   ""
+
+representative-registration-number label   ""
+representative-registration-number class   ""
+
+representative-under-37-cfr-10.9 label   ""
+representative-under-37-cfr-10.9 class   ""
+
+request-for-early-publication label   ""
+
+request-to-not-publish label   ""
+
+residence label   ""
+
+said-application label   ""
+
+state class   ""
+state label   ""
+
+status-phrase label   ""
+
+substitution-for label   ""
+
+suggested-representative-figure label   ""
+
+telephone label   ""
+telephone class   ""
+telephone data-format   ""
+
+this-application-is-a label   ""
+
+title-of-invention-simple id   ""
+title-of-invention-simple class   ""
+title-of-invention-simple label   ""
+
+variety-denomination label   ""
+
+which-is-a label   ""
+
