@@ -85,3 +85,9 @@ The script uses a load balancer which detects the number of CPU cores and create
 ### Bulk Database Insertion Performance
 
 The method used to insert data into the database can be configured in two ways.  The script can insert each document record immediately after it is parsed or in bulk after a file is finished being parsed.  Using bulk storage utilizes .csv files to temporarily store the data before it is inserted in bulk.  If the '-database' flag is set but the '-csv' is not set, then the .csv. files are erased after being used to load the data.  
+
+### USTPTO Contact
+
+If you have questions about the USPTO patent data you can contact:
+Author, Joseph Lee: joseph@ripplesoftware.ca
+USPTO: EconomicsData@uspto.gov

@@ -150,7 +150,7 @@ def write_link_arrays_to_file(all_links_array, args_array):
     pair_process_file.close()
     legal_process_file.close()
 
-    logger.info('Finished writing all .zip filepaths to file ' + time.strftime("%c"))
+    logger.info('Finished writing all patent data links to files. Finshed Time: ' + time.strftime("%c"))
     print("Finished writing all patent data links to files. Finshed Time: " + time.strftime("%c"))
 
 # Write all log links to files
@@ -243,6 +243,7 @@ def collect_all_unstarted_links_from_file(args_array):
     application_temp_array = []
     classification_temp_array = []
     pair_temp_array = []
+    legal_temp_array = []
 
     print('Reading all required links to download and parse ' + time.strftime("%c"))
     logger.info('Reading all required links to download and parse ' + time.strftime("%c"))
@@ -308,7 +309,7 @@ def build_or_update_link_files(args_array):
     # Check if links log files exists already
     # If not exists, then find and write all links to file
     #TODO: what if only one log file is missing??  How could that happen??
-    if not os.path.isfile(args_array['grant_process_log_file']) or not os.path.isfile(args_array['application_process_log_file']) or not os.path.isfile(args_array['classification_process_log_file'] not os.path.isfile(args_array['legal_process_log_file'])):
+    if not os.path.isfile(args_array['grant_process_log_file']) or not os.path.isfile(args_array['application_process_log_file']) or not os.path.isfile(args_array['classification_process_log_file']) or not os.path.isfile(args_array['legal_process_log_file']):
 
         print("No existing link file lists found. Creating them now.  " + time.strftime("%c"))
         logger.info('No existing link file lists found. Creating them now. ' + time.strftime("%c"))

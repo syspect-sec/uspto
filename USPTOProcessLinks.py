@@ -272,7 +272,7 @@ def PAIR_links_parser(bulk_source_url):
     soup = BeautifulSoup(content, "html.parser")
     for link in soup.find_all('a', href=True):
         if ".csv.zip" in link['href'] and is_parsable_PAIR_link(link['href']):
-            link_array.append(bulk_source_url + link['href'], "PAIR")
+            link_array.append([bulk_source_url + link['href'], "PAIR"])
     # Return the final array of links
     return link_array
 
@@ -294,7 +294,7 @@ def legal_links_parser(bulk_source_url):
     soup = BeautifulSoup(content, "html.parser")
     for link in soup.find_all('a', href=True):
         if ".csv.zip" in link['href'] and is_parsable_legal_link(link['href']):
-            link_array.append(bulk_source_url + link['href'], "LEGAL")
+            link_array.append([bulk_source_url + link['href'], "LEGAL"])
     # Return the final array of links
     return link_array
 
