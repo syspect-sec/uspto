@@ -134,15 +134,15 @@ def write_link_arrays_to_file(all_links_array, args_array):
 
     # Write all grant and application links to separate files
     for item in all_links_array["grants"]:
-        grant_process_file.write(item[0] + "," + item[1] + ",Processed\n")
+        grant_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
     for item in all_links_array["applications"]:
-        application_process_file.write(item[0] + "," + item[1] + ",Processed\n")
+        application_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
     for item in all_links_array["classifications"]:
-        classification_process_file.write(item[0] + "," + item[1] + ",Processed\n")
+        classification_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
     for item in all_links_array["PAIR"]:
-        pair_process_file.write(item[0] + "," + item[1] + ",Processed\n")
+        pair_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
     for item in all_links_array["legal"]:
-        legal_process_file.write(item[0] + "," + item[1] + ",Processed\n")
+        legal_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
 
     # Close files
     grant_process_file.close()
