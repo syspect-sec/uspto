@@ -79,6 +79,15 @@ def extract_USCPC_class_dict(line, file_name):
     # Return the class dictionary
     return class_dict_array
 
+# Accepts the file-type code and returns the extraction type
+def set_extraction_type(code):
+    if code == "USCLS":
+        return "usclass"
+    elif code == "CPCCLS":
+        return "cpcclass"
+    elif code == "USCPCCLS":
+        return "uscpc"
+
 # Process a line of CSV from classification
 def process_class_content(args_array):
 
@@ -87,10 +96,13 @@ def process_class_content(args_array):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
+    # Set the extraction type
+    args_array['extraction_type'] = set_extraction_type(args_array['uspto_xml_format'])
+
     # If csv file insertion is required, then open all the files
     # into args_array
     if "csv" in args_array['command_args'] or ("database" in args_array['command_args'] and args_array['database_insert_mode'] == "bulk"):
-        args_array['csv_file_array'] = USPTOCSVHandler.open_csv_files(args_array['document_type'], args_array['file_name'], args_array['csv_directory'])
+        args_array['csv_file_array'] = USPTOCSVHandler.open_csv_files(args_array['document_type'], args_array['file_name'], args_array['csv_directory'], args_array['extraction_type'])
 
     # Check the classification filetype code and process accordingly
     if args_array['uspto_xml_format'] == "USCLS":
