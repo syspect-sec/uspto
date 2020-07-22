@@ -383,9 +383,7 @@ CREATE TABLE IF NOT EXISTS uspto.USCPCCONCORDANCE (
   CPCClass VARCHAR(15) DEFAULT NULL,
   Position INT NOT NULL,
   FileName VARCHAR(45) NOT NULL,
-  PRIMARY KEY (USClass, Position, FileName)
-)
-ENGINE = InnoDB;
+  PRIMARY KEY (USClass, Position, FileName));
 
 -- -----------------------------------------------------
 -- Table uspto.INTCLASS_G
@@ -592,8 +590,7 @@ CREATE TABLE IF NOT EXISTS uspto.CASE_L (
   CaseType3 VARCHAR(20) DEFAULT NULL,
   CaseTypeNote VARCHAR(30) DEFAULT NULL,
   FileName VARCHAR(45) NOT NULL,
-  PRIMARY KEY (CaseID, FileName))
-ENGINE = InnoDB;
+  PRIMARY KEY (CaseID, FileName));
 
 -- -----------------------------------------------------
 -- Table uspto.ATTORNEY_L
@@ -606,9 +603,7 @@ CREATE TABLE IF NOT EXISTS uspto.ATTORNEY_L (
   Name VARCHAR(100) NOT NULL,
   ContactInfo TEXT DEFAULT NULL,
   Position VARCHAR(200) DEFAULT NULL,
-  FileName VARCHAR(45) DEFAULT NULL
-)
-ENGINE = InnoDB;
+  FileName VARCHAR(45) DEFAULT NULL);
 
 -- -----------------------------------------------------
 -- Table uspto.PARTY_L
@@ -618,9 +613,7 @@ CREATE TABLE IF NOT EXISTS uspto.PARTY_L (
   CaseID VARCHAR(15) NOT NULL,
   PartyType VARCHAR(50) NOT NULL,
   Name VARCHAR(1000) NOT NULL,
-  FileName VARCHAR(45) NOT NULL
-)
-ENGINE = InnoDB;
+  FileName VARCHAR(45) NOT NULL);
 
 -- -----------------------------------------------------
 -- Table uspto.PATENT_L
@@ -633,8 +626,7 @@ CREATE TABLE IF NOT EXISTS uspto.PATENT_L (
   PatentID VARCHAR(20) NOT NULL,
   PatentDocType VARCHAR(30) DEFAULT NULL,
   FileName VARCHAR(45) NOT NULL,
-  PRIMARY KEY (CaseID, PatentID, FileName))
-ENGINE = InnoDB;
+  PRIMARY KEY (CaseID, PatentID, FileName));
 
 -- -----------------------------------------------------
 -- Table uspto.STARTED_FILES
