@@ -533,9 +533,9 @@ if __name__=="__main__":
     database_insert_mode = "bulk" # values include `each` and `bulk`
 
     # Declare filepaths
-    #app_temp_dirpath = working_directory + "/TMP/"
     if sandbox: app_temp_dirpath = "/Volumes/Thar/uspto/TMP/downloads"
-    else: app_csv_dirpath = working_directory + "/CSV/"
+    else: app_temp_dirpath = working_directory + "/TMP/"
+    app_csv_dirpath = working_directory + "/CSV/"
     app_log_file = working_directory + "/LOG/USPTO_app.log"
     app_config_file = working_directory + "/.USPTO_config.cnf"
     log_lock_file = working_directory + "/LOG/.logfile.lock"

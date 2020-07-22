@@ -449,7 +449,9 @@ def extract_XML1_application(raw_data, args_array):
     try:
         claims = ""
         c_elem = document_root.find('subdoc-claims')
-        claims += USPTOSanitizer.strip_for_csv(' '.join(c_elem.itertext()))
+        if c_elem is not None:
+            claims += USPTOSanitizer.strip_for_csv(' '.join(c_elem.itertext()))
+        else: claims = None
     except Exception as e:
         claims = None
         traceback.print_exc()
