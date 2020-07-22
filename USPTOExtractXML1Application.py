@@ -436,7 +436,9 @@ def extract_XML1_application(raw_data, args_array):
     try:
         description = ""
         d_elem = document_root.find('subdoc-description')
-        description += USPTOSanitizer.strip_for_csv(' '.join(d_elem.itertext()))
+        if d_elem is not None:
+            description += USPTOSanitizer.strip_for_csv(' '.join(d_elem.itertext()))
+        else: description = None
     except Exception as e:
         description = None
         traceback.print_exc()

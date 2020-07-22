@@ -511,7 +511,7 @@ class SQLProcess:
                 with open(csv_file_name, 'r') as read_file, open(temp_file_name, 'w+') as write_file:
                     # Line by line copy data from original file to temp file
                     for line in read_file:
-                        print("Current line: " + str(current_index) + " looking for line: " + str(error_line))
+                        #print("Current line: " + str(current_index) + " looking for line: " + str(error_line))
                         # If current line number matches the given line number then skip copying
                         if int(current_index) != int(error_line):
                             write_file.write(line)

@@ -464,10 +464,12 @@ def extract_XML4_application(raw_data, args_array):
     try:
         description = ""
         d_elem = document_root.find('description')
-        description += USPTOSanitizer.strip_for_csv(' '.join(d_elem.itertext()))
+        if d_elem is not None:
+            description += USPTOSanitizer.strip_for_csv(' '.join(d_elem.itertext()))
+        else: description = None
     except Exception as e:
         description = None
-        traceback.print_exc()
+        #traceback.print_exc()
         logger.error("Exception while extracting description from " + str(app_no) + ": " + traceback.print_exc())
     #print(description)
 
