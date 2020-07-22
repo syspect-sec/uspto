@@ -63,7 +63,9 @@ def start_thread_processes(links_array, args_array, database_args):
     processes = []
 
     # Calculate the total length of all links to collect
-    total_links_count = len(links_array['grants']) + len(links_array['applications']) + len(links_array['classifications']) + + len(links_array['PAIR'])
+    total_links_count = 0
+    for key, value in links_array.items():
+        total_links_count += len(value)
     # Define how many threads should be started
     try:
         # If number_of_threads is set in args
@@ -531,8 +533,8 @@ if __name__=="__main__":
     database_insert_mode = "bulk" # values include `each` and `bulk`
 
     # Declare filepaths
-    app_temp_dirpath = working_directory + "/TMP/"
-    #app_temp_dirpath = "/Volumes/Thar/uspto/TMP/downloads"
+    #app_temp_dirpath = working_directory + "/TMP/"
+    app_temp_dirpath = "/Volumes/Thar/uspto/TMP/downloads"
     app_csv_dirpath = working_directory + "/CSV/"
     app_log_file = working_directory + "/LOG/USPTO_app.log"
     app_config_file = working_directory + "/.USPTO_config.cnf"
@@ -547,8 +549,8 @@ if __name__=="__main__":
     cpc_classification_text_filename = working_directory + "/installation/CLS/cpcclass.csv"
     mysql_database_reset_filename = working_directory + "/installation/uspto_create_database_mysql.sql"
     postgresql_database_reset_filename = working_directory + "/installation/uspto_create_database_postgres.sql"
-    sandbox_downloads_dirpath = working_directory + "/TMP/downloads/"
-    #sandbox_downloads_dirpath = "/Volumes/Thar/uspto/TMP/downloads/"
+    #sandbox_downloads_dirpath = working_directory + "/TMP/downloads/"
+    sandbox_downloads_dirpath = "/Volumes/Thar/uspto/TMP/downloads/"
 
     # Database args
     database_args = {

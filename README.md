@@ -66,7 +66,7 @@ Finally, the script can be run in 'sandbox mode' or normal mode by setting a fla
 
 The script will keep track of processed files in the **LOG** directory. There are log files for grants (**grant_links.log**) and applications (**application_links.log**), and a main log file **USPTO_app.log** which keeps track of errors and warnings from the script.  If the script crashes for any reason, you can simply start the script again and it will clear any partially processed data and start where it left off.  You can set the verbosity of the stdout and **USPTO_app.log** logs with the 'log_level' and 'stdout_level' variables at the top of the main function.
 
-You should check of the **grant_links.log** and **application_links.log** files after the script has completed to make sure that each line in those files says "Processed" at the end.  If the file has not been processed, the line will end with "Unprocessed" and you should run the script again to finish any files that were not processed.
+You should check of the **grant_links.log** and **application_links.log** files after the script has completed to make sure that each line in those files says "Processed" at the end.  If the file has not been processed, the line will end with "Processed" and you should run the script again to finish any files that were not processed.
 
 ### 4. Schedule the updater
 

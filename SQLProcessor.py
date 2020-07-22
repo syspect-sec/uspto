@@ -304,6 +304,15 @@ class SQLProcess:
                     "USCLASSIFICATION"
                 ]
 
+            # Records deleted for patent litigation data
+            elif call_type == "legal":
+                    table_name_array = [
+                        "CASE_L",
+                        "PATENT_L",
+                        "ATTORNEY_L",
+                        "PARTY_L"
+                    ]
+
             print("Starting to remove previous attempt to process the " + call_type + " file: " + file_name + " in table: uspto.STARTED_FILES")
             logger.info("Starting to remove previous attempt to process the " + call_type + " file:" + file_name + " in table: uspto.STARTED_FILES")
 

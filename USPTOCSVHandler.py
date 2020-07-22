@@ -19,7 +19,7 @@ import USPTOLogger
 # Function used to open the required csv files and create a csv.DictWrite object
 # for each one.  This function also creates arrays of table column names for each table
 # and returns both the csv.DictWrite and table column arrays back to the args_array.
-def open_csv_files(file_type, file_name, csv_directory):
+def open_csv_files(file_type, file_name, csv_directory, extraction_type=None):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
@@ -200,145 +200,95 @@ def open_csv_files(file_type, file_name, csv_directory):
 
         # Create array of field names for each PAIR table
         # and append to array to be passed back with args array
-        #field_names_array['transaction'] = ['ApplicationID', 'PublicationID', 'FileDate', 'Kind', 'USSeriesCode', 'AppType', 'PublishDate', 'Title', 'Abstract', 'ClaimsNum', 'DrawingsNum', 'FiguresNum', 'Description', 'Claims', 'FileName']
-        #field_names_array['adjustment'] = ['ApplicationID', 'Position', 'OrgName', 'LastName', 'FirstName', 'Address', 'City', 'State', 'Country', 'FileName']
-        #field_names_array['adjustmentdesc'] = ['ApplicationID', 'Position', 'OrgName', 'FirstName', 'LastName', 'Role', 'City', 'State', 'Country', 'FileName']
-        field_names_array['correspondence'] = ['ApplicationID', 'Name1', 'Name2', 'Address', 'City', 'RegionCode', 'RegionName', 'PostalCode', 'CountryCode', 'CountryName', 'CustomerNum', 'FileName']
-        field_names_array['continuitychild'] = ['ApplicationID', 'Position', 'ChildApplicationID', 'FileDate', 'ContinuationType', 'FileName']
-        field_names_array['continuityparent'] = ['ApplicationID', 'Position', 'ParentApplicationID', 'FileDate', 'ContinuationType', 'FileName']
-        #field_names_array['extension'] = ['ApplicationID', 'Position', 'Section', 'Class', 'SubClass', 'MainGroup', 'SubGroup', 'Malformed', 'FileName']
-        #field_names_array['extensiondesc'] = ['ApplicationID', 'Position', 'Section', 'Class', 'SubClass', 'MainGroup', 'SubGroup', 'Malformed', 'FileName']
-
-        # Define all the dicionaries to hold the csv data
-        #csv_writer_array['transaction'] = {}
-        #csv_writer_array['adjustment'] = {}
-        #csv_writer_array['adjustmentdesc'] = {}
-        csv_writer_array['correspondence'] = {}
-        csv_writer_array['continuitychild'] = {}
-        csv_writer_array['continuityparent'] = {}
-        #csv_writer_array['extension'] = {}
-        #csv_writer_array['extensiondesc'] = {}
-
-        # Define all the .csv filenames fullpath and append to array
-        #csv_writer_array['transaction']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-        #csv_writer_array['adjustment']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-        #csv_writer_array['adjustmentdesc']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-        csv_writer_array['correspondence']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-        csv_writer_array['continuitychild']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-        csv_writer_array['continuityparent']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-        #csv_writer_array['extension']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-        #csv_writer_array['extensiondesc']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-
-
-        # Define all the dictionaries to hold the csv data
-        #csv_writer_array['transaction']['file'] = open(csv_writer_array['transaction']['csv_file_name'], 'w')
-        #csv_writer_array['adjustment']['file'] = open(csv_writer_array['adjustment']['csv_file_name'], 'w')
-        #csv_writer_array['adjustmentdesc']['file'] = open(csv_writer_array['adjustmentdesc']['csv_file_name'], 'w')
-        csv_writer_array['correspondence']['file'] = open(csv_writer_array['correspondence']['csv_file_name'], 'w')
-        csv_writer_array['continuitychild']['file'] = open(csv_writer_array['continuitychild']['csv_file_name'], 'w')
-        csv_writer_array['continuityparent']['file'] = open(csv_writer_array['continuityparent']['csv_file_name'], 'w')
-        #csv_writer_array['extension']['file'] = open(csv_writer_array['extension']['csv_file_name'], 'w')
-        #csv_writer_array['extensiondesc']['file'] = open(csv_writer_array['extensiondesc']['csv_file_name'], 'w')
-
-        # Open all CSV files to write to and append to array
-        #csv_writer_array['transaction']['csv_writer'] = csv.DictWriter(csv_writer_array['transaction']['file'], fieldnames = field_names_array['transaction'], delimiter = '|', lineterminator = "\n")
-        #csv_writer_array['adjustment']['csv_writer'] = csv.DictWriter(csv_writer_array['adjustment']['file'], fieldnames = field_names_array['adjustment'], delimiter = '|', lineterminator = "\n")
-        #csv_writer_array['adjustmentdesc']['csv_writer'] = csv.DictWriter(csv_writer_array['adjustmentdesc']['file'], fieldnames = field_names_array['adjustmentdesc'], delimiter = '|', lineterminator = "\n")
-        csv_writer_array['correspondence']['csv_writer'] = csv.DictWriter(csv_writer_array['correspondence']['file'], fieldnames = field_names_array['correspondence'], delimiter = '|', lineterminator = "\n")
-        csv_writer_array['continuitychild']['csv_writer'] = csv.DictWriter(csv_writer_array['continuitychild']['file'], fieldnames = field_names_array['continuitychild'], delimiter = '|', lineterminator = "\n")
-        csv_writer_array['continuityparent']['csv_writer'] = csv.DictWriter(csv_writer_array['continuityparent']['file'], fieldnames = field_names_array['continuityparent'], delimiter = '|', lineterminator = "\n")
-        #csv_writer_array['extension']['csv_writer'] = csv.DictWriter(csv_writer_array['extension']['file'], fieldnames = field_names_array['extension'], delimiter = '|', lineterminator = "\n")
-        #csv_writer_array['extensiondesc']['csv_writer'] = csv.DictWriter(csv_writer_array['extensiondesc']['file'], fieldnames = field_names_array['extensiondesc'], delimiter = '|', lineterminator = "\n")
-
-        # Write header for all application csv files
-        #csv_writer_array['transaction']['csv_writer'].writeheader()
-        #csv_writer_array['adjustment']['csv_writer'].writeheader()
-        #csv_writer_array['adjustmentdesc']['csv_writer'].writeheader()
-        csv_writer_array['correspondence']['csv_writer'].writeheader()
-        csv_writer_array['continuitychild']['csv_writer'].writeheader()
-        csv_writer_array['continuityparent']['csv_writer'].writeheader()
-        #csv_writer_array['extension']['csv_writer'].writeheader()
-        #csv_writer_array['extensiondesc']['csv_writer'].writeheader()
+        if extraction_type == "correspondence":
+            field_names_array['correspondence'] = ['ApplicationID', 'Name1', 'Name2', 'Address', 'City', 'RegionCode', 'RegionName', 'PostalCode', 'CountryCode', 'CountryName', 'CustomerNum', 'FileName']
+            csv_writer_array['correspondence'] = {}
+            csv_writer_array['correspondence']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
+            csv_writer_array['correspondence']['file'] = open(csv_writer_array['correspondence']['csv_file_name'], 'w')
+            csv_writer_array['correspondence']['csv_writer'] = csv.DictWriter(csv_writer_array['correspondence']['file'], fieldnames = field_names_array['correspondence'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['correspondence']['csv_writer'].writeheader()
+        elif extraction_type == "continuitychild":
+            csv_writer_array['continuitychild'] = {}
+            field_names_array['continuitychild'] = ['ApplicationID', 'Position', 'ChildApplicationID', 'FileDate', 'ContinuationType', 'FileName']
+            csv_writer_array['continuitychild']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
+            csv_writer_array['continuitychild']['file'] = open(csv_writer_array['continuitychild']['csv_file_name'], 'w')
+            csv_writer_array['continuitychild']['csv_writer'] = csv.DictWriter(csv_writer_array['continuitychild']['file'], fieldnames = field_names_array['continuitychild'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['continuitychild']['csv_writer'].writeheader()
+        elif extraction_type == "continuityparent":
+            csv_writer_array['continuityparent'] = {}
+            field_names_array['continuityparent'] = ['ApplicationID', 'Position', 'ParentApplicationID', 'FileDate', 'ContinuationType', 'FileName']
+            csv_writer_array['continuityparent']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
+            csv_writer_array['continuityparent']['file'] = open(csv_writer_array['continuityparent']['csv_file_name'], 'w')
+            csv_writer_array['continuityparent']['csv_writer'] = csv.DictWriter(csv_writer_array['continuityparent']['file'], fieldnames = field_names_array['continuityparent'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['continuityparent']['csv_writer'].writeheader()
 
     # If the classification CSV file will be written
     elif file_type == "class":
 
         # Create array of field names for each classification table
         # and append to array to be passed back with args array
-        field_names_array['usclass'] = ['Class', 'SubClass', 'Indent', 'SubClsSqsNum', 'NextHigherSub', 'Title', 'FileName']
-        field_names_array['cpcclass'] = ['Section', 'Class', 'SubClass', 'MainGroup', 'SubGroup', 'Title', 'FileName']
-        field_names_array['uscpc'] = ['USClass', 'CPCClass', 'Position', 'FileName']
-
-        # Define all the dicionaries to hold the csv data
-        csv_writer_array['usclass'] = {}
-        csv_writer_array['cpcclass'] = {}
-        csv_writer_array['uscpc'] = {}
-
-        # Define all the .csv filenames fullpath and append to array
-        csv_writer_array['usclass']['csv_file_name'] = csv_directory + 'CSV_C/' + csv_file_name
-        csv_writer_array['cpcclass']['csv_file_name'] = csv_directory + 'CSV_C/' + csv_file_name
-        csv_writer_array['uscpc']['csv_file_name'] = csv_directory + 'CSV_C/' + csv_file_name
-
-        # Define all the dictionaries to hold the csv data
-        csv_writer_array['usclass']['file'] = open(csv_writer_array['usclass']['csv_file_name'], 'w')
-        csv_writer_array['cpcclass']['file'] = open(csv_writer_array['cpcclass']['csv_file_name'], 'w')
-        csv_writer_array['uscpc']['file'] = open(csv_writer_array['uscpc']['csv_file_name'], 'w')
-
-        # Open all CSV files to write to and append to array
-        csv_writer_array['usclass']['csv_writer'] = csv.DictWriter(csv_writer_array['usclass']['file'], fieldnames = field_names_array['usclass'], delimiter = '|', lineterminator = "\n")
-        csv_writer_array['cpcclass']['csv_writer'] = csv.DictWriter(csv_writer_array['cpcclass']['file'], fieldnames = field_names_array['cpcclass'], delimiter = '|', lineterminator = "\n")
-        csv_writer_array['uscpc']['csv_writer'] = csv.DictWriter(csv_writer_array['uscpc']['file'], fieldnames = field_names_array['uscpc'], delimiter = '|', lineterminator = "\n")
-
-        # Write header for all application csv files
-        csv_writer_array['usclass']['csv_writer'].writeheader()
-        csv_writer_array['cpcclass']['csv_writer'].writeheader()
-        csv_writer_array['uscpc']['csv_writer'].writeheader()
+        if extraction_type == "usclass":
+            field_names_array['usclass'] = ['Class', 'SubClass', 'Indent', 'SubClsSqsNum', 'NextHigherSub', 'Title', 'FileName']
+            csv_writer_array['usclass'] = {}
+            csv_writer_array['usclass']['csv_file_name'] = csv_directory + 'CSV_C/' + csv_file_name
+            csv_writer_array['usclass']['file'] = open(csv_writer_array['usclass']['csv_file_name'], 'w')
+            csv_writer_array['usclass']['csv_writer'] = csv.DictWriter(csv_writer_array['usclass']['file'], fieldnames = field_names_array['usclass'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['usclass']['csv_writer'].writeheader()
+        elif extraction_type == "cpcclass":
+            field_names_array['cpcclass'] = ['Section', 'Class', 'SubClass', 'MainGroup', 'SubGroup', 'Title', 'FileName']
+            csv_writer_array['cpcclass'] = {}
+            csv_writer_array['cpcclass']['csv_file_name'] = csv_directory + 'CSV_C/' + csv_file_name
+            csv_writer_array['cpcclass']['file'] = open(csv_writer_array['cpcclass']['csv_file_name'], 'w')
+            csv_writer_array['cpcclass']['csv_writer'] = csv.DictWriter(csv_writer_array['cpcclass']['file'], fieldnames = field_names_array['cpcclass'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['cpcclass']['csv_writer'].writeheader()
+        elif extraction_type == "uscpc":
+            field_names_array['uscpc'] = ['USClass', 'CPCClass', 'Position', 'FileName']
+            csv_writer_array['uscpc'] = {}
+            csv_writer_array['uscpc']['csv_file_name'] = csv_directory + 'CSV_C/' + csv_file_name
+            csv_writer_array['uscpc']['file'] = open(csv_writer_array['uscpc']['csv_file_name'], 'w')
+            csv_writer_array['uscpc']['csv_writer'] = csv.DictWriter(csv_writer_array['uscpc']['file'], fieldnames = field_names_array['uscpc'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['uscpc']['csv_writer'].writeheader()
 
     # If the legal CSV file will be written
     elif file_type == "legal":
 
         # Create array of field names for each legal table
         # and append to array to be passed back with args array
-        field_names_array['cases'] = ['CaseID', 'PacerID', 'CourtTitle', 'DistrictID', 'CaseTitle', 'AssignedTo', 'ReferredTo', 'Cause', 'JurisdictionBasis', 'FileDate', 'CloseDate', 'LastFileDate', 'JuryDemand', 'Demand', 'LeadCase', 'RelatedCase', 'Settlement', 'CaseIDRaw', 'CaseType1', 'CaseType2', 'CaseType3', 'CaseTypeNote', 'FileName']
-        field_names_array['pacercases'] = ['USClass', 'CPCClass', 'Position', 'FileName']
-        field_names_array['names'] = ['CaseID', 'PartyType', 'Name', 'FileName']
-        field_names_array['attorneys'] = ['CaseID', 'CaseIDRaw', 'PartyType', 'Name', 'ContactInfo', 'Position', 'FileName']
-        field_names_array['patents'] = ['CaseID', 'PacerID', 'NOS', 'PatentID', 'PatentDocType', 'FileName']
-
-        # Define all the dicionaries to hold the csv data
-        csv_writer_array['cases'] = {}
-        csv_writer_array['pacercases'] = {}
-        csv_writer_array['names'] = {}
-        csv_writer_array['attorneys'] = {}
-        csv_writer_array['patents'] = {}
-
-        # Define all the .csv filenames fullpath and append to array
-        csv_writer_array['cases']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
-        csv_writer_array['pacercases']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
-        csv_writer_array['names']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
-        csv_writer_array['attorneys']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
-        csv_writer_array['patents']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
-
-        # Define all the dictionaries to hold the csv data
-        csv_writer_array['cases']['file'] = open(csv_writer_array['cases']['csv_file_name'], 'w')
-        csv_writer_array['pacercases']['file'] = open(csv_writer_array['pacercases']['csv_file_name'], 'w')
-        csv_writer_array['names']['file'] = open(csv_writer_array['names']['csv_file_name'], 'w')
-        csv_writer_array['attorneys']['file'] = open(csv_writer_array['attorneys']['csv_file_name'], 'w')
-        csv_writer_array['patents']['file'] = open(csv_writer_array['patents']['csv_file_name'], 'w')
-
-        # Open all CSV files to write to and append to array
-        csv_writer_array['cases']['csv_writer'] = csv.DictWriter(csv_writer_array['cases']['file'], fieldnames = field_names_array['cases'], delimiter = '|', lineterminator = "\n")
-        csv_writer_array['pacercases']['csv_writer'] = csv.DictWriter(csv_writer_array['pacercases']['file'], fieldnames = field_names_array['pacercases'], delimiter = '|', lineterminator = "\n")
-        csv_writer_array['names']['csv_writer'] = csv.DictWriter(csv_writer_array['names']['file'], fieldnames = field_names_array['names'], delimiter = '|', lineterminator = "\n")
-        csv_writer_array['attorneys']['csv_writer'] = csv.DictWriter(csv_writer_array['attorneys']['file'], fieldnames = field_names_array['attorneys'], delimiter = '|', lineterminator = "\n")
-        csv_writer_array['patents']['csv_writer'] = csv.DictWriter(csv_writer_array['patents']['file'], fieldnames = field_names_array['patents'], delimiter = '|', lineterminator = "\n")
-
-        # Write header for all application csv files
-        csv_writer_array['cases']['csv_writer'].writeheader()
-        csv_writer_array['pacercases']['csv_writer'].writeheader()
-        csv_writer_array['names']['csv_writer'].writeheader()
-        csv_writer_array['attorneys']['csv_writer'].writeheader()
-        csv_writer_array['patents']['csv_writer'].writeheader()
+        if extraction_type == "cases":
+            field_names_array['cases'] = ['CaseID', 'PacerID', 'CourtTitle', 'DistrictID', 'CaseTitle', 'AssignedTo', 'ReferredTo', 'Cause', 'JurisdictionBasis', 'FileDate', 'CloseDate', 'LastFileDate', 'JuryDemand', 'Demand', 'LeadCase', 'RelatedCase', 'Settlement', 'CaseIDRaw', 'CaseType1', 'CaseType2', 'CaseType3', 'CaseTypeNote', 'FileName']
+            csv_writer_array['cases'] = {}
+            csv_writer_array['cases']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
+            csv_writer_array['cases']['file'] = open(csv_writer_array['cases']['csv_file_name'], 'w')
+            csv_writer_array['cases']['csv_writer'] = csv.DictWriter(csv_writer_array['cases']['file'], fieldnames = field_names_array['cases'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['cases']['csv_writer'].writeheader()
+        elif extraction_type == "pacercases":
+            field_names_array['pacercases'] = ['USClass', 'CPCClass', 'Position', 'FileName']
+            csv_writer_array['pacercases'] = {}
+            csv_writer_array['pacercases']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
+            csv_writer_array['pacercases']['file'] = open(csv_writer_array['pacercases']['csv_file_name'], 'w')
+            csv_writer_array['pacercases']['csv_writer'] = csv.DictWriter(csv_writer_array['pacercases']['file'], fieldnames = field_names_array['pacercases'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['pacercases']['csv_writer'].writeheader()
+        elif extraction_type == "names":
+            field_names_array['names'] = ['CaseID', 'PartyType', 'Name', 'FileName']
+            csv_writer_array['names'] = {}
+            csv_writer_array['names']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
+            csv_writer_array['names']['file'] = open(csv_writer_array['names']['csv_file_name'], 'w')
+            csv_writer_array['names']['csv_writer'] = csv.DictWriter(csv_writer_array['names']['file'], fieldnames = field_names_array['names'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['names']['csv_writer'].writeheader()
+        elif extraction_type == "attorneys":
+            field_names_array['attorneys'] = ['CaseID', 'CaseIDRaw', 'PartyType', 'Name', 'ContactInfo', 'Position', 'FileName']
+            csv_writer_array['attorneys'] = {}
+            csv_writer_array['attorneys']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
+            csv_writer_array['attorneys']['file'] = open(csv_writer_array['attorneys']['csv_file_name'], 'w')
+            csv_writer_array['attorneys']['csv_writer'] = csv.DictWriter(csv_writer_array['attorneys']['file'], fieldnames = field_names_array['attorneys'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['attorneys']['csv_writer'].writeheader()
+        elif extraction_type == "patents":
+            field_names_array['patents'] = ['CaseID', 'PacerID', 'NOS', 'PatentID', 'PatentDocType', 'FileName']
+            csv_writer_array['patents'] = {}
+            csv_writer_array['patents']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
+            csv_writer_array['patents']['file'] = open(csv_writer_array['patents']['csv_file_name'], 'w')
+            csv_writer_array['patents']['csv_writer'] = csv.DictWriter(csv_writer_array['patents']['file'], fieldnames = field_names_array['patents'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['patents']['csv_writer'].writeheader()
 
     print('[Opened all .csv files for ' + file_type + ' ' + file_name + ' storage Time: {0}]'.format(time.strftime('%c')))
     logger.info('Opened all .csv files for ' + file_type + ' ' + file_name + ' storage Time: {0}]'.format(time.strftime('%c')))

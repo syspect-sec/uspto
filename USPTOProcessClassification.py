@@ -110,6 +110,7 @@ def process_class_content(args_array):
     # Titles for CPC classifications
     elif args_array['uspto_xml_format'] == "CPCCLS":
 
+        extraction_type = "cpc"
         # Open file in read mode
         with open(args_array['url_link'], 'r') as read_obj:
             # Pass the file object to reader() to get the reader object

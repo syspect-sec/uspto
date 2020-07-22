@@ -52,6 +52,7 @@ def write_process_log(args_array):
     elif document_type == "application" : log_file_to_rewrite = args_array['application_process_log_file']
     elif document_type == "class" : log_file_to_rewrite = args_array['classification_process_log_file']
     elif document_type == "PAIR" : log_file_to_rewrite = args_array['pair_process_log_file']
+    elif document_type == "legal" : log_file_to_rewrite = args_array['legal_process_log_file']
 
     # variable hold while loop running
     log_rewrite_success = 0
@@ -133,15 +134,15 @@ def write_link_arrays_to_file(all_links_array, args_array):
 
     # Write all grant and application links to separate files
     for item in all_links_array["grants"]:
-        grant_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+        grant_process_file.write(item[0] + "," + item[1] + ",Processed\n")
     for item in all_links_array["applications"]:
-        application_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+        application_process_file.write(item[0] + "," + item[1] + ",Processed\n")
     for item in all_links_array["classifications"]:
-        classification_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+        classification_process_file.write(item[0] + "," + item[1] + ",Processed\n")
     for item in all_links_array["PAIR"]:
-        pair_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+        pair_process_file.write(item[0] + "," + item[1] + ",Processed\n")
     for item in all_links_array["legal"]:
-        legal_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+        legal_process_file.write(item[0] + "," + item[1] + ",Processed\n")
 
     # Close files
     grant_process_file.close()
@@ -191,7 +192,7 @@ def update_link_arrays_to_file(all_links_array, args_array):
         if link_found_flag == False:
             print("- New patent grant data file found..." + new_item[0])
             # Append the new links to array
-            grant_process_data_array.append(new_item[0] + "," + new_item[1] + ",Unprocessed\n")
+            grant_process_data_array.append(new_item[0] + "," + new_item[1] + ",Processed\n")
 
     # Check if new found grant links exist already in file
     for new_item in all_links_array['applications']:
@@ -210,7 +211,7 @@ def update_link_arrays_to_file(all_links_array, args_array):
         if link_found_flag == False:
             print("- New patent application data file found..." + new_item[0])
             # Append the new links to array
-            application_process_data_array.append(new_item[0] + "," + new_item[1] + ",Unprocessed\n")
+            application_process_data_array.append(new_item[0] + "," + new_item[1] + ",Processed\n")
 
     grant_process_file = open(args_array['grant_process_log_file'], "w")
     application_process_file = open(args_array['application_process_log_file'], "w")

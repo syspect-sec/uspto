@@ -23,6 +23,7 @@ import USPTOProcessXMLGrant
 import USPTOProcessAPSGrant
 import USPTOProcessXMLApplication
 import USPTOProcessPAIRData
+import USPTOProcessLegalData
 import USPTOProcessClassification
 import USPTOExtractXML4Grant
 import USPTOExtractXML2Grant
@@ -165,7 +166,7 @@ def process_link_file(args_array):
         elif args_array['uspto_xml_format'] == "PAIR":
             file_processed_success = USPTOProcessPAIRData.process_PAIR_content(args_array)
         elif args_array['uspto_xml_format'] == "LEGAL":
-            file_processed_success = USPTOProcessLEGALData.process_legal_content(args_array)
+            file_processed_success = USPTOProcessLegalData.process_legal_content(args_array)
         elif "CLS" in args_array['uspto_xml_format']:
             file_processed_success = USPTOProcessClassification.process_class_content(args_array)
 
@@ -412,8 +413,14 @@ def is_duplicate_link(type, link):
     link = link.split("/")[-1]
     if type == "PG":
         #links_to_remove = ["2001.zip", "2000.zip", "1999.zip", "1998.zip", "1997.zip", "1996.zip"]
-        links_to_remove = ["pgb2001", "pba2000", "pba1999", "pba1998",
-        "pba1997", "pba1996"]
+        links_to_remove = [
+            "pgb2001",
+            "pba2000",
+            "pba1999",
+            "pba1998",
+            "pba1997",
+            "pba1996"
+        ]
         is_duplicate = False
         for item in links_to_remove:
             if item in link:
@@ -450,7 +457,7 @@ def is_parsable_legal_link(link):
         "attorneys.csv.zip",
         "cases.csv.zip",
         #"documents.csv.zip",
-        #"names.csv.zip",
+        "names.csv.zip",
         #"pacer_cases.csv.zip",
         "patents.csv.zip"
     ]
