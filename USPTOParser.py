@@ -534,8 +534,8 @@ if __name__=="__main__":
 
     # Declare filepaths
     #app_temp_dirpath = working_directory + "/TMP/"
-    app_temp_dirpath = "/Volumes/Thar/uspto/TMP/downloads"
-    app_csv_dirpath = working_directory + "/CSV/"
+    if sandbox: app_temp_dirpath = "/Volumes/Thar/uspto/TMP/downloads"
+    else: app_csv_dirpath = working_directory + "/CSV/"
     app_log_file = working_directory + "/LOG/USPTO_app.log"
     app_config_file = working_directory + "/.USPTO_config.cnf"
     log_lock_file = working_directory + "/LOG/.logfile.lock"
@@ -549,8 +549,8 @@ if __name__=="__main__":
     cpc_classification_text_filename = working_directory + "/installation/CLS/cpcclass.csv"
     mysql_database_reset_filename = working_directory + "/installation/uspto_create_database_mysql.sql"
     postgresql_database_reset_filename = working_directory + "/installation/uspto_create_database_postgres.sql"
-    #sandbox_downloads_dirpath = working_directory + "/TMP/downloads/"
-    sandbox_downloads_dirpath = "/Volumes/Thar/uspto/TMP/downloads/"
+    if sandbox: sandbox_downloads_dirpath = "/Volumes/Thar/uspto/TMP/downloads/"
+    else: sandbox_downloads_dirpath = working_directory + "/TMP/downloads/"
 
     # Database args
     database_args = {
