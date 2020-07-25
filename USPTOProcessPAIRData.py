@@ -38,11 +38,12 @@ def process_PAIR_content(args_array):
 
     # Set a flag based on filename to call the extraction function
     args_array['extraction_type'] = set_extraction_type(csv_file_name)
+    csv_output_filename = set_csv_output_filename(csv_file_name)
 
     # If csv file insertion is required, then open all the files
     # into args_array
     if "csv" in args_array['command_args'] or ("database" in args_array['command_args'] and args_array['database_insert_mode'] == "bulk"):
-        args_array['csv_file_array'] = USPTOCSVHandler.open_csv_files(args_array['document_type'], args_array['file_name'], args_array['csv_directory'], args_array['extraction_type'])
+        args_array['csv_file_array'] = USPTOCSVHandler.open_csv_files(args_array['document_type'], csv_output_filename, args_array['csv_directory'], args_array['extraction_type'])
 
     # Open file in read mode
     with open(csv_file_name, 'r') as read_obj:
@@ -103,6 +104,15 @@ def process_PAIR_content(args_array):
 
 # Returns a code for the extraction type
 def set_extraction_type(filename):
+    if "transactions" in filename: return "transaction"
+    elif "pat_term_adj" in filename: return "adjustment"
+    elif "continuity_children" in filename: return "continuitychild"
+    elif "continuity_parents" in filename: return "continuityparent"
+    elif "correspondence_address" in filename: return "correspondence"
+    else: return None
+
+# Returns the csv output filename
+def set_csv_output_filename(filename):
     if "transactions" in filename: return "transaction"
     elif "pat_term_adj" in filename: return "adjustment"
     elif "continuity_children" in filename: return "continuitychild"

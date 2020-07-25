@@ -11,6 +11,7 @@ from pprint import pprint
 
 # Import USPTO Parser Functions
 import USPTOLogger
+import USPTOSanitizer
 
 class SQLProcess:
 
@@ -43,8 +44,6 @@ class SQLProcess:
         try:
             self._cursor.execute(sql)
             #self._conn.commit()
-            #result = self._cursor.fetchall()  #fetchone(), fetchmany(n)
-            #return result  #return affected rows
         except Exception as e:
             # If there is an error and using databse postgresql
             # Then rollback the commit??
@@ -114,6 +113,9 @@ class SQLProcess:
                         traceback_array = traceback.format_exc().splitlines()
                         for line in traceback_array:
                             if "duplicate key" in line:
+                                # Insert the csv file item by item
+                                self.insert_csv_item_by_item(csv_file_obj['csv_file_name'], args_array)
+                                # Remove the offending line from csv file
                                 self.remove_item_from_csv(traceback_array, csv_file_obj['csv_file_name'])
 
                         # Return a unsucessful flag
@@ -301,7 +303,7 @@ class SQLProcess:
             # Records deleted for classifcation data
             elif call_type == "class":
                 table_name_array = [
-                    "USCLASSIFICATION"
+                    "USCLASS_C"
                 ]
 
             # Records deleted for patent litigation data
@@ -483,7 +485,6 @@ class SQLProcess:
             self._conn = None
         print('Connection to database closed successfully.')
 
-
     # Searches a csv file and extracts any items with the ID in traceback string
     def remove_item_from_csv(self, traceback_array, csv_file_name):
 
@@ -537,63 +538,123 @@ class SQLProcess:
                     print("Temp file: " + temp_file_name + " removed...")
                     logger.warning("Temp file: " + temp_file_name + " removed...")
 
+    # This function will open the csv file and then
+    # load it into the database item by item
+    def insert_csv_item_by_item(self, csv_file, args_array):
 
-# This function accepts a table name and a dictionary with keys as column names and values as data.
-# It builds an sql query out of this array.
-def build_sql_insert_query(insert_data_array, args_array):
+        # Set the start time of operation
+        start_time = time.time()
 
-    uspto_xml_format = args_array['uspto_xml_format']
+        logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+        print("[Reverting to item-by-item insertion for csv file " + csv_file + "...]")
+        logger.info("[Reverting to item-by-item insertion for csv file " + csv_file + "...]")
 
-    # Set a length counter used to find when the last item is appended to query string
-    array_length_counter = 1
-    length_of_array = len(insert_data_array) - 1
-    # Pass the table name to variable
-    table_name = insert_data_array['table_name']
-    # Pop the table name off the array to be stored into database
-    del insert_data_array['table_name']
+        # Open the file to read and extract array
+        with open(csv_file, "r") as csv_infile:
+            csv_contents = csv_infile.readlines()
 
-    sql_query_string = "INSERT INTO " + table_name + " "
-    sql_column_string = "("
-    sql_value_string = " VALUES ("
-    # Concatenate the list of keys and values to sql format
-    for key, value in list(insert_data_array.items()):
+        # Get a list of column names from first item
+        fields = csv_contents[0].split("|")
+        # Pop the field headers from file
+        csv_contents.pop()
 
-        # Don't escape values that are None (NULL)
-        if value is not None and isinstance(value, int) == False:
-            # Escape all values for sql insertion
-            value = USPTOSanitizer.escape_value_for_sql(str(value.encode('utf-8')))
-            # Since postgresql uses `$` as delimiter, must  strip from first and last char
-            value = value.strip("$").replace("$$$", "$").replace("$$", "$")
+        # Insert each item into database
+        for item in csv_contents:
+            # Build the insert array with field names as keys
+            insert_dict = {}
+            # Get the table name and add to dict
+            insert_dict['table_name'] = self.get_table_name_from_csv_filename(csv_file)
 
-        # If the last item in the array then append line without comma at end
-        if length_of_array == array_length_counter:
-            sql_column_string += key
-            # Check for None value and append
-            if value == None:
-                sql_value_string += 'NULL'
+            # Create a data dictionary for the item
+            insert_values = item.split("|")
+            for i in range(len(fields)):
+                insert_dict[fields[i]] = insert_values[i]
+            # Build a sql query string for the item
+            sql = self.build_sql_insert_query(insert_dict, args_array)
+            # Submit the item to database insertion
+            self.load(sql, args_array)
+
+        print("[Completed item-by-item insertion for csv file " + csv_file + "...]")
+        logger.info("[Completed item-by-item insertion for csv file " + csv_file + "...]")
+
+    # This function accepts the csv_file, extracts the filename and
+    # returns the name of the database table associated
+    def get_table_name_from_csv_filename(self, csv_file):
+        # Get the table extention
+        if "CSV_G" in csv_file: table_ext = "_G"
+        elif "CSV_A" in csv_file: table_ext = "_A"
+        elif "CSV_L" in csv_file: table_ext = "_L"
+        elif "CSV_P" in csv_file: table_ext = "_P"
+        elif "CSV_C" in csv_file: table_ext = "_C"
+        # Remove file extention
+        csv_file = csv_file.split("/")[-1].replace(".csv", "")
+        # Get target table name
+        if "_" in csv_file: table_name = csv_file.split("_")[0].upper()
+        else: table_name = csv_file
+        # return with extension
+        return "uspto." + table_name + table_ext
+
+
+    # This function accepts a table name and a dictionary
+    # with keys as column names and values as data.
+    # It builds an sql query out of this array.
+    def build_sql_insert_query(self, insert_data_array, args_array):
+
+        logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+
+        uspto_xml_format = args_array['uspto_xml_format']
+
+        # Set a length counter used to find when the last item is appended to query string
+        array_length_counter = 1
+        length_of_array = len(insert_data_array) - 1
+        # Pass the table name to variable
+        table_name = insert_data_array['table_name']
+        # Pop the table name off the array to be stored into database
+        del insert_data_array['table_name']
+
+        sql_query_string = "INSERT INTO " + table_name + " "
+        sql_column_string = "("
+        sql_value_string = " VALUES ("
+        # Concatenate the list of keys and values to sql format
+        for key, value in list(insert_data_array.items()):
+
+            # Don't escape values that are None (NULL)
+            if value is not None and isinstance(value, int) == False:
+                # Escape all values for sql insertion
+                value = USPTOSanitizer.escape_value_for_sql(str(value.encode('utf-8')))
+                # Since postgresql uses `$` as delimiter, must  strip from first and last char
+                value = value.strip("$").replace("$$$", "$").replace("$$", "$")
+
+            # If the last item in the array then append line without comma at end
+            if length_of_array == array_length_counter:
+                sql_column_string += key
+                # Check for None value and append
+                if value == None:
+                    sql_value_string += 'NULL'
+                else:
+                    # PostgreSQL strings will be escaped slightly different than MySQL
+                    if args_array['database_type'] == 'postgresql':
+                        sql_value_string += "$$" + str(value)+ "$$"
+                    elif args_array['database_type'] == 'mysql':
+                        sql_value_string += '"' + str(value) + '"'
+            # If not the last item then append with comma
             else:
-                # PostgreSQL strings will be escaped slightly different than MySQL
-                if args_array['database_type'] == 'postgresql':
-                    sql_value_string += "$$" + str(value)+ "$$"
-                elif args_array['database_type'] == 'mysql':
-                    sql_value_string += '"' + str(value) + '"'
-        # If not the last item then append with comma
-        else:
-            sql_column_string += key + ", "
-            # Check if value is None
-            if value == None:
-                sql_value_string +=  'NULL,'
-            else:
-                if args_array['database_type'] == 'postgresql':
-                    sql_value_string +=  "$$" + str(value) + "$$,"
-                elif args_array['database_type'] == 'mysql':
-                    sql_value_string += '"' + str(value) + '",'
-        array_length_counter += 1
-    # Add the closing bracket
-    sql_column_string += ") "
-    sql_value_string += ");"
+                sql_column_string += key + ", "
+                # Check if value is None
+                if value == None:
+                    sql_value_string +=  'NULL,'
+                else:
+                    if args_array['database_type'] == 'postgresql':
+                        sql_value_string +=  "$$" + str(value) + "$$,"
+                    elif args_array['database_type'] == 'mysql':
+                        sql_value_string += '"' + str(value) + '",'
+            array_length_counter += 1
+        # Add the closing bracket
+        sql_column_string += ") "
+        sql_value_string += ");"
 
-    # Concatenate the pieces of the query
-    sql_query_string += sql_column_string + sql_value_string
-    # Return the query string
-    return sql_query_string
+        # Concatenate the pieces of the query
+        sql_query_string += sql_column_string + sql_value_string
+        logger.info(sql_query_string)
+        # Return the query string
+        return sql_query_string

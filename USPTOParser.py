@@ -554,14 +554,14 @@ if __name__=="__main__":
 
     # Database args
     database_args = {
-        #"database_type" : "postgresql", # choose 'mysql' or 'postgresql'
-        "database_type" : "mysql", # choose 'mysql' or 'postgresql'
+        "database_type" : "postgresql", # choose 'mysql' or 'postgresql'
+        #"database_type" : "mysql", # choose 'mysql' or 'postgresql'
         "host" : "127.0.0.1",
-        #"port" : 5432, # PostgreSQL port
-        "port" : 3306, # MySQL port
+        "port" : 5432, # PostgreSQL port
+        #"port" : 3306, # MySQL port
         "user" : "uspto",
-        #"passwd" : "Ld58KimTi06v2PnlXTFuLG4", # PostgreSQL password
-        "passwd" : "R5wM9N5qCEU3an#&rku8mxrVBuF@ur", # MySQL password
+        "passwd" : "Ld58KimTi06v2PnlXTFuLG4", # PostgreSQL password
+        #"passwd" : "R5wM9N5qCEU3an#&rku8mxrVBuF@ur", # MySQL password
         "db" : "uspto",
         "charset" : "utf8"
     }

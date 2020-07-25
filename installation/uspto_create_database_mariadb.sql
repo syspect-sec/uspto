@@ -419,43 +419,43 @@ CREATE TABLE IF NOT EXISTS `uspto`.`APPLICANT_A` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `uspto`.`USCLASSIFICATION`
+-- Table `uspto`.`USCLASS_C`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `uspto`.`USCLASSIFICATION` ;
+DROP TABLE IF EXISTS `uspto`.`USCLASS_C` ;
 
-CREATE TABLE IF NOT EXISTS `uspto`.`USCLASSIFICATION` (
+CREATE TABLE IF NOT EXISTS `uspto`.`USCLASS_C` (
   `Class` VARCHAR(3) NULL,
   `SubClass` VARCHAR(6) DEFAULT NULL,
   `Indent` VARCHAR(2) DEFAULT  NULL,
   `SubClassSqsNum` VARCHAR(4) DEFAULT NULL,
   `NextHigherSub` VARCHAR(6) DEFAULT NULL,
-  `Title` VARCHAR(500) DEFAULT NULL,
+  `Title` TEXT DEFAULT NULL,
   `FileName` VARCHAR(45) NOT NULL
 )
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `uspto`.`CPCCLASSIFICATION`
+-- Table `uspto`.`CPCCLASS_C`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `uspto`.`CPCCLASSIFICATION` ;
+DROP TABLE IF EXISTS `uspto`.`CPCCLASS_C` ;
 
-CREATE TABLE IF NOT EXISTS `uspto`.`CPCCLASSIFICATION` (
+CREATE TABLE IF NOT EXISTS `uspto`.`CPCCLASS_C` (
   `Section` VARCHAR(15) DEFAULT NULL,
   `Class` VARCHAR(15) DEFAULT NULL,
   `SubClass` VARCHAR(15) DEFAULT NULL,
   `MainGroup` VARCHAR(15) DEFAULT NULL,
   `SubGroup` VARCHAR(15) DEFAULT NULL,
-  `Title` VARCHAR(500) DEFAULT NULL,
+  `Title` TEXT DEFAULT NULL,
   `FileName` VARCHAR(45) NOT NULL
 )
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table `uspto`.`USCPCCONCORDANCE`
+-- Table `uspto`.`USCPC_C`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `uspto`.`USCPCCONCORDANCE` ;
+DROP TABLE IF EXISTS `uspto`.`USCPC_C` ;
 
-CREATE TABLE IF NOT EXISTS `uspto`.`USCPCCONCORDANCE` (
+CREATE TABLE IF NOT EXISTS `uspto`.`USCPC_C` (
   `USClass` VARCHAR(15) NOT NULL,
   `CPCClass` VARCHAR(15) DEFAULT NULL,
   `Position` INT(3) NOT NULL,

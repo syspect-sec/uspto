@@ -215,10 +215,10 @@ CREATE TABLE IF NOT EXISTS uspto.CONTINUITYPARENT_P (
   PRIMARY KEY (ApplicationID, ParentApplicationID, FileName));
 
 -- -----------------------------------------------------
--- Table uspto.CONTINUITY_CHILD_P
+-- Table uspto.CONTINUITYCHILD_P
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS uspto.CONTINUITY_CHILD_P (
+CREATE TABLE IF NOT EXISTS uspto.CONTINUITYCHILD_P (
   ApplicationID VARCHAR(20) NOT NULL,
   Position INT DEFAULT NULL,
   ChildApplicationID VARCHAR(45) NOT NULL,
@@ -346,39 +346,39 @@ CREATE TABLE IF NOT EXISTS uspto.APPLICANT_A (
   PRIMARY KEY (ApplicationID, Position, FileName));
 
 -- -----------------------------------------------------
--- Table uspto.USCLASSIFICATION
+-- Table uspto.USCLASS_C
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS uspto.USCLASSIFICATION (
+CREATE TABLE IF NOT EXISTS uspto.USCLASS_C (
   Class VARCHAR(3) NULL,
   SubClass VARCHAR(6) DEFAULT NULL,
   Indent VARCHAR(2) DEFAULT  NULL,
   SubClassSqsNum VARCHAR(4) DEFAULT NULL,
   NextHigherSub VARCHAR(6) DEFAULT NULL,
-  Title VARCHAR(200) DEFAULT NULL,
+  Title TEXT DEFAULT NULL,
   FileName VARCHAR(45) NOT NULL
 );
 
 -- -----------------------------------------------------
--- Table uspto.CPCCLASSIFICATION
+-- Table uspto.CPCClASS_C
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS uspto.CPCCLASSIFICATION (
+CREATE TABLE IF NOT EXISTS uspto.CPCClASS_C (
   Section VARCHAR(15) DEFAULT NULL,
   Class VARCHAR(15) DEFAULT NULL,
   SubClass VARCHAR(15) DEFAULT NULL,
   MainGroup VARCHAR(15) DEFAULT NULL,
   SubGroup VARCHAR(15) DEFAULT NULL,
-  Title VARCHAR(500) DEFAULT NULL,
+  Title TEXT DEFAULT NULL,
   FileName VARCHAR(45) NOT NULL
 );
 
 -- -----------------------------------------------------
--- Table uspto.USCPCCONCORDANCE
+-- Table uspto.USCPC_C
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS uspto.USCPCCONCORDANCE ;
+DROP TABLE IF EXISTS uspto.USCPC_C ;
 
-CREATE TABLE IF NOT EXISTS uspto.USCPCCONCORDANCE (
+CREATE TABLE IF NOT EXISTS uspto.USCPC_C (
   USClass VARCHAR(15) NOT NULL,
   CPCClass VARCHAR(15) DEFAULT NULL,
   Position INT NOT NULL,

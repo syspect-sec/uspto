@@ -18,7 +18,7 @@ def return_US_class_dict(line):
 
     # Build a class dictionary
     class_dictionary = {
-        "table_name" : "uspto.USCLASSIFICATION",
+        "table_name" : "uspto.USCLASS_C",
         "extraction_type" : "usclass",
         "Class" : line[0:3].strip(),
         "SubClass" : line[3:9].strip(),
@@ -38,7 +38,7 @@ def extract_CPC_class_dict(line):
 
     # Build a class dictionary
     class_dictionary = {
-        "table_name" : "uspto.CPCCLASSIFICATION",
+        "table_name" : "uspto.CPCClASS_C",
         "extraction_type" : "cpcclass",
         "Section" : cpc_array[0],
         "Class" : cpc_array[1],
@@ -64,7 +64,7 @@ def extract_USCPC_class_dict(line, file_name):
         if line[i].strip() != "":
             # Build a class dictionary
             class_dictionary = {
-                "table_name" : "uspto.USCPCCONCORDANCE",
+                "table_name" : "uspto.USCPC_C",
                 "extraction_type" : "uscpc",
                 "USClass" : us_class.strip(),
                 "CPCClass" : line[i].strip(),
