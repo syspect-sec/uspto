@@ -504,39 +504,21 @@ class SQLProcess:
                 error_line = line.split("line")[1].strip()
                 print("Duplicate line number in file " + csv_file_name + " identified as line number " + error_line)
                 logger.warning("Duplicate line number in file " + csv_file_name + " identified as line number " + error_line)
-                is_skipped = False
-                current_index = 1
-                # Create a temp file to move data to
-                temp_file_name = csv_file_name + '.bak'
-                # Open original file in read only mode and dummy file in write mode
-                with open(csv_file_name, 'r') as read_file, open(temp_file_name, 'w+') as write_file:
-                    # Line by line copy data from original file to temp file
-                    for line in read_file:
-                        #print("Current line: " + str(current_index) + " looking for line: " + str(error_line))
-                        # If current line number matches the given line number then skip copying
-                        if int(current_index) != int(error_line):
-                            write_file.write(line)
-                        else:
-                            logger.warning("skipping line...")
-                            is_skipped = True
-                        current_index += 1
 
-                # If any line is skipped then rename temp file as original file
-                if is_skipped:
-                    print("Duplicate ID line(s) have been found and removed from: " + csv_file_name)
-                    logger.warning("Duplicate ID line(s) have been found and removed from: " + csv_file_name)
-                    os.remove(csv_file_name)
-                    print("Original .csv file: " + csv_file_name + " removed...")
-                    logger.warning("Original .csv file: " + csv_file_name + " removed...")
-                    os.rename(temp_file_name, csv_file_name)
-                    print("Temp file: " + temp_file_name + " renamed to " + csv_file_name)
-                    logger.warning("Temp file: " + temp_file_name + " renamed to " + csv_file_name)
-                else:
-                    print("No Duplicate ID line(s) were found in: " + csv_file_name)
-                    logger.warning("No Duplicate ID line(s) were found in: " + csv_file_name)
-                    os.remove(temp_file_name)
-                    print("Temp file: " + temp_file_name + " removed...")
-                    logger.warning("Temp file: " + temp_file_name + " removed...")
+                # Open original file in read only mode and dummy file in write mode
+                with open(csv_file_name, 'r') as read_file:
+                    # Pass the file contents into an array
+                    csv_file_array = read_file.readlines()
+                    # Pop off the error line
+                    del csv_file_array[error_line - 1]
+                    #csv_file_array.pop(error_line - 1)
+                # Open the file again with write permissions
+                with open(csv_file_name, 'w') as write_file:
+                    for line in csv_file_array:
+                        write_file.write(line)
+
+                print("Duplicate ID line(s) have been found and removed from: " + csv_file_name)
+                logger.warning("Duplicate ID line(s) have been found and removed from: " + csv_file_name)
 
     # This function will open the csv file and then
     # load it into the database item by item
