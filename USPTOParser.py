@@ -293,7 +293,7 @@ def load_balancer_thread(link_queue, args_array):
                 # Start another group of threads and pass in i to stagger the downloads
                 # TODO: calculate the number of new threads to start
                 for i in range(1):
-                    start_new_thread = multiprocessing.Process(target=main_process,args=(link_queue, args_array, i))
+                    start_new_thread = multiprocessing.Process(target=main_process,args=(link_queue, args_array, args_array['database_args'], i))
                     start_new_thread.start()
                     time.sleep(2)
 
@@ -302,7 +302,7 @@ def load_balancer_thread(link_queue, args_array):
                 print("Starting another single thread due to low CPU load balance of: " + str(five_minute_load_average * 100) + "%")
                 logger.info("Starting another single thread due to low CPU load balance of: " + str(five_minute_load_average * 100) + "%")
                 # Start another thread and pass in 0 to start right away
-                start_new_thread = multiprocessing.Process(target=main_process,args=(link_queue, args_array, 1))
+                start_new_thread = multiprocessing.Process(target=main_process,args=(link_queue, args_array, args_array['database_args'], 1))
                 start_new_thread.start()
 
         else:
