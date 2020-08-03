@@ -496,8 +496,8 @@ class SQLProcess:
         start_time = time.time()
 
         logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
-        print("[Looking for duplicate ID lines in file " + csv_file_name + "]")
-        logger.warning("[Looking for duplicate ID lines in file " + csv_file_name + "]")
+        print("[Looking for error lines in file " + csv_file_name + "]")
+        logger.warning("[Looking for error lines in file " + csv_file_name + "]")
 
         # Search traceback_array for the item ID
         for line in traceback_array:
@@ -522,8 +522,8 @@ class SQLProcess:
                     for line in csv_file_array:
                         write_file.write(line)
 
-                print("Error line(s) have been found and removed from: " + csv_file_name)
-                logger.warning("Error line(s) have been found and removed from: " + csv_file_name)
+                print("Error line " + error_line + " has been found and removed from: " + csv_file_name)
+                logger.warning("Error line " + error_line + " has been found and removed from: " + csv_file_name)
 
     # This function will open the csv file and then
     # load it into the database item by item
