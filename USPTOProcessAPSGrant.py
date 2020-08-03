@@ -1092,8 +1092,8 @@ def process_APS_grant_content(args_array):
                                 inventor_first_name = USPTOSanitizer.strip_for_csv(name_array[0])[:100]
                                 inventor_last_name = USPTOSanitizer.strip_for_csv(name_array[1])[:100]
                             else:
-                                USPTOSanitizer.strip_for_csv(inventor_first_name = name_array[0])[:100]
-                                USPTOSanitizer.strip_for_csv(inventor_last_name = name_array[1])[:100]
+                                inventor_first_name = USPTOSanitizer.strip_for_csv(name_array[0])[:100]
+                                inventor_last_name = USPTOSanitizer.strip_for_csv(name_array[1])[:100]
 
                         except:
                             traceback.print_exc()

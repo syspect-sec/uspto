@@ -114,9 +114,13 @@ class SQLProcess:
                         for line in traceback_array:
                             if "duplicate key" in line:
                                 # Insert the csv file item by item
-                                self.insert_csv_item_by_item(csv_file_obj['csv_file_name'], args_array)
+                                #self.insert_csv_item_by_item(csv_file_obj['csv_file_name'], args_array)
                                 # Remove the offending line from csv file
-                                self.remove_item_from_csv(traceback_array, csv_file_obj['csv_file_name'])
+                                self.remove_item_from_csv(traceback_array, csv_file_obj['csv_file_name'], "duplicate_key_violation")
+                            elif "violates not-null constraint" in line:
+                                # Remove the offending line from csv file
+                                self.remove_item_from_csv(traceback_array, csv_file_obj['csv_file_name'], "not_null_violation")
+
 
                         # Return a unsucessful flag
                         if bulk_insert_failed_attempts > 20:
@@ -486,7 +490,7 @@ class SQLProcess:
         print('Connection to database closed successfully.')
 
     # Searches a csv file and extracts any items with the ID in traceback string
-    def remove_item_from_csv(self, traceback_array, csv_file_name):
+    def remove_item_from_csv(self, traceback_array, csv_file_name, violation_type):
 
         # Set process time
         start_time = time.time()
@@ -502,6 +506,7 @@ class SQLProcess:
             if line.startswith("CONTEXT:"):
                 # Get the error line number
                 error_line = line.split("line")[1].strip()
+                if not error_line.isnumeric(): error_line = error_line.split(":")[0]
                 print("Duplicate line number in file " + csv_file_name + " identified as line number " + error_line)
                 logger.warning("Duplicate line number in file " + csv_file_name + " identified as line number " + error_line)
 
