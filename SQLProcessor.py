@@ -515,7 +515,7 @@ class SQLProcess:
                     # Pass the file contents into an array
                     csv_file_array = read_file.readlines()
                     # Pop off the error line
-                    del csv_file_array[error_line - 1]
+                    del csv_file_array[int(error_line) - 1]
                     #csv_file_array.pop(error_line - 1)
                 # Open the file again with write permissions
                 with open(csv_file_name, 'w') as write_file:
