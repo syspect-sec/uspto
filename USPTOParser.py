@@ -306,8 +306,8 @@ def load_balancer_thread(link_queue, args_array):
                 start_new_thread.start()
 
         else:
-            print("Reporting CPU load balance: " + str(five_minute_load_average * 100) + "%")
-            logger.info("Reporting CPU load balance: " + str(five_minute_load_average * 100) + "%")
+            print("Reporting CPU load balance: " + str(round(five_minute_load_average * 100, 2)) + "%")
+            logger.info("Reporting CPU load balance: " + str(round(five_minute_load_average * 100, 2)) + "%")
 
 # Check existing app structure and create it if required
 def validate_existing_file_structure(args_array):
@@ -547,6 +547,7 @@ if __name__=="__main__":
     classification_process_log_file = working_directory + "/LOG/class_links.log"
     us_classification_text_filename = working_directory + "/installation/CLS/usclass.txt"
     cpc_classification_text_filename = working_directory + "/installation/CLS/cpcclass.csv"
+    us_cpc_concordance_text_filename = working_directory + "/installation/CLS/uspc-cpc.csv"
     mysql_database_reset_filename = working_directory + "/installation/uspto_create_database_mysql.sql"
     postgresql_database_reset_filename = working_directory + "/installation/uspto_create_database_postgres.sql"
     if sandbox: sandbox_downloads_dirpath = "/Volumes/Thar/uspto/TMP/downloads/"
@@ -606,6 +607,7 @@ if __name__=="__main__":
         "classification_process_log_file" : classification_process_log_file,
         "us_classification_text_filename" : us_classification_text_filename,
         "cpc_classification_text_filename" : cpc_classification_text_filename,
+        "us_cpc_concordance_text_filename" : us_cpc_concordance_text_filename,
         "grant_process_log_file" : grant_process_log_file,
         "application_process_log_file" : application_process_log_file,
         "application_pair_process_log_file" : application_pair_process_log_file,

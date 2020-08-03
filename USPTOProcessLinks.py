@@ -214,6 +214,7 @@ def get_all_links(args_array):
     classification_linklist = []
     classification_linklist.append([args_array['us_classification_text_filename'], "USCLS"])
     classification_linklist.append([args_array['cpc_classification_text_filename'], "CPCCLS"])
+    classification_linklist.append([args_array['cpc_classification_text_filename'], "USCPCCLS"])
     print('Finished grabbing patent classification links... ' + time.strftime("%c"))
     # Log finished building all zip filepaths
     logger.info('Finished grabbing patent classification bulk-data links: ' + time.strftime("%c"))
