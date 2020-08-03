@@ -507,8 +507,8 @@ class SQLProcess:
                 # Get the error line number
                 error_line = line.split("line")[1].strip()
                 if not error_line.isnumeric(): error_line = error_line.split(":")[0]
-                print("Duplicate line number in file " + csv_file_name + " identified as line number " + error_line)
-                logger.warning("Duplicate line number in file " + csv_file_name + " identified as line number " + error_line)
+                print("Error line number in file " + csv_file_name + " identified as line number " + error_line)
+                logger.warning("Error line number in file " + csv_file_name + " identified as line number " + error_line)
 
                 # Open original file in read only mode and dummy file in write mode
                 with open(csv_file_name, 'r') as read_file:
@@ -522,8 +522,8 @@ class SQLProcess:
                     for line in csv_file_array:
                         write_file.write(line)
 
-                print("Duplicate ID line(s) have been found and removed from: " + csv_file_name)
-                logger.warning("Duplicate ID line(s) have been found and removed from: " + csv_file_name)
+                print("Error line(s) have been found and removed from: " + csv_file_name)
+                logger.warning("Error line(s) have been found and removed from: " + csv_file_name)
 
     # This function will open the csv file and then
     # load it into the database item by item

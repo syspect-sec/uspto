@@ -202,7 +202,7 @@ def extract_dat_file_from_zip(args_array):
             print('[Removing corrupted zip file ' + args_array['temp_zip_file_name'] + ']')
             logger.warning('Removing corrupted file ' + args_array['temp_zip_file_name'])
             # Remove the corrupted zip file
-            #delete_zip_file(args_array['temp_zip_file_name'])
+            delete_zip_file(args_array['temp_zip_file_name'])
             # Return None to signal failed status
             return None
         except:
