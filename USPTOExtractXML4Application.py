@@ -470,7 +470,7 @@ def extract_XML4_application(raw_data, args_array):
     except Exception as e:
         description = None
         #traceback.print_exc()
-        logger.error("Exception while extracting description from " + str(app_no) + ": " + traceback.print_exc())
+        #logger.error("Exception while extracting description from " + str(app_no) + ": " + traceback.print_exc())
     #print(description)
 
     # Find the claims
@@ -482,8 +482,8 @@ def extract_XML4_application(raw_data, args_array):
         else: claims = None
     except Exception as e:
         claims = None
-        traceback.print_exc()
-        logger.error("Exception while extracting claim from " + str(app_no) + ": " + traceback.print_exc())
+        #traceback.print_exc()
+        #logger.error("Exception while extracting claim from " + str(app_no) + ": " + traceback.print_exc())
     #print(claims)
 
     # Find the number of claims
@@ -493,8 +493,8 @@ def extract_XML4_application(raw_data, args_array):
             number_of_claims += 1
     except Exception as e:
         number_of_claims = None
-        traceback.print_exc()
-        logger.error("Exception while extracting claim from " + str(app_no))
+        #traceback.print_exc()
+        #logger.error("Exception while extracting claim from " + str(app_no))
     #print(number_of_claims)
 
     # Find the number of drawings and figures
@@ -513,8 +513,8 @@ def extract_XML4_application(raw_data, args_array):
     except Exception as e:
         number_of_figures = None
         number_of_drawings = None
-        traceback.print_exc()
-        logger.error("Exception while extracting figures and drawings num " + str(app_no))
+        #traceback.print_exc()
+        #logger.error("Exception while extracting figures and drawings num " + str(app_no))
     #print(number_of_figures)
     #print(number_of_drawings)
 

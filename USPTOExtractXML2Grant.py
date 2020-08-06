@@ -615,8 +615,8 @@ def extract_XML2_grant(raw_data, args_array):
             else: abstract = None
         except Exception as e:
             abstract = None
-            traceback.print_exc()
-            logger.error("Exception while extracting description from " + str(document_id) + ": " + traceback.print_exc())
+            #traceback.print_exc()
+            #logger.error("Exception while extracting description from " + str(document_id) + ": " + traceback.print_exc())
         #print(abstract)
 
         # Collect detailed description from DETDESC
@@ -628,8 +628,8 @@ def extract_XML2_grant(raw_data, args_array):
                 description = None
         except Exception as e:
             description = None
-            traceback.print_exc()
-            logger.error("Exception while extracting claim from " + str(document_id) + ": " + traceback.print_exc())
+            #traceback.print_exc()
+            #logger.error("Exception while extracting claim from " + str(document_id) + ": " + traceback.print_exc())
         #print(description)
 
         # Collect claims from data
@@ -641,8 +641,8 @@ def extract_XML2_grant(raw_data, args_array):
             else: claims = None
         except Exception as e:
             claims = None
-            traceback.print_exc()
-            logger.error("Exception while extracting claim from " + str(document_id) + ": " + traceback.print_exc())
+            #traceback.print_exc()
+            #logger.error("Exception while extracting claim from " + str(document_id) + ": " + traceback.print_exc())
         #print(claims)
 
         # Append SQL data into dictionary to be written later

@@ -8,7 +8,7 @@ FLUSH PRIVILEGES;
 -- Set the password function to use mysql_native_password
 SET old_passwords = 0;
 
--- Create and set password for shtf@localhost
+-- Create and set password for uspto@localhost
 DROP USER `uspto`@`localhost`;
 CREATE USER `uspto`@`localhost` IDENTIFIED BY 'R5wM9N5qCEU3an#&rku8mxrVBuF@ur';
 

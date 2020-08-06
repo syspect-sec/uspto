@@ -5,7 +5,7 @@
 -- First Flush all privileges from mysql
 FLUSH PRIVILEGES;
 
--- Create and set password for shtf@localhost
+-- Create and set password for uspto@localhost
 DROP USER IF EXISTS `uspto`@`localhost`;
 CREATE USER `uspto`@`localhost` IDENTIFIED WITH mysql_native_password BY 'R5wM9N5qCEU3an#&rku8mxrVBuF@ur';
 

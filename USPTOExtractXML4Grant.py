@@ -670,8 +670,8 @@ def extract_XML4_grant(raw_data, args_array):
         else: abstract = None
     except Exception as e:
         abstract = None
-        traceback.print_exc()
-        logger.error("Exception while extracting abstract from " + str(document_id) + ": " + traceback.print_exc())
+        #traceback.print_exc()
+        #logger.error("Exception while extracting abstract from " + str(document_id) + ": " + traceback.print_exc())
     #print(abstract)
 
     # Find the description
@@ -682,8 +682,8 @@ def extract_XML4_grant(raw_data, args_array):
         else: description = None
     except Exception as e:
         description = None
-        traceback.print_exc()
-        logger.error("Exception while extracting description from " + str(document_id) + ": " + traceback.print_exc())
+        #traceback.print_exc()
+        #logger.error("Exception while extracting description from " + str(document_id) + ": " + traceback.print_exc())
     #print(description)
 
     # Find the claims
@@ -694,8 +694,8 @@ def extract_XML4_grant(raw_data, args_array):
         else: claims = None
     except Exception as e:
         claims = None
-        traceback.print_exc()
-        logger.error("Exception while extracting claim from " + str(document_id) + ": " + traceback.print_exc())
+        #traceback.print_exc()
+        #logger.error("Exception while extracting claim from " + str(document_id) + ": " + traceback.print_exc())
     #print(claims)
 
     # Append SQL data into dictionary to be written later
