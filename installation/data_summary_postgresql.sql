@@ -9,9 +9,9 @@
 --
 SELECT
 	YEAR(a.IssueDate) as Year,
-	b.Count as Official Total,
-	count(*) as Database Total,
-	count(*) - b.Count as Difference,
+	b.Count as 'Official Total',
+	count(*) as 'Database Total',
+	count(*) - b.Count as 'Difference',
 	100 - ABS(ROUND(count(*) / b.Count * 100, 2) - 100) as 'Accuracy %'
 FROM uspto.GRANT as a
 JOIN uspto.GRANT_SUMMARY as b ON

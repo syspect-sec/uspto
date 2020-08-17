@@ -194,12 +194,12 @@ def return_formatted_date(time_str, args_array, document_id):
             # If the month value is out of range
             if time_str[4:6] == "00" : month = "1"
             elif int(time_str[4:6]) > 12 or int(time_str[4:6]) < 1: month = "01"
-            else: month = time_str[4:6].replace("0", "")
+            else: month = time_str[4:6].lstrip("0")
 
             # If the day value is out of range
             if time_str[6:8] == "00" : day = "1"
             elif int(time_str[6:8]) > 31 or int(time_str[6:8]) < 1 : day = "01"
-            else: day = time_str[6:8].replace("0", "")
+            else: day = time_str[6:8].lstrip("0")
 
             # Validate the date for other erors such as leap year, etc.
             try:
@@ -243,10 +243,10 @@ def return_formatted_date(time_str, args_array, document_id):
                 else: year = time_str[0:4]
                 # Get the month
                 if  time_str[4:6] == "00" : month = "1"
-                else: month = time_str[4:6].replace("0", "")
+                else: month = time_str[4:6].lstrip("0")
                 # Get the day
                 if time_str[6:8] == "00" : day = "1"
-                else: day = time_str[6:8].replace("0", "")
+                else: day = time_str[6:8].lstrip("0")
 
                 # Validate the date for other erors such as leap year, etc.
                 try:
