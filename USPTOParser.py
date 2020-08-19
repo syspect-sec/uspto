@@ -587,7 +587,7 @@ if __name__=="__main__":
         "uspto_bulk_data_url" : 'https://bulkdata.uspto.gov/',
         "reedtech_bulk_data_url" : "https://patents.reedtech.com/",
         "uspto_classification_data_url" : 'https://www.uspto.gov/web/patents/classification/selectnumwithtitle.htm',
-        "uspto_PAIR_data_url" : "https://bulkdata.uspto.gov/data/patent/pair/economics/2017/",
+        "uspto_PAIR_data_url" : "https://bulkdata.uspto.gov/data/patent/pair/economics/2019/",
         "uspto_legal_data_url" : "https://bulkdata.uspto.gov/data/patent/litigation/2016/",
         "sandbox" : sandbox,
         "log_level" : log_level,
