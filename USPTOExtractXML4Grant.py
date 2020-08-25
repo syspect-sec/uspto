@@ -324,82 +324,83 @@ def extract_XML4_grant(raw_data, args_array):
             uspatcit_position = 1
             forpatcit_position = 1
             nptc_position = 1
-            rfc = rf.find(citation_id_string)
-            if rfc != None:
-                # If the patent citation child is found must be a patent citation
-                if rfc.find('patcit') != None:
-                    x = rfc.find('patcit')
-                    try: citation_country = x.find('document-id').findtext('country').strip()[:5]
-                    except: citation_country = None
-                    try: citation_grant_id = x.find('document-id').findtext('doc-number').strip()[:20]
-                    except: citation_grant_id = None
-                    try: citation_kind = x.find('document-id').findtext('kind').strip()[:10]
-                    except: citation_kind = None
-                    try: citation_name = x.find('document-id').findtext('name').strip()[:100]
-                    except: citation_name = None
-                    try: citation_date = USPTOSanitizer.return_formatted_date(x.find('document-id').findtext('date'), args_array, document_id)
-                    except: citation_date = None
-                    try: citation_category = rfc.findtext('category').strip().upper()[:20]
-                    except Exception as e: citation_category = None
-                    # US patent citations
-                    if(citation_country.strip().upper() == 'US'):
+            all_rfc = rf.findall(citation_id_string)
+            for rfc in all_rfc:
+                if rfc != None:
+                    # If the patent citation child is found must be a patent citation
+                    if rfc.find('patcit') != None:
+                        x = rfc.find('patcit')
+                        try: citation_country = x.find('document-id').findtext('country').strip()[:5]
+                        except: citation_country = None
+                        try: citation_grant_id = x.find('document-id').findtext('doc-number').strip()[:20]
+                        except: citation_grant_id = None
+                        try: citation_kind = x.find('document-id').findtext('kind').strip()[:10]
+                        except: citation_kind = None
+                        try: citation_name = x.find('document-id').findtext('name').strip()[:100]
+                        except: citation_name = None
+                        try: citation_date = USPTOSanitizer.return_formatted_date(x.find('document-id').findtext('date'), args_array, document_id)
+                        except: citation_date = None
+                        try: citation_category = rfc.findtext('category').strip().upper()[:20]
+                        except Exception as e: citation_category = None
+                        # US patent citations
+                        if(citation_country.strip().upper() == 'US'):
+
+                            # Append SQL data into dictionary to be written later
+                            processed_gracit.append({
+                                "table_name" : "uspto.GRACIT_G",
+                                "GrantID" : document_id,
+                                "Position" : uspatcit_position,
+                                "CitedID" : citation_grant_id,
+                                "Kind" : citation_kind,
+                                "Name" : citation_name,
+                                "Date" : citation_date,
+                                "Country" : citation_country,
+                                "Category" : citation_category,
+                                "FileName" : args_array['file_name']
+                            })
+                            #print(processed_usclass)
+                            uspatcit_position += 1
+
+                        elif citation_country.strip().upper() != 'US':
+
+                            # Append SQL data into dictionary to be written later
+                            processed_forpatcit.append({
+                                "table_name" : "uspto.FORPATCIT_G",
+                                "GrantID" : document_id,
+                                "Position" : forpatcit_position,
+                                "CitedID" : citation_grant_id,
+                                "Kind" : citation_kind,
+                                "Name" : citation_name,
+                                "Date" : citation_date,
+                                "Country" : citation_country,
+                                "Category" : citation_category,
+                                "FileName" : args_array['file_name']
+                            })
+                            forpatcit_position += 1
+                            #print(processed_forpatcit)
+
+                    # If the non patent citations are found
+                    elif rfc.find('nplcit') != None:
+                        x = rfc.find('nplcit')
+                        # Sometimes, there will be '<i> or <sup>, etc.' in the reference string; we need to remove it
+                        try:
+                            npatcit_text = USPTOSanitizer.strip_for_csv(x.findtext('othercit'))
+                            #npatcit_text.replace("<", "").replace(">","")
+                        except: npatcit_text = None
+                        try: citation_category = rfc.findtext('category').strip().upper()[:20]
+                        except: citation_category = None
 
                         # Append SQL data into dictionary to be written later
-                        processed_gracit.append({
-                            "table_name" : "uspto.GRACIT_G",
+                        processed_nonpatcit.append({
+                            "table_name" : "uspto.NONPATCIT_G",
                             "GrantID" : document_id,
-                            "Position" : uspatcit_position,
-                            "CitedID" : citation_grant_id,
-                            "Kind" : citation_kind,
-                            "Name" : citation_name,
-                            "Date" : citation_date,
-                            "Country" : citation_country,
+                            "Position" : nptc_position,
+                            "Citation" : npatcit_text,
                             "Category" : citation_category,
                             "FileName" : args_array['file_name']
                         })
-                        #print(processed_usclass)
-                        uspatcit_position += 1
-
-                    elif citation_country.strip().upper() != 'US':
-
-                        # Append SQL data into dictionary to be written later
-                        processed_forpatcit.append({
-                            "table_name" : "uspto.FORPATCIT_G",
-                            "GrantID" : document_id,
-                            "Position" : forpatcit_position,
-                            "CitedID" : citation_grant_id,
-                            "Kind" : citation_kind,
-                            "Name" : citation_name,
-                            "Date" : citation_date,
-                            "Country" : citation_country,
-                            "Category" : citation_category,
-                            "FileName" : args_array['file_name']
-                        })
-                        forpatcit_position += 1
-                        #print(processed_forpatcit)
-
-                # If the non patent citations are found
-                elif rfc.find('nplcit') != None:
-                    x = rfc.find('nplcit')
-                    # Sometimes, there will be '<i> or <sup>, etc.' in the reference string; we need to remove it
-                    try:
-                        npatcit_text = USPTOSanitizer.strip_for_csv(x.findtext('othercit'))
-                        #npatcit_text.replace("<", "").replace(">","")
-                    except: npatcit_text = None
-                    try: citation_category = rfc.findtext('category').strip().upper()[:20]
-                    except: citation_category = None
-
-                    # Append SQL data into dictionary to be written later
-                    processed_nonpatcit.append({
-                        "table_name" : "uspto.NONPATCIT_G",
-                        "GrantID" : document_id,
-                        "Position" : nptc_position,
-                        "Citation" : npatcit_text,
-                        "Category" : citation_category,
-                        "FileName" : args_array['file_name']
-                    })
-                    #print(processed_nonpatcit)
-                    nptc_position += 1
+                        #print(processed_nonpatcit)
+                        nptc_position += 1
 
         # Find number of claims
         try: claims_num = r.findtext('number-of-claims').strip()

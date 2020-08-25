@@ -80,19 +80,19 @@ def open_csv_files(file_type, file_name, csv_directory, extraction_type=None):
         csv_writer_array['foreignpriority']['csv_file_name'] = csv_directory + 'CSV_G/foreignpriority_' + csv_file_name
 
         # Define all the dictionary arrays to hold writers and filenames
-        csv_writer_array['grant']['file'] = open(csv_writer_array['grant']['csv_file_name'], 'w')
-        csv_writer_array['applicant']['file'] = open(csv_writer_array['applicant']['csv_file_name'], 'w')
-        csv_writer_array['examiner']['file'] = open(csv_writer_array['examiner']['csv_file_name'], 'w')
-        csv_writer_array['agent']['file'] = open(csv_writer_array['agent']['csv_file_name'], 'w')
-        csv_writer_array['assignee']['file'] = open(csv_writer_array['assignee']['csv_file_name'], 'w')
-        csv_writer_array['inventor']['file'] = open(csv_writer_array['inventor']['csv_file_name'], 'w')
-        csv_writer_array['gracit']['file'] = open(csv_writer_array['gracit']['csv_file_name'], 'w')
-        csv_writer_array['forpatcit']['file'] = open(csv_writer_array['forpatcit']['csv_file_name'], 'w')
-        csv_writer_array['nonpatcit']['file'] = open(csv_writer_array['nonpatcit']['csv_file_name'], 'w')
-        csv_writer_array['usclass']['file'] = open(csv_writer_array['usclass']['csv_file_name'], 'w')
-        csv_writer_array['intclass']['file'] = open(csv_writer_array['intclass']['csv_file_name'], 'w')
-        csv_writer_array['cpcclass']['file'] = open(csv_writer_array['cpcclass']['csv_file_name'], 'w')
-        csv_writer_array['foreignpriority']['file'] = open(csv_writer_array['foreignpriority']['csv_file_name'], 'w')
+        csv_writer_array['grant']['file'] = open(csv_writer_array['grant']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['applicant']['file'] = open(csv_writer_array['applicant']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['examiner']['file'] = open(csv_writer_array['examiner']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['agent']['file'] = open(csv_writer_array['agent']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['assignee']['file'] = open(csv_writer_array['assignee']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['inventor']['file'] = open(csv_writer_array['inventor']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['gracit']['file'] = open(csv_writer_array['gracit']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['forpatcit']['file'] = open(csv_writer_array['forpatcit']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['nonpatcit']['file'] = open(csv_writer_array['nonpatcit']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['usclass']['file'] = open(csv_writer_array['usclass']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['intclass']['file'] = open(csv_writer_array['intclass']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['cpcclass']['file'] = open(csv_writer_array['cpcclass']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['foreignpriority']['file'] = open(csv_writer_array['foreignpriority']['csv_file_name'], 'w', encoding='utf-8-sig')
 
         # Open all CSV files to write to and append to array
         csv_writer_array['grant']['csv_writer'] = csv.DictWriter(csv_writer_array['grant']['file'], fieldnames = field_names_array['grant'], delimiter = '|', lineterminator = "\n")
@@ -162,15 +162,15 @@ def open_csv_files(file_type, file_name, csv_directory, extraction_type=None):
         csv_writer_array['foreignpriority']['csv_file_name'] = csv_directory + 'CSV_A/foreignpriority_' + csv_file_name
 
         # Define all the dictionaries to hold the csv data
-        csv_writer_array['application']['file'] = open(csv_writer_array['application']['csv_file_name'], 'w')
-        csv_writer_array['agent']['file'] = open(csv_writer_array['agent']['csv_file_name'], 'w')
-        csv_writer_array['assignee']['file'] = open(csv_writer_array['assignee']['csv_file_name'], 'w')
-        csv_writer_array['inventor']['file'] = open(csv_writer_array['inventor']['csv_file_name'], 'w')
-        csv_writer_array['applicant']['file'] = open(csv_writer_array['applicant']['csv_file_name'], 'w')
-        csv_writer_array['usclass']['file'] = open(csv_writer_array['usclass']['csv_file_name'], 'w')
-        csv_writer_array['intclass']['file'] = open(csv_writer_array['intclass']['csv_file_name'], 'w')
-        csv_writer_array['cpcclass']['file'] = open(csv_writer_array['cpcclass']['csv_file_name'], 'w')
-        csv_writer_array['foreignpriority']['file'] = open(csv_writer_array['foreignpriority']['csv_file_name'], 'w')
+        csv_writer_array['application']['file'] = open(csv_writer_array['application']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['agent']['file'] = open(csv_writer_array['agent']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['assignee']['file'] = open(csv_writer_array['assignee']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['inventor']['file'] = open(csv_writer_array['inventor']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['applicant']['file'] = open(csv_writer_array['applicant']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['usclass']['file'] = open(csv_writer_array['usclass']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['intclass']['file'] = open(csv_writer_array['intclass']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['cpcclass']['file'] = open(csv_writer_array['cpcclass']['csv_file_name'], 'w', encoding='utf-8-sig')
+        csv_writer_array['foreignpriority']['file'] = open(csv_writer_array['foreignpriority']['csv_file_name'], 'w', encoding='utf-8-sig')
 
         # Open all CSV files to write to and append to array
         csv_writer_array['application']['csv_writer'] = csv.DictWriter(csv_writer_array['application']['file'], fieldnames = field_names_array['application'], delimiter = '|', lineterminator = "\n")
@@ -204,21 +204,21 @@ def open_csv_files(file_type, file_name, csv_directory, extraction_type=None):
             field_names_array['correspondence'] = ['ApplicationID', 'Name1', 'Name2', 'Address', 'City', 'RegionCode', 'RegionName', 'PostalCode', 'CountryCode', 'CountryName', 'CustomerNum', 'FileName']
             csv_writer_array['correspondence'] = {}
             csv_writer_array['correspondence']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-            csv_writer_array['correspondence']['file'] = open(csv_writer_array['correspondence']['csv_file_name'], 'w')
+            csv_writer_array['correspondence']['file'] = open(csv_writer_array['correspondence']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['correspondence']['csv_writer'] = csv.DictWriter(csv_writer_array['correspondence']['file'], fieldnames = field_names_array['correspondence'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['correspondence']['csv_writer'].writeheader()
         elif extraction_type == "continuitychild":
             csv_writer_array['continuitychild'] = {}
             field_names_array['continuitychild'] = ['ApplicationID', 'Position', 'ChildApplicationID', 'FileDate', 'ContinuationType', 'FileName']
             csv_writer_array['continuitychild']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-            csv_writer_array['continuitychild']['file'] = open(csv_writer_array['continuitychild']['csv_file_name'], 'w')
+            csv_writer_array['continuitychild']['file'] = open(csv_writer_array['continuitychild']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['continuitychild']['csv_writer'] = csv.DictWriter(csv_writer_array['continuitychild']['file'], fieldnames = field_names_array['continuitychild'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['continuitychild']['csv_writer'].writeheader()
         elif extraction_type == "continuityparent":
             csv_writer_array['continuityparent'] = {}
             field_names_array['continuityparent'] = ['ApplicationID', 'Position', 'ParentApplicationID', 'FileDate', 'ContinuationType', 'FileName']
             csv_writer_array['continuityparent']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
-            csv_writer_array['continuityparent']['file'] = open(csv_writer_array['continuityparent']['csv_file_name'], 'w')
+            csv_writer_array['continuityparent']['file'] = open(csv_writer_array['continuityparent']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['continuityparent']['csv_writer'] = csv.DictWriter(csv_writer_array['continuityparent']['file'], fieldnames = field_names_array['continuityparent'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['continuityparent']['csv_writer'].writeheader()
 
@@ -231,21 +231,21 @@ def open_csv_files(file_type, file_name, csv_directory, extraction_type=None):
             field_names_array['usclass'] = ['Class', 'SubClass', 'Indent', 'SubClsSqsNum', 'NextHigherSub', 'Title', 'FileName']
             csv_writer_array['usclass'] = {}
             csv_writer_array['usclass']['csv_file_name'] = csv_directory + 'CSV_C/' + csv_file_name
-            csv_writer_array['usclass']['file'] = open(csv_writer_array['usclass']['csv_file_name'], 'w')
+            csv_writer_array['usclass']['file'] = open(csv_writer_array['usclass']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['usclass']['csv_writer'] = csv.DictWriter(csv_writer_array['usclass']['file'], fieldnames = field_names_array['usclass'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['usclass']['csv_writer'].writeheader()
         elif extraction_type == "cpcclass":
             field_names_array['cpcclass'] = ['Section', 'Class', 'SubClass', 'MainGroup', 'SubGroup', 'Title', 'FileName']
             csv_writer_array['cpcclass'] = {}
             csv_writer_array['cpcclass']['csv_file_name'] = csv_directory + 'CSV_C/' + csv_file_name
-            csv_writer_array['cpcclass']['file'] = open(csv_writer_array['cpcclass']['csv_file_name'], 'w')
+            csv_writer_array['cpcclass']['file'] = open(csv_writer_array['cpcclass']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['cpcclass']['csv_writer'] = csv.DictWriter(csv_writer_array['cpcclass']['file'], fieldnames = field_names_array['cpcclass'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['cpcclass']['csv_writer'].writeheader()
         elif extraction_type == "uscpc":
             field_names_array['uscpc'] = ['USClass', 'CPCClass', 'Position', 'FileName']
             csv_writer_array['uscpc'] = {}
             csv_writer_array['uscpc']['csv_file_name'] = csv_directory + 'CSV_C/' + csv_file_name
-            csv_writer_array['uscpc']['file'] = open(csv_writer_array['uscpc']['csv_file_name'], 'w')
+            csv_writer_array['uscpc']['file'] = open(csv_writer_array['uscpc']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['uscpc']['csv_writer'] = csv.DictWriter(csv_writer_array['uscpc']['file'], fieldnames = field_names_array['uscpc'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['uscpc']['csv_writer'].writeheader()
 
@@ -258,35 +258,35 @@ def open_csv_files(file_type, file_name, csv_directory, extraction_type=None):
             field_names_array['cases'] = ['CaseID', 'PacerID', 'CourtTitle', 'DistrictID', 'CaseTitle', 'AssignedTo', 'ReferredTo', 'Cause', 'JurisdictionBasis', 'FileDate', 'CloseDate', 'LastFileDate', 'JuryDemand', 'Demand', 'LeadCase', 'RelatedCase', 'Settlement', 'CaseIDRaw', 'CaseType1', 'CaseType2', 'CaseType3', 'CaseTypeNote', 'FileName']
             csv_writer_array['cases'] = {}
             csv_writer_array['cases']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
-            csv_writer_array['cases']['file'] = open(csv_writer_array['cases']['csv_file_name'], 'w')
+            csv_writer_array['cases']['file'] = open(csv_writer_array['cases']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['cases']['csv_writer'] = csv.DictWriter(csv_writer_array['cases']['file'], fieldnames = field_names_array['cases'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['cases']['csv_writer'].writeheader()
         elif extraction_type == "pacercases":
             field_names_array['pacercases'] = ['USClass', 'CPCClass', 'Position', 'FileName']
             csv_writer_array['pacercases'] = {}
             csv_writer_array['pacercases']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
-            csv_writer_array['pacercases']['file'] = open(csv_writer_array['pacercases']['csv_file_name'], 'w')
+            csv_writer_array['pacercases']['file'] = open(csv_writer_array['pacercases']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['pacercases']['csv_writer'] = csv.DictWriter(csv_writer_array['pacercases']['file'], fieldnames = field_names_array['pacercases'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['pacercases']['csv_writer'].writeheader()
         elif extraction_type == "names":
             field_names_array['names'] = ['CaseID', 'PartyType', 'Name', 'FileName']
             csv_writer_array['names'] = {}
             csv_writer_array['names']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
-            csv_writer_array['names']['file'] = open(csv_writer_array['names']['csv_file_name'], 'w')
+            csv_writer_array['names']['file'] = open(csv_writer_array['names']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['names']['csv_writer'] = csv.DictWriter(csv_writer_array['names']['file'], fieldnames = field_names_array['names'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['names']['csv_writer'].writeheader()
         elif extraction_type == "attorneys":
             field_names_array['attorneys'] = ['CaseID', 'CaseIDRaw', 'PartyType', 'Name', 'ContactInfo', 'Position', 'FileName']
             csv_writer_array['attorneys'] = {}
             csv_writer_array['attorneys']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
-            csv_writer_array['attorneys']['file'] = open(csv_writer_array['attorneys']['csv_file_name'], 'w')
+            csv_writer_array['attorneys']['file'] = open(csv_writer_array['attorneys']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['attorneys']['csv_writer'] = csv.DictWriter(csv_writer_array['attorneys']['file'], fieldnames = field_names_array['attorneys'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['attorneys']['csv_writer'].writeheader()
         elif extraction_type == "patents":
             field_names_array['patents'] = ['CaseID', 'PacerID', 'NOS', 'PatentID', 'PatentDocType', 'FileName']
             csv_writer_array['patents'] = {}
             csv_writer_array['patents']['csv_file_name'] = csv_directory + 'CSV_L/' + csv_file_name
-            csv_writer_array['patents']['file'] = open(csv_writer_array['patents']['csv_file_name'], 'w')
+            csv_writer_array['patents']['file'] = open(csv_writer_array['patents']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['patents']['csv_writer'] = csv.DictWriter(csv_writer_array['patents']['file'], fieldnames = field_names_array['patents'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['patents']['csv_writer'].writeheader()
 

@@ -34,3 +34,6 @@ LOG/old_link_files
 # Ignnore Python .pyc files
 ###########################
 *.pyc
+
+# VSCode
+.vscode/settings.json
