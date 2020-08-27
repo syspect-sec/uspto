@@ -170,13 +170,14 @@ def process_link_file(args_array):
         elif "CLS" in args_array['uspto_xml_format']:
             file_processed_success = USPTOProcessClassification.process_class_content(args_array)
 
-        # If the file was not extracted add to attempts count
+        # If the file was not extracted successfully
+        # add to attempts count
         if file_processed_success == False:
             file_processed_attempts += 1
             # If the file extraction limit breached then break loop
             if file_processed_attempts > 2:
                 print("Extraction process for contents of: " + args_array['url_link'] + " failed 3 times at: " + time.strftime("%c"))
-                logger.warning("Extraction process for contents of: " + args_array['url_link'] + " failed 3 times at: " + time.strftime("%c"))
+                logger.error("Extraction process for contents of: " + args_array['url_link'] + " failed 3 times at: " + time.strftime("%c"))
                 break
         # If the database insertion failed then break the loop
         elif file_processed_success == None:
@@ -191,13 +192,19 @@ def process_link_file(args_array):
 # Collect all patent grant and publications data files
 def get_all_links(args_array):
 
-    # Returns a list
+    # This function returns a dict of lists of each classification of links
+    # Each item in the list is a url to download the item and a code to
+    # specify the classification of the link for routing during parsing.
+    # The codes are:
     # PG = Patent Grants
     # PA = Patent Applications
     # PP = PAIR
     # PL = Patent Legal Data
-    # Uses args_array['command_args'] 'biblio' or 'full'
-    # to dermine which links to select
+    # USCLS, CPCCLS, USCPCCLS = Classification Data
+    #
+    # This function also uses args_array['command_args'] == 'biblio' or 'full'
+    # to dermine whether to add the bibliographic or full-text links
+    # for those grant and application files that have both options.
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
@@ -209,7 +216,7 @@ def get_all_links(args_array):
     # Classification url
     url_source_UPC_class = args_array["uspto_classification_data_url"]
 
-    # TODO: fix the classification parser
+    # TODO: Validate the classification parser
     print('Started grabbing patent classification bulk-data links... ' + time.strftime("%c"))
     classification_linklist = []
     classification_linklist.append([args_array['us_classification_text_filename'], "USCLS"])
@@ -233,15 +240,15 @@ def get_all_links(args_array):
     # Log finished building all zip filepaths
     logger.info('Finished grabbing patent application bulk-data links: ' + time.strftime("%c"))
 
-    print('Started grabbing PAIR pair bulk-data links... ' + time.strftime("%c"))
     # Get all patent application pair data
+    print('Started grabbing PAIR pair bulk-data links... ' + time.strftime("%c"))
     pair_linklist = PAIR_links_parser(args_array['uspto_PAIR_data_url'])
     print('Finished grabbing PAIR bulk-data links... ' + time.strftime("%c"))
     # Log finished building all zip filepaths
     logger.info('Finished grabbing PAIR bulk-data links: ' + time.strftime("%c"))
 
-    print('Started grabbing patent legal bulk-data links... ' + time.strftime("%c"))
     # Get all patent legal data
+    print('Started grabbing patent legal bulk-data links... ' + time.strftime("%c"))
     legal_linklist = legal_links_parser(args_array['uspto_legal_data_url'])
     print('Finished grabbing PAIR bulk-data links... ' + time.strftime("%c"))
     # Log finished building all zip filepaths
@@ -290,8 +297,9 @@ def legal_links_parser(bulk_source_url):
     final_zip_file_link_array = []
 
     # Set the context for SSL (not checking!)
+    # TODO: check the SSL context to allow validation of SSL certificate!
     context = ssl.SSLContext()
-    # First collect all links on USPTO bulk data page
+    # First collect all links on USPTO bulk-data page
     content = urllib.request.urlopen(bulk_source_url, context=context).read()
     soup = BeautifulSoup(content, "html.parser")
     for link in soup.find_all('a', href=True):
@@ -316,6 +324,7 @@ def links_parser(source_type, link_type, bulk_data_source, bulk_source_url):
     # If using USPTO bulk data source
     if bulk_data_source == "uspto":
         # Set the context for SSL (not checking!)
+        # TODO: check the SSL context to allow validation of SSL certificate!
         context = ssl.SSLContext()
         # First collect all links on USPTO bulk data page
         content = urllib.request.urlopen(bulk_source_url, context=context).read()
@@ -378,6 +387,7 @@ def links_parser(source_type, link_type, bulk_data_source, bulk_source_url):
             full_source_url = bulk_source_url + "parbbib.php"
 
         # Set the context for SSL (not checking!)
+        # TODO: check the SSL context to allow validation of SSL certificate!
         context = ssl.SSLContext()
         # First collect all links on USPTO bulk data page
         content = urllib.request.urlopen(full_source_url, context=context).read()
@@ -409,6 +419,7 @@ def links_parser(source_type, link_type, bulk_data_source, bulk_source_url):
     return final_zip_file_link_array
 
 # Checks if link should be removed because duplicate of weekly
+# because some of the bulk-data is available in weekly and annual files.
 def is_duplicate_link(type, link):
     # Get the filename from link
     link = link.split("/")[-1]
@@ -426,16 +437,18 @@ def is_duplicate_link(type, link):
         for item in links_to_remove:
             if item in link:
                 is_duplicate = True
-        if is_duplicate: return True
-        else: return False
+        return is_duplicate
     elif type == "PA":
         links_to_remove = [""]
-        if link in links_to_remove:
-            return True
-        else: return False
+        for item in links_to_remove:
+            if item in link:
+                return True
+        return False
 
 
-# Checks if PAIR .zip link is in the list currently able to parse
+# Checks if PAIR .zip link is in the list currently able to parse.
+# Other files will be added when I have time.
+# You can comment out the files you don't want parsed here.
 def is_parsable_PAIR_link(link):
     # Links that are parsable
     parsable_links = [
@@ -451,7 +464,9 @@ def is_parsable_PAIR_link(link):
     if link in parsable_links: return True
     else: return False
 
-# Checks if legal .zip link is in the list currently able to parse
+# Checks if legal .zip link is in the list currently able to parse.
+# Other files will be added when I have time.
+# You can comment out the files you don't want parsed here.
 def is_parsable_legal_link(link):
     # Links that are parsable
     parsable_links = [

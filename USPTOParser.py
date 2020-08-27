@@ -59,14 +59,14 @@ def start_thread_processes(links_array, args_array, database_args):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
-    # Define array to hold processes to multithread
+    # Define array to hold processes
     processes = []
 
     # Calculate the total length of all links to collect
     total_links_count = 0
     for key, value in links_array.items():
         total_links_count += len(value)
-    # Define how many threads should be started
+    # Determine how many threads should be started
     try:
         # If number_of_threads is set in args
         if "number_of_threads" in args_array["command_args"]:
@@ -93,7 +93,6 @@ def start_thread_processes(links_array, args_array, database_args):
     # Create a Queue to hold link pile and share between threads
     link_queue = multiprocessing.Queue()
     # Put all the links into the queue
-    #TODO write classification parser and also append to queue
     for link in links_array['classifications']:
         link.append("class")
         link_queue.put(link)
@@ -115,7 +114,7 @@ def start_thread_processes(links_array, args_array, database_args):
 
     # Loop for number_of_threads and append threads to process
     for i in range(number_of_threads):
-        # Set an argument to hold the thread number for spooling up downloads.
+        # Include argument `i` to delay start of threads to avoid to many concurrent downloads.
         # Create a thread and append to list
         processes.append(multiprocessing.Process(target=main_process, args=(link_queue, args_array, database_args, i)))
 
@@ -141,10 +140,10 @@ def main_process(link_queue, args_array, database_args, spooling_value):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
-    # Check the spooling value in args_array and set a wait time
+    # Check the delay value in args_array and set a wait time
     args_array['spooling_value'] = spooling_value
     if args_array['spooling_value'] > 4:
-        print('[Sleeping thread for initial spooling thread number ' + str(spooling_value) + '...]')
+        print('[Sleeping thread number ' + str(spooling_value) + ' to wait for download...]')
         logger.info('Sleeping thread for initial spooling thread number ' + str(spooling_value) + '...')
         time.sleep((args_array['spooling_value']) * args_array['thread_spool_delay'])
         print('[Thread number ' + str(spooling_value) + ' is waking from sleep...]')
@@ -154,15 +153,14 @@ def main_process(link_queue, args_array, database_args, spooling_value):
 
     print('Process {0} is starting to work! Start Time: {1}'.format(os.getpid(), time.strftime("%c")))
 
-    # Create the database connection here so that each process uses its own connection,
-    # hopefully to increase the bandwith to the database.
+    # Create the database connection here so that each process uses its own connection
     if "database" in args_array["command_args"]:
         # Create a database connection for each thread processes
         database_connection = SQLProcessor.SQLProcess(database_args)
         database_connection.connect()
         args_array['database_connection'] = database_connection
 
-    # Go through each link in the array passed in.
+    # Go through each link in link_queue
     while not link_queue.empty():
 
         # Set process time
@@ -170,24 +168,27 @@ def main_process(link_queue, args_array, database_args, spooling_value):
 
         # Get the next item in the queue
         item = link_queue.get()
-        # Separate link item into link and file_type and append to args_array for item
+        # Separate link item into (1) link url, (2) file format type,
+        # and (3) the document type and append to args_array to be
+        # passed with the item through parsing route
         args_array['url_link'] = item[0]
         args_array['uspto_xml_format'] = item[1]
         args_array['document_type'] = item[3]
-        # File_name is used to keep track of the .zip base filename
+        # file_name is used to keep track of the downloaded file's
+        # base filename (no file extension)
         args_array['file_name'] = os.path.basename(args_array['url_link']).replace(".zip", "").replace(".csv", "").replace(".txt", "")
 
         print("Processing " + args_array['uspto_xml_format'] + " file: " + args_array['url_link'] + " Started at: " + time.strftime("%c"))
 
         # If using `each` database insertion check if the args_array['file_name']
         # has previously been partially processed.
-        # If it has, then remove all records from the previous partial processing.
-        # If it has not, then insert into STARTED_FILES as having been started.
-        if "database" in args_array['command_args'] and args_array['database_insert_mode'] != "bulk":
+        # If it has, then remove all database records from the previous partial processing.
+        # If it has not, then insert into filename into STARTED_FILES to mark that it has been started.
+        if "database" in args_array['command_args'] and args_array['database_insert_mode'] == "each":
             database_connection.remove_previous_file_records(args_array['document_type'], args_array['file_name'])
 
-        # Call the function to collect patent data from each link
-        # and store it to specified place (csv and/or database)
+        # Call function to collect patent data for the link
+        # and store it to specified location (csv and/or database)
         try:
             USPTOProcessLinks.process_link_file(args_array)
             # Print and log notification that one .zip package is finished
@@ -203,8 +204,10 @@ def main_process(link_queue, args_array, database_args, spooling_value):
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
 
-
-    # TODO: check for unprocessed (will have to add "processing" flag.) and add a check before starting
+    # At this point all links have bene processed
+    #
+    # TODO: check logs files again for unprocessed files
+    # (will have to add an additional "processing" flag to links in log file.)
     # processing to avoid collisions of link piles.  Make link_pile loop into a function and
     # then call it again.  OR... make link pile a super global, and somehow be able to check against
     # other processes and rebalance and pop off from link piles.
@@ -316,7 +319,7 @@ def validate_existing_file_structure(args_array):
 
     try:
         # Check that the structure required for the app to function are in place
-        # If not then create directory structure
+        # If not then create missing directory structure
         for required_directory in args_array['required_directory_array']:
             if not os.path.exists(args_array['working_directory'] + required_directory):
                 os.makedirs(args_array['working_directory'] + required_directory)
@@ -351,17 +354,19 @@ def build_command_arguments(argument_array, args_array):
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
     try:
-        # Create an array to store modified command line arguemnts
+        # Create an dict to store converted command line arguemnts
         command_args = {}
 
         # Pop off the first element of array because it's the application filename
         argument_array.pop(0)
 
-        # For loop to modify elements and strip "-" and check if arguement expected
+        # Loop to convert elements
         for i in range(len(argument_array)):
             skip = 0
+            # Finish the loop if finished parsing all args
             if skip + i == len(argument_array):
                 break
+            # Check if argument allowed
             if argument_array[i] in args_array['allowed_args_array']:
                 # Check for help menu requested
                 if argument_array[i] == "-h" or argument_array[i] == "-help":
@@ -370,7 +375,7 @@ def build_command_arguments(argument_array, args_array):
                     exit()
                 elif argument_array[i] == "-t":
                     # Check that next argument is integer between 0 and 20
-                    if int(argument_array[i + 1]) > 0 and int(argument_array[i + 1]) < 31:
+                    if int(argument_array[i + 1]) > 0 and int(argument_array[i + 1]) < 20:
                         command_args['number_of_threads'] = argument_array[i + 1]
                         # Pop the value off
                         argument_array.pop(i + 1)
@@ -379,7 +384,7 @@ def build_command_arguments(argument_array, args_array):
                     # If the argument for number_of_threads is invalid return error
                     else:
                         # Argument length is not ok, print message and return False
-                        print("Command argument error [illegal number of threads]....")
+                        print("Command argument error: Too many threads.  Max threads is 20.")
                         # Print out full argument help menu
                         print(build_argument_output())
                         exit()
@@ -505,31 +510,34 @@ def handle_application_close(start_time, all_files_processed, args_array):
 # (1) Setup Logger
 # (2) Parse and validate command line arguments
 # (3) Collect previous configuration settings
-# (4) Check for existing and if nessesary build required directory and file structure for the app
-# (5) Check for existing data, look for log files and parse into workflow
-# (6) Collect links if needed or look for new links if `-update` argument flag is set
-
+# (4) Check required directory and file structure for the app
+# (5) Look for existing log files and parse into workflow
+# (6) Collect links if none exist or look for new links if `-update` argument flag is set
 
 if __name__=="__main__":
 
-    # If running sandbox mode or not
     # Sandbox mode will keep all downloaded data files locally to
-    # prevent having to download them multiple times, this can be
-    # set from the command line argument '-sandbox'
+    # prevent having to download them multiple times, this can also
+    # be set from the command line argument '-sandbox'
     sandbox = False
     # Log levels
     log_level = 1 # Log levels 1 = error, 2 = warning, 3 = info
     stdout_level = 1 # Stdout levels 1 = verbose, 0 = non-verbose
 
     # Declare variables
-    start_time=time.time()
+    start_time = time.time()
     working_directory = os.getcwd()
     allowed_args_array = [
         "-csv", "-database", "-update", "-t",
         "-biblio", "-full",
         "-balance", "-sandbox", "-h", "-help"
     ]
+    # Default number of threads to use if not specified.
+    # 5 threads is good on 4 core processor.
+    # General rule of 1 thread per core, plus one seems to work well.
     default_threads = 5
+    # Whether to insert the data after each item, or after each file.
+    # `bulk` inserts after each file, `each` after each item.
     database_insert_mode = "bulk" # values include `each` and `bulk`
 
     # Declare filepaths
@@ -578,7 +586,7 @@ if __name__=="__main__":
         "/TMP",
         "/TMP/downloads",
         "/TMP/unzip"
-        ]
+    ]
 
     # Create an array of args that can be passed as a group
     # and appended to as needed
@@ -620,10 +628,10 @@ if __name__=="__main__":
 
     # Setup logger
     USPTOLogger.setup_logger(args_array['log_level'], app_log_file)
-    # Include logger in the main function
+    # Include logger
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
-    # Perform analysis of command line args and store in args_array
+    # Parse command line args and store in args_array
     args_array["command_args"] = build_command_arguments(sys.argv, args_array)
 
     # If command_args are checked OK! Start app
