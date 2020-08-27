@@ -141,6 +141,8 @@ class SQLProcess:
                         # TODO: LOCAL is used to set duplicate key to warning instead of error
                         # TODO: IGNORE is also used to ignore rows that violate duplicate unique key constraints
                         bulk_insert_sql = "LOAD DATA LOCAL INFILE '" + csv_file_obj['csv_file_name'] + "' INTO TABLE " + csv_file_obj['table_name'] + " FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n' IGNORE 1 LINES"
+                        bulk_insert_sql = bulk_insert_sql.replace("\\", "/")
+
                         # Execute the query built above
                         self._cursor.execute(bulk_insert_sql)
                         # Return a successfull insertion flag
@@ -150,8 +152,8 @@ class SQLProcess:
 
                         # Increment the failed counter
                         bulk_insert_failed_attempts += 1
-                        print("Database bulk load query attempt " + str(bulk_insert_failed_attempts) + " failed... " + csv_file['csv_file_name'] + " into table: " + csv_file['table_name'])
-                        logger.error("Database bulk load query attempt " + str(bulk_insert_failed_attempts) + " failed..." + csv_file['csv_file_name'] + " into table: " + csv_file['table_name'])
+                        print("Database bulk load query attempt " + str(bulk_insert_failed_attempts) + " failed... " + csv_file_obj['csv_file_name'] + " into table: " + csv_file_obj['table_name'])
+                        logger.error("Database bulk load query attempt " + str(bulk_insert_failed_attempts) + " failed..." + csv_file_obj['csv_file_name'] + " into table: " + csv_file_obj['table_name'])
                         print("Query string: " + bulk_insert_sql)
                         logger.error("Query string: " + bulk_insert_sql)
                         traceback.print_exc()

@@ -245,6 +245,7 @@ CREATE TABLE IF NOT EXISTS `uspto`.`CORRESPONDENCE_P` (
   `CustomerNum` VARCHAR(45) DEFAULT NULL,
   `FileName` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`ApplicationID`, `FileName`))
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
