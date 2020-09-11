@@ -76,6 +76,52 @@ $ python USPTOParser.py -update
 
 The script will check your previous data destination(s) settings and get any new patent data release files that have been published on the USPTO website (https://bulkdata.uspto.gov/).  The new files are then parsed and stored in the destinations you previously specified.  Since database data files are released every week, the updater can be scheduled once a week to keep your database up-to-date.
 
+
+### 5. Post Parsing Activities
+
+After the USPTOParser.py finishes building the initial databases, the data can be validated, duplicate records can be removed and some metrics can be calculated such as total forward and backward citations.  The scripts for each of these processes can be found in the **installation** directory.
+
+**Validate Record Counts**
+
+The total grants and applications can be compared to the per year summary issued by the USPTO using a pre-built script.  USPTO per year data summary for grants and applications can be found here: https://www.uspto.gov/web/offices/ac/ido/oeip/taf/us_stat.htm
+
+_MySQL_
+
+installation/data_summary_mysql.sql
+
+_PostgreSQL_
+
+installation/data_summary_postgresql.sql
+
+**Remove Duplicate Records**
+
+The USPTO bulk dataset contains some duplicate grant and application records.  These records are initially inserted into the database and the GRANT and APPLICATION tables use a primary key that is a combination of the id and source filename. The duplicate records can be removed from the database using the following scripts:
+
+_MySQL_
+
+installation/remove_duplicates_mysql.sql
+
+_PostgreSQL_
+
+installation/remove_duplicates_postgesql.sql
+
+**Calculate Additional Statistics**
+
+The USPTO data contains a wealth of information.  The data can be used to calculate patent
+metrics for statistical analysis. There are some scripts included to calculate some common statistical metrics such as forward and backward citation counts.
+
+_MariaDB_
+
+installation/uspto_metrics_mariadb.sql
+
+_MySQL_
+
+installation/uspto_metrics_mysql.sql
+
+_PostgreSQL_
+
+installation/uspto_metrics_postgresql.sql
+
 ## **Further Information:**
 
 ### CPU Load balancing
@@ -91,3 +137,4 @@ The method used to insert data into the database can be configured in two ways. 
 If you have questions about the USPTO patent data you can contact:
 Author, Joseph Lee: joseph@ripplesoftware.ca
 USPTO: EconomicsData@uspto.gov
+USPTO Developer: Developer@USPTO.GOV
