@@ -15,7 +15,7 @@ SELECT GrantID, count(*) as count
 FROM uspto.GRANT AS a
 GROUP BY a.GrantID
 HAVING count(*) > 1
-ORDER BY count(*) DESC
+ORDER BY count(*) DESC;
 
 --
 -- Delete GrantID duplicates

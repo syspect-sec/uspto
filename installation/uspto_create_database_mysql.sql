@@ -18,7 +18,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
 DROP SCHEMA IF EXISTS `uspto` ;
 CREATE SCHEMA IF NOT EXISTS `uspto` DEFAULT CHARACTER SET utf8 ;
-USE `uspto` ;
+USE `uspto`;
 
 
 -- -----------------------------------------------------

@@ -9,4 +9,4 @@ ALTER DATABASE uspto CONNECTION LIMIT 1;
 SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = 'uspto';
 
 -- Drop database
-DROP DATABASE uspto
+DROP DATABASE uspto;

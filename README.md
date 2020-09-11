@@ -95,7 +95,7 @@ installation/data_summary_postgresql.sql
 
 **Remove Duplicate Records**
 
-The USPTO bulk dataset contains some duplicate grant and application records.  These records are initially inserted into the database and the GRANT and APPLICATION tables use a primary key that is a combination of the id and source filename. The duplicate records can be removed from the database using the following scripts:
+The USPTO bulk dataset contains some duplicate patent grant and application records.  These records are initially inserted into the database and the GRANT and APPLICATION tables which use a combination of the id and source filename as primary keys. The duplicate patent grant records can be removed from the database using a script, but duplicate application ids are left in the database.  If you want to remove them, you can modify the script and run it again.
 
 _MySQL_
 
