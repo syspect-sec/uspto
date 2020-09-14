@@ -93,6 +93,22 @@ _PostgreSQL_
 
 installation/data_summary_postgresql.sql
 
+**Verify Parser Accuracy**
+
+The ability of USPTOParser to accurately extract all the records from the bulk-data files can be verified using a pre-built SQL script and a small Python application.  The pre-built script will compile a count of all records from each source file into a table, and the Python script will search each source bulk-data file for XML tags and compile a count of the number of records that should be in each database table.  To run the Python script, you will must have maintained the source bulk-data files.  You will need to edit the Python script to include the database credentials of your completed USPTO database, and if you have changed the downloads directory you also must specify the new downloads directory.
+
+_MySQL_
+
+installation/parser_summary_mysql.sql
+
+_PostgreSQL_
+
+installation/parser_summary_postgresql.sql
+
+_Python Verification Script_
+
+installation/USPTOparserVefify.py
+
 **Remove Duplicate Records**
 
 The USPTO bulk dataset contains some duplicate patent grant and application records.  These records are initially inserted into the database and the GRANT and APPLICATION tables which use a combination of the id and source filename as primary keys. The duplicate patent grant records can be removed from the database using a script, but duplicate application ids are left in the database.  If you want to remove them, you can modify the script and run it again.
