@@ -857,11 +857,34 @@ class SQLProcess:
             print('[Inserting expected value for ' + table_name + ' into PARSER_VERIFICATION table.')
             logger.info('[Inserting expected value for ' + table_name + ' into PARSER_VERIFICATION table.')
 
-            tag_count_sql = """
-            UPDATE uspto.PARSER_VERIFICATION
-            SET expected = """ + str(count) +  """
+            # Check if a record exists for the file_name / table_name
+            check_exists = """
+            SELECT count(*) as count
+            FROM uspto.PARSER_VERIFICATION
             WHERE FileName = '""" + file_name + """'
             AND TableName = '""" + table_name + """';"""
+            if args_array['stdout_level'] == 1: print(check_exists)
+            self._cursor.execute(check_exists)
+            result = self._cursor.fetchone()
 
-            if args_array['stdout_level'] == 1: print(tag_count_sql)
-            self._cursor.execute(tag_count_sql)
+            # Insert or update depending on result of count
+            if result['count'] == 0:
+
+                tag_count_sql = """
+                INSERT INTO uspto.PARSER_VERIFICATION
+                (FileName, TableName, Count, Expected)
+                VALUES ('""" + file_name + """', '""" + table_name + """', 0, """ + str(count) + """);"""
+
+                if args_array['stdout_level'] == 1: print(tag_count_sql)
+                self._cursor.execute(tag_count_sql)
+
+            else:
+
+                tag_count_sql = """
+                UPDATE uspto.PARSER_VERIFICATION
+                SET expected = """ + str(count) +  """
+                WHERE FileName = '""" + file_name + """'
+                AND TableName = '""" + table_name + """';"""
+
+                if args_array['stdout_level'] == 1: print(tag_count_sql)
+                self._cursor.execute(tag_count_sql)
