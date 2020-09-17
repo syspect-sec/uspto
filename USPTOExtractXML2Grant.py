@@ -248,11 +248,11 @@ def extract_XML2_grant(raw_data, args_array):
                 try: title = USPTOSanitizer.strip_for_csv(USPTOSanitizer.return_element_text(B540)[:500])
                 except: title = None
 
-            # Collect Citations
+            # Patent Citations
             for B560 in B500.findall('B560'):
                 # Reset position counter for all citations loop
                 position = 1
-                # B561 is PATCIT
+                # B561 is Patent Citation
                 for B561 in B560.findall('B561'):
 
                     # TODO: find out how to do PCIT, DOC without loop.  Only B561 needs loop
@@ -350,7 +350,7 @@ def extract_XML2_grant(raw_data, args_array):
 
                 # Reset position counter for non-patent citations loop
                 position = 1
-                # NON-PATENT LITERATURE
+                # Non-patent Literature Citations
                 for B562 in B560.findall('B562'):
                     NCIT = B562.find('NCIT')
                     if NCIT is not None:
@@ -361,7 +361,7 @@ def extract_XML2_grant(raw_data, args_array):
                         non_patent_citation_text = None
 
                     # Parse citation category into code
-                    if(len(B562.getchildren())>1):
+                    if(len(B562.getchildren()) > 1):
                         try: ncitation_category = B562.getchildren()[1].tag.replace("\n", "").replace("\r", "").upper()
                         except: ncitation_category = None
                     else: ncitation_category = None
@@ -577,7 +577,7 @@ def extract_XML2_grant(raw_data, args_array):
                         #print(processed_examiner)
                         position += 1
 
-        # Collect foreign priotiry data
+        # B300 Foreign priotiry data
         position = 1
         for B300 in r.findall('B300'):
             # Country

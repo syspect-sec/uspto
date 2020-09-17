@@ -700,9 +700,14 @@ def strip_for_csv(string):
     if string is None:
         return None
     else:
-        return string.replace('"', '').replace("\n", "").replace("\r", "").replace("|", "").strip()
+        return string.replace('"', '').replace("\n", "").replace("\r", "").replace(" |", ", ").replace("| ", ", ").replace("|", ",").replace("\\", "").strip()
 
 # Cleans a csv item and returns string
 def clean_PAIR_csv_item(string):
-    string = string.replace('"', '').strip()
-    return string
+    if string is None:
+        return None
+    else:
+        string = string.replace('"', '').replace("\n", "").replace("\r", "").replace(" |", ", ").replace("| ", ", ").replace("|", ",").replace("\\", "").strip()
+        if string == "none" or string == "none none": string = ""
+        if string == "": string = "none"
+        return string

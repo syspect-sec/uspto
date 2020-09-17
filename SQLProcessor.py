@@ -309,17 +309,19 @@ class SQLProcess:
             # Records deleted for classifcation data
             elif call_type == "class":
                 table_name_array = [
-                    "USCLASS_C"
+                    "USCLASS_C",
+                    "CPCCLASS_C",
+                    "USCPC_C",
                 ]
 
             # Records deleted for patent litigation data
             elif call_type == "legal":
-                    table_name_array = [
-                        "CASE_L",
-                        "PATENT_L",
-                        "ATTORNEY_L",
-                        "PARTY_L"
-                    ]
+                table_name_array = [
+                    "CASE_L",
+                    "PATENT_L",
+                    "ATTORNEY_L",
+                    "PARTY_L"
+                ]
 
             print("Starting to remove previous attempt to process the " + call_type + " file: " + file_name + " in table: uspto.STARTED_FILES")
             logger.info("Starting to remove previous attempt to process the " + call_type + " file:" + file_name + " in table: uspto.STARTED_FILES")
@@ -467,6 +469,9 @@ class SQLProcess:
                 self._cursor.execute(get_table_list_sql)
                 # Check the count is true or false.
                 table_list = self._cursor.fetchall()
+                # Print list of tables found
+                for item in table_list:
+                    print("--  Table Found: " + item[1])
 
         except Exception as e:
             # If there is an error and using databse postgresql
@@ -483,13 +488,18 @@ class SQLProcess:
             logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
 
     def close(self):
+
+        logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+
         if self._cursor != None:
             self._cursor.close()
             self._cursor = None
         if self._conn != None:
             self._conn.close()
             self._conn = None
+
         print('Connection to database closed successfully.')
+        logger.info('Connection to database closed successfully.')
 
     # Searches a csv file and extracts any items with the ID in traceback string
     def remove_item_from_csv(self, traceback_array, csv_file_name, violation_type):
@@ -647,3 +657,211 @@ class SQLProcess:
         logger.info(sql_query_string)
         # Return the query string
         return sql_query_string
+
+
+    # Check if PARSER_VERIFICATION table exists and if not create it
+    def checkParserVerificationTable(self, args_array):
+
+        # Set the start time of operation
+        start_time = time.time()
+
+        logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+
+        print('[Checking for PARSER_VERIFICATION table in database. Time consuming:{0} Time Finished: {1}]'.format(time.time() - start_time, time.strftime("%c")))
+        logger.info('[Checking for PARSER_VERIFICATION table in database. Time consuming:{0} Time Finished: {1}]'.format(time.time() - start_time, time.strftime("%c")))
+
+        # List of all tables that should be verified
+        table_name_array = [
+            "GRANT",
+            "INTCLASS_G",
+            "CPCCLASS_G",
+            "USCLASS_G",
+            "INVENTOR_G",
+            "AGENT_G",
+            "ASSIGNEE_G",
+            "APPLICANT_G",
+            "NONPATCIT_G",
+            "EXAMINER_G",
+            "GRACIT_G",
+            "FORPATCIT_G",
+            "FOREIGNPRIORITY_G",
+            "APPLICATION",
+            "INTCLASS_A",
+            "USCLASS_A",
+            "CPCCLASS_A",
+            "FOREIGNPRIORITY_A",
+            "AGENT_A",
+            "ASSIGNEE_A",
+            "INVENTOR_A",
+            "APPLICANT_A",
+            "TRANSACTION_P",
+            "ADJUSTMENT_P",
+            "ADJUSTMENTDESC_P",
+            "CORRESPONDENCE_P",
+            "CONTINUITYCHILD_P",
+            "CONTINUITYPARENT_P",
+            "EXTENSION_P",
+            "EXTENSIONDESC_P",
+            "USCLASS_C",
+            "CPCCLASS_C",
+            "USCPC_C",
+            "CASE_L",
+            "PATENT_L",
+            "ATTORNEY_L",
+            "PARTY_L"
+        ]
+
+        try:
+            # Set bool to track table found
+            table_found = False
+
+            # If using PostgreSQL
+            if self.database_type == "postgresql":
+                # Build query to get list of all tables in uspto database
+                get_table_list_sql = "SELECT * FROM pg_catalog.pg_tables WHERE schemaname != 'pg_catalog' AND schemaname != 'information_schema'"
+                self._cursor.execute(get_table_list_sql)
+                # Check the count is true or false.
+                table_list = self._cursor.fetchall()
+                # Print list of tables found
+                if args_array['stdout_level'] == 1: pprint(table_list)
+                # CHeck for PARSER_VERIFICATION table
+                for item in table_list:
+                    if item[1] == "PARSER_VERIFICATION": table_found = True
+                # If the table is found then return
+                if table_found: return True
+                # If table not found then create table
+                else:
+
+                    print('- Creating PARSER_VERIFICATION table in uspto database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+                    logger.info('- Creating PARSER_VERIFICATION table in uspto database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+
+                    create_table_sql = """
+                    CREATE TABLE IF NOT EXISTS uspto.PARSER_VERIFICATION (
+                      FileName VARCHAR(45) NOT NULL,
+                      TableName VARCHAR(45) NOT NULL,
+                      Count INT(11) NOT NULL,
+                      Expected INT(11) DEFAULT NULL,
+                      PRIMARY KEY (FileName, TableName));
+                    """
+                    self._cursor.execute(create_table_sql)
+
+                    print('- Finished creating PARSER_VERIFICATION table in uspto database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+                    logger.info('- Finished creating PARSER_VERIFICATION table in uspto database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+
+                    # Populate the PARSER_VERIFICATION table with data for
+                    # all other tables counted by source FileName
+                    for table in table_name_array:
+
+                        print('- Populating PARSER_VERIFICATION with ' + table + ' table counts in database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+                        logger.info('- Populating PARSER_VERIFICATION with ' + table + ' table counts in database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+
+                        populate_count_sql = """
+                        INSERT INTO uspto.PARSER_VERIFICATION
+                        (FileName, TableName, Count)
+                        SELECT FileName, '""" + table +  """', count(*)
+                        FROM uspto.""" + table + """
+                        GROUP BY FileName;
+                        """
+                        if args_array['stdout_level'] == 1: print(populate_count_sql)
+                        self._cursor.execute(populate_count_sql)
+                        print('- Finished populating PARSER_VERIFICATION with ' + table + ' table counts in database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+                        logger.info('- Finished populating PARSER_VERIFICATION with ' + table + ' table counts in database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+
+            # If using MySQL
+            elif self.database_type == "mysql":
+                # Build query to get list of all tables in uspto database
+                get_table_list_sql = "SHOW TABLES"
+                self._cursor.execute(get_table_list_sql)
+                # Check the count is true or false.
+                table_list = self._cursor.fetchall()
+                # Print list of tables found
+                if args_array['stdout_level'] == 1: pprint(table_list)
+                # CHeck for PARSER_VERIFICATION table
+                for item in table_list:
+                    if item[0] == "PARSER_VERIFICATION": table_found = True
+                # If the table is found then return
+                if table_found: return True
+                # If table not found then create table
+                else:
+
+                    print('- Creating PARSER_VERIFICATION table in uspto database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+                    logger.info('- Creating PARSER_VERIFICATION table in uspto database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+
+                    create_table_sql = """
+                    CREATE TABLE IF NOT EXISTS uspto.PARSER_VERIFICATION (
+                      `FileName` VARCHAR(45) NOT NULL,
+                      `TableName` VARCHAR(45) NOT NULL,
+                      `Count` INT(11) NOT NULL,
+                      `Expected` INT(11) DEFAULT NULL,
+                      PRIMARY KEY (`FileName`, `TableName`));
+                    """
+                    self._cursor.execute(create_table_sql)
+
+                    print('- Finished creating PARSER_VERIFICATION table in uspto database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+                    logger.info('- Finished creating PARSER_VERIFICATION table in uspto database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+
+                    # Populate the PARSER_VERIFICATION table with data for
+                    # all other tables counted by source FileName
+                    for table in table_name_array:
+
+                        print('- Populating PARSER_VERIFICATION with ' + table + ' table counts in database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+                        logger.info('- Populating PARSER_VERIFICATION with ' + table + ' table counts in database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+
+                        populate_count_sql = """
+                        INSERT INTO uspto.PARSER_VERIFICATION
+                        (FileName, TableName, Count)
+                        SELECT FileName, '""" + table +  """', count(*)
+                        FROM uspto.""" + table + """
+                        GROUP BY FileName;
+                        """
+                        if args_array['stdout_level'] == 1: print(populate_count_sql)
+                        self._cursor.execute(populate_count_sql)
+                        print('- Finished populating PARSER_VERIFICATION with ' + table + ' table counts in database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+                        logger.info('- Finished populating PARSER_VERIFICATION with ' + table + ' table counts in database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+
+        except Exception as e:
+            # If there is an error and using databse postgresql
+            # Then rollback the commit??
+            if self.database_type == "postgresql":
+                self._conn.rollback()
+
+            # Print and log general fail comment
+            print("Database build of PARSER_VERIFICATION table list failed!")
+            logger.error("Database build of PARSER_VERIFICATION table list failed!")
+            traceback.print_exc()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
+
+        print('[Finished creating PARSER_VERIFICATION table in database. Time consuming:{0} Time Finished: {1}]'.format(time.time() - start_time, time.strftime("%c")))
+        logger.info('[Finished creatingr PARSER_VERIFICATION table in database. Time consuming:{0} Time Finished: {1}]'.format(time.time() - start_time, time.strftime("%c")))
+
+
+    # Stores the counts of XML tags counted in files
+    def storeVerificationExtraction(self, counts_dict, args_array):
+
+        # Set the start time of operation
+        start_time = time.time()
+
+        logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+
+        # Extract the file_name from args_array
+        file_name = args_array['file_name']
+        # Remove the table name from the dict
+        del counts_dict['file_name']
+
+        # Loop through all key, values and insert exptected value
+        # into PARSER_VERIFICATION for the table / filename combination
+        for table_name, count in counts_dict.items():
+
+            print('[Inserting expected value for ' + table_name + ' into PARSER_VERIFICATION table.')
+            logger.info('[Inserting expected value for ' + table_name + ' into PARSER_VERIFICATION table.')
+
+            tag_count_sql = """
+            UPDATE uspto.PARSER_VERIFICATION
+            SET expected = """ + str(count) +  """
+            WHERE FileName = '""" + file_name + """'
+            AND TableName = '""" + table_name + """';"""
+
+            if args_array['stdout_level'] == 1: print(tag_count_sql)
+            self._cursor.execute(tag_count_sql)

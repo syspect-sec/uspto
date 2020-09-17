@@ -221,6 +221,7 @@ CREATE TABLE IF NOT EXISTS `uspto`.`TRANSACTION_P` (
   `Position` INT NOT NULL,
   `Description` TINYTEXT DEFAULT NULL,
   `Date` DATE DEFAULT NULL,
+  `FileName` VARCHAR(45) NOT NULL,
   INDEX `fk_applicationid_transaction` (`ApplicationID` ASC) ,
   PRIMARY KEY (`ApplicationID`, `Position`))
 ENGINE = InnoDB;

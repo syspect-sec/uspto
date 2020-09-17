@@ -1,6 +1,6 @@
-# USPTOStoreGrantData.py
-# USPTO Bulk Data Parser - Store Grant Data
-# Description: Imported to the main USPTOParser.py.  Stores grant data in CSV or database.
+# USPTOStorePAIRData.py
+# USPTO Bulk Data Parser - Store PAIR Data
+# Description: Imported to the main USPTOParser.py.  Stores PAIR data in CSV or database.
 # Author: Joseph Lee
 # Email: joseph@ripplesoftware.ca
 # Website: www.ripplesoftware.ca

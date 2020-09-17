@@ -15,12 +15,14 @@ import multiprocessing
 import traceback
 import string
 import psutil
+from pprint import pprint
 
 # Import USPTO Parser Functions
 import USPTOLogger
 import SQLProcessor
 import USPTOSanitizer
 import USPTOProcessLinks
+import USPTOVerifyLinks
 import USPTOCSVHandler
 import USPTOProcessAPSGrant
 import USPTOProcessXMLGrant
@@ -114,9 +116,15 @@ def start_thread_processes(links_array, args_array, database_args):
 
     # Loop for number_of_threads and append threads to process
     for i in range(number_of_threads):
-        # Include argument `i` to delay start of threads to avoid to many concurrent downloads.
-        # Create a thread and append to list
-        processes.append(multiprocessing.Process(target=main_process, args=(link_queue, args_array, database_args, i)))
+        # If doing a verification of existing parsed database
+        if "verify" in args_array['command_args']:
+            # Create a thread and append to list
+            processes.append(multiprocessing.Process(target=verification_process, args=(link_queue, args_array, database_args, i)))
+        # If parsing bulk-data into database:
+        else:
+            # Include argument `i` to delay start of threads to avoid to many concurrent downloads.
+            # Create a thread and append to list
+            processes.append(multiprocessing.Process(target=main_process, args=(link_queue, args_array, database_args, i)))
 
     # Append the load balancer thread once to the loop
     processes.append(multiprocessing.Process(target=load_balancer_thread, args=(link_queue, args_array)))
@@ -125,12 +133,91 @@ def start_thread_processes(links_array, args_array, database_args):
     for p in processes:
         p.start()
 
-    print("All " + str(number_of_threads) + " initial main process(es) have been loaded... ")
-    logger.info("All " + str(number_of_threads) + " initial main process(es) have been loaded... ")
+    # If doing a verification of existing parsed database
+    if "verify" in args_array['command_args']: action = "verification"
+    else: action = "main"
+
+    print("All " + str(number_of_threads) + " initial " + action + " process(es) have been loaded... ")
+    logger.info("All " + str(number_of_threads) + " initial " + action + " process(es) have been loaded... ")
 
     # This .join() function prevents the script from progressing further.
     for p in processes:
         p.join()
+
+# Verification function for multiprocessing
+def verification_process(link_queue, args_array, database_args, spooling_value):
+    # Set process start time
+    process_start_time = time.time()
+
+    logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+
+    # Check the delay value in args_array and set a wait time
+    args_array['spooling_value'] = spooling_value
+    if args_array['spooling_value'] > 4:
+        print('[Sleeping thread number ' + str(spooling_value) + ' to wait for download...]')
+        logger.info('Sleeping thread for initial spooling thread number ' + str(spooling_value) + '...')
+        time.sleep((args_array['spooling_value']) * args_array['thread_spool_delay'])
+        print('[Thread number ' + str(spooling_value) + ' is waking from sleep...]')
+        logger.info('Thread number ' + str(spooling_value) + ' is waking from sleep...')
+
+        args_array['spooling_value'] = 0
+
+    print('Process {0} is starting to work! Start Time: {1}'.format(os.getpid(), time.strftime("%c")))
+
+    # Create a database connection for each thread processes
+    database_connection = SQLProcessor.SQLProcess(database_args)
+    database_connection.connect()
+    args_array['database_connection'] = database_connection
+
+    # Go through each link in link_queue
+    while not link_queue.empty():
+
+        # Set process time
+        start_time = time.time()
+
+        # Get the next item in the queue
+        item = link_queue.get()
+        # Separate link item into (1) link url, (2) file format type,
+        # and (3) the document type and append to args_array to be
+        # passed with the item through parsing route
+        args_array['url_link'] = item[0]
+        args_array['uspto_xml_format'] = item[1]
+        args_array['document_type'] = item[3]
+
+        # file_name is used to keep track of the downloaded file's
+        # base filename (no file extension)
+        args_array['file_name'] = os.path.basename(args_array['url_link']).replace(".zip", "").replace(".csv", "").replace(".txt", "")
+
+        print("Verifying " + args_array['uspto_xml_format'] + " file: " + args_array['file_name'] + " Started at: " + time.strftime("%c"))
+
+        # Call function to verify data for each link
+        # and store the expected values in the PARSER_VERIFICATION table
+        try:
+            USPTOVerifyLinks.verify_link_file(args_array)
+            # Print and log notification that one .zip package is finished
+            print('[Finished processing one .zip package! Time consuming:{0} Time Finished: {1}]'.format(time.time() - start_time, time.strftime("%c")))
+            logger.info('Finished processing one .zip package! Time consuming:{0} Time Finished: {1}]'.format(time.time() - start_time, time.strftime("%c")))
+
+        except Exception as e:
+            # Print and log general fail comment
+            print("Processing a file failed... " + args_array['file_name'] + " from link " + args_array['url_link'] + " at: " + time.strftime("%c"))
+            logger.error("Processing a file failed... " + args_array['file_name'] + " from link " + args_array['url_link'])
+            traceback.print_exc()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
+
+    # At this point all links have bene processed
+    #
+    # TODO: check logs files again for unprocessed files
+    # (will have to add an additional "processing" flag to links in log file.)
+    # processing to avoid collisions of link piles.  Make link_pile loop into a function and
+    # then call it again.  OR... make link pile a super global, and somehow be able to check against
+    # other processes and rebalance and pop off from link piles.
+
+    # Print message that process is finished
+    print('[Process {0} is finished. Time consuming:{1} Time Finished: {1}]'.format(time.time() - process_start_time, time.strftime("%c")))
+
 
 # Main function for multiprocessing
 def main_process(link_queue, args_array, database_args, spooling_value):
@@ -344,9 +431,28 @@ def validate_existing_file_structure(args_array):
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         logger.error(str(e) + str(exc_type) + str(fname) + str(exc_tb.tb_lineno))
-        # Return false to main function
-        return False
+        # Exit script
+        exit()
 
+# Check the existing database structure and create if not exists already
+def validate_existing_database_structure(args_array):
+
+    # If doing a verification of existing parsed database
+    if "verify" in args_array['command_args']:
+        # Connect to database
+        database_connection = SQLProcessor.SQLProcess(database_args)
+        database_connection.connect()
+        # Check if PARSER_VERIFICATION table exists and if not create it
+        database_connection.checkParserVerificationTable(args_array)
+        # Close the database connection
+        database_connection.close()
+    else:
+        pass
+        # Check if database exists and if not create it
+        # Check if all required tables exist and if not run creation script
+
+        # Run the initial queries to populate the PARSER_VERIFICATION table
+        # with counts of parsed data already in the database
 
 # Parses the command argument sys.arg into command set, also encrypt password for use
 def build_command_arguments(argument_array, args_array):
@@ -393,6 +499,7 @@ def build_command_arguments(argument_array, args_array):
                     command_args['source_type'] = "biblio"
                 elif argument_array[i] == "-full":
                     command_args['source_type'] = "full"
+
                 else:
                     # If the argument is expected but not requiring a second
                     # setting argument append as key to command_args
@@ -411,6 +518,16 @@ def build_command_arguments(argument_array, args_array):
         # If source_type was not specificed, then set to the default value
         if "source_type" not in command_args:
             command_args['source_type'] = args_array['default_source_type']
+
+        # Check that the verify command is issued alone
+        if "verify" in command_args:
+            # Remove the source_type from command args
+            del(command_args['source_type'])
+            # Exit any other commands command submitted with verify.
+            # 'number_of_threads' is expected
+            if len(command_args) != 2:
+                print("-- The -verify command must be run alone and cannot be run with any other commands.")
+                exit()
 
         # If arguments passed then return array of arguments
         return command_args
@@ -444,7 +561,8 @@ def build_argument_output():
     argument_output += "-database   : write the patent data to database.  Setting will be saved on update or restart.\n"
     argument_output += "-biblio     : (default) parse the USPTO bulk-data Red Book Biliographic data-set.\n"
     argument_output += "-full       : parse the USPTO bulk-data Red Book full-text data-set.\n"
-    argument_output += "-update     : check for new patent bulk data files and process them\n"
+    argument_output += "-update     : check for new patent bulk data files and process them.\n"
+    argument_output += "-verify     : verify the completed database against source bulk-data files.\n"
     return argument_output
 
 # Set the config settings in file based on command arguments
@@ -519,7 +637,7 @@ if __name__=="__main__":
     # Sandbox mode will keep all downloaded data files locally to
     # prevent having to download them multiple times, this can also
     # be set from the command line argument '-sandbox'
-    sandbox = False
+    sandbox = True
     # Log levels
     log_level = 1 # Log levels 1 = error, 2 = warning, 3 = info
     stdout_level = 1 # Stdout levels 1 = verbose, 0 = non-verbose
@@ -530,7 +648,8 @@ if __name__=="__main__":
     allowed_args_array = [
         "-csv", "-database", "-update", "-t",
         "-biblio", "-full",
-        "-balance", "-sandbox", "-h", "-help"
+        "-balance", "-sandbox", "-h", "-help",
+        "-verify"
     ]
     # Default number of threads to use if not specified.
     # 5 threads is good on 4 core processor.
@@ -563,14 +682,14 @@ if __name__=="__main__":
 
     # Database args
     database_args = {
-        "database_type" : "postgresql", # choose 'mysql' or 'postgresql'
-        #"database_type" : "mysql", # choose 'mysql' or 'postgresql'
+        #"database_type" : "postgresql", # choose 'mysql' or 'postgresql'
+        "database_type" : "mysql", # choose 'mysql' or 'postgresql'
         "host" : "127.0.0.1",
-        "port" : 5432, # PostgreSQL port
-        #"port" : 3306, # MySQL port
+        #"port" : 5432, # PostgreSQL port
+        "port" : 3306, # MySQL port
         "user" : "uspto",
-        "passwd" : "Ld58KimTi06v2PnlXTFuLG4", # PostgreSQL password
-        #"passwd" : "R5wM9N5qCEU3an#&rku8mxrVBuF@ur", # MySQL password
+        #"passwd" : "Ld58KimTi06v2PnlXTFuLG4", # PostgreSQL password
+        "passwd" : "R5wM9N5qCEU3an#&rku8mxrVBuF@ur", # MySQL password
         "db" : "uspto",
         "charset" : "utf8"
     }
@@ -648,57 +767,62 @@ if __name__=="__main__":
         print("Starting USPTO Patent Database Builder " + time.strftime("%c"))
 
         # Check existing app structure and create it if required
-        # If true then coninue app process
-        if validate_existing_file_structure(args_array):
+        validate_existing_file_structure(args_array)
+        # Check existing database structure and create if required
+        validate_existing_database_structure(args_array)
 
-            # Collect all links, or update with new links to log files
-            USPTOLogger.build_or_update_link_files(args_array)
+        # Collect all links, or update with new links to log files
+        USPTOLogger.build_or_update_link_files(args_array)
 
-            # Main loop that checks if all links have been processed.
-            # Read the list of files to process and eliminate the ones
-            # that are marked as processed.
-            all_files_processed = False
-            while all_files_processed == False:
+        # Main loop that checks if all links have been processed.
+        # Read the list of files to process and eliminate the ones
+        # that are marked as processed.
+        all_files_processed = False
+        while all_files_processed == False:
 
-                # Read list of all required files into array from log files
-                # An array is returned with list of links for each type of data to processs
-                # (1) Patent Classification Data
-                # (2) Patent Grant Documents
-                # (3) Application Documents
-                # (4) PAIR Data
-                # (5) Patent Legal Case Data
+            # Read list of all required files into array from log files
+            # An array is returned with list of links for each type of data to processs
+            # (1) Patent Classification Data
+            # (2) Patent Grant Documents
+            # (3) Application Documents
+            # (4) PAIR Data
+            # (5) Patent Legal Case Data
 
-                # Collect all links by passing in log files
-                # TODO: add classification parsing and PAIR link processing
-                all_links_array = USPTOLogger.collect_all_unstarted_links_from_file(args_array)
+            # Collect all links by passing in log files
+            # TODO: add classification parsing and PAIR link processing
+            all_links_array = USPTOLogger.collect_all_unstarted_links_from_file(args_array)
 
-                # If collecting the links array failed print error and log error
-                if not all_links_array:
-                    print('Failed to collect links from file ' + time.strftime("%c"))
-                    logger.error('Failed to collect links from file ' + time.strftime("%c"))
-                    # Set the main loop to exit
-                    all_files_processed = "Error"
+            # If collecting the links array failed print error and log error
+            if not all_links_array:
+                print('Failed to collect links from file ' + time.strftime("%c"))
+                logger.error('Failed to collect links from file ' + time.strftime("%c"))
+                # Set the main loop to exit
+                all_files_processed = "Error"
 
-                # Else if the read list of unprocessed links is not empty
-                elif len(all_links_array["grants"]) != 0 or len(all_links_array["applications"]) != 0 or len(all_links_array["PAIR"]) != 0 or len(all_links_array["classifications"]) != 0 or len(all_links_array["legal"]) != 0:
-                    # TODO update with classifcation data and PAIR data output
-                    print(str(len(all_links_array["grants"])) + " grant links will be collected. Start time: " + time.strftime("%c"))
-                    print(str(len(all_links_array["applications"])) + " application links will be collected. Start time: " + time.strftime("%c"))
-                    print(str(len(all_links_array["classifications"])) + " classification links will be collected. Start time: " + time.strftime("%c"))
-                    print(str(len(all_links_array["PAIR"])) + " PAIR links will be collected. Start time: " + time.strftime("%c"))
-                    print(str(len(all_links_array["legal"])) + " legal links will be collected. Start time: " + time.strftime("%c"))
-                    logger.info(str(len(all_links_array["grants"])) + " grant links will be collected. Start time: " + time.strftime("%c"))
-                    logger.info(str(len(all_links_array["applications"])) + " application links will be collected. Start time: " + time.strftime("%c"))
-                    logger.info(str(len(all_links_array["classifications"])) + " classification links will be collected. Start time: " + time.strftime("%c"))
-                    logger.info(str(len(all_links_array["PAIR"])) + " PAIR links will be collected. Start time: " + time.strftime("%c"))
-                    logger.info(str(len(all_links_array["legal"])) + " legal links will be collected. Start time: " + time.strftime("%c"))
+            # Else if the read list of unprocessed links is not empty
+            elif len(all_links_array["grants"]) != 0 or len(all_links_array["applications"]) != 0 or len(all_links_array["PAIR"]) != 0 or len(all_links_array["classifications"]) != 0 or len(all_links_array["legal"]) != 0:
 
-                    # Start the threading processes for the stack of links to process
-                    start_thread_processes(all_links_array, args_array, database_args)
+                # Set the string for the output depeding on whether verification or parsing bulk-data
+                if "verify" in args_array['command_args']: action = "verified"
+                else: action = "collected"
+                # TODO update with classifcation data and PAIR data output
+                print(str(len(all_links_array["grants"])) + " grant links will be " + action + ". Start time: " + time.strftime("%c"))
+                print(str(len(all_links_array["applications"])) + " application links will be " + action + ". Start time: " + time.strftime("%c"))
+                print(str(len(all_links_array["classifications"])) + " classification links will be " + action + ". Start time: " + time.strftime("%c"))
+                print(str(len(all_links_array["PAIR"])) + " PAIR links will be " + action + ". Start time: " + time.strftime("%c"))
+                print(str(len(all_links_array["legal"])) + " legal links will be " + action + ". Start time: " + time.strftime("%c"))
+                logger.info(str(len(all_links_array["grants"])) + " grant links will be " + action + ". Start time: " + time.strftime("%c"))
+                logger.info(str(len(all_links_array["applications"])) + " application links will be " + action + ". Start time: " + time.strftime("%c"))
+                logger.info(str(len(all_links_array["classifications"])) + " classification links will be " + action + ". Start time: " + time.strftime("%c"))
+                logger.info(str(len(all_links_array["PAIR"])) + " PAIR links will be " + action + ". Start time: " + time.strftime("%c"))
+                logger.info(str(len(all_links_array["legal"])) + " legal links will be " + action + ". Start time: " + time.strftime("%c"))
 
-                # If both link lists are empty then all files have been processed, set main loop to exit
-                else:
-                    all_files_processed = True
+                # Start the threading processes for the stack of links to process
+                start_thread_processes(all_links_array, args_array, database_args)
 
-            # Handle the closing of the application
-            handle_application_close(start_time, all_files_processed, args_array)
+            # If both link lists are empty then all files have been processed, set main loop to exit
+            else:
+                all_files_processed = True
+
+        # Handle the closing of the application
+        handle_application_close(start_time, all_files_processed, args_array)

@@ -253,33 +253,62 @@ def collect_all_unstarted_links_from_file(args_array):
         # Read all required grant links into array
         with open(args_array['grant_process_log_file'], "r") as grant_process_file:
             for line in grant_process_file:
-                #print line.split(",")[2].replace("\n", "")
-                if line.split(",")[2].replace("\n", "") != "Processed":
-                    grant_temp_array.append(line.split(","))
+                # If doing verification, collect processed files
+                if "verify" in args_array['command_args']:
+                    if line.split(",")[2].replace("\n", "") == "Processed":
+                        grant_temp_array.append(line.split(","))
+                # If parsing bulk-data, collect all unprocessed files
+                else:
+                    if line.split(",")[2].replace("\n", "") != "Processed":
+                        grant_temp_array.append(line.split(","))
 
         # Read all required applicaton links into array
         with open(args_array['application_process_log_file'], "r") as application_process_file:
             for line in application_process_file:
-                if line.split(",")[2].replace("\n", "") != "Processed":
-                    application_temp_array.append(line.split(","))
+                # If doing verification, collect processed files
+                if "verify" in args_array['command_args']:
+                    if line.split(",")[2].replace("\n", "") == "Processed":
+                        application_temp_array.append(line.split(","))
+                # If parsing bulk-data, collect all unprocessed files
+                else:
+                    if line.split(",")[2].replace("\n", "") != "Processed":
+                        application_temp_array.append(line.split(","))
 
         # Read all required classification links into array
         with open(args_array['classification_process_log_file'], "r") as classification_process_file:
             for line in classification_process_file:
-                if line.split(",")[2].replace("\n", "") != "Processed":
-                    classification_temp_array.append(line.split(","))
+                # If doing verification, collect processed files
+                if "verify" in args_array['command_args']:
+                    if line.split(",")[2].replace("\n", "") == "Processed":
+                        classification_temp_array.append(line.split(","))
+                # If parsing bulk-data, collect all unprocessed files
+                else:
+                    if line.split(",")[2].replace("\n", "") != "Processed":
+                        classification_temp_array.append(line.split(","))
 
         # Read all required PAIR links into array
         with open(args_array['pair_process_log_file'], "r") as pair_process_file:
             for line in pair_process_file:
-                if line.split(",")[2].replace("\n", "") != "Processed":
-                    pair_temp_array.append(line.split(","))
+                # If doing verification, collect processed files
+                if "verify" in args_array['command_args']:
+                    if line.split(",")[2].replace("\n", "") == "Processed":
+                        pair_temp_array.append(line.split(","))
+                # If parsing bulk-data, collect all unprocessed files
+                else:
+                    if line.split(",")[2].replace("\n", "") != "Processed":
+                        pair_temp_array.append(line.split(","))
 
         # Read all required legal links into array
         with open(args_array['legal_process_log_file'], "r") as legal_process_file:
             for line in legal_process_file:
-                if line.split(",")[2].replace("\n", "") != "Processed":
-                    legal_temp_array.append(line.split(","))
+                # If doing verification, collect processed files
+                if "verify" in args_array['command_args']:
+                    if line.split(",")[2].replace("\n", "") == "Processed":
+                        legal_temp_array.append(line.split(","))
+                # If parsing bulk-data, collect all unprocessed files
+                else:
+                    if line.split(",")[2].replace("\n", "") != "Processed":
+                        legal_temp_array.append(line.split(","))
 
         print('Finished reading all required links to download and parse ' + time.strftime("%c"))
         logger.info('Finished reading all required links to download and parse ' + time.strftime("%c"))
@@ -307,10 +336,17 @@ def build_or_update_link_files(args_array):
 
     logger = logging.getLogger("USPTO_Database_Construction")
 
-    # Check if links log files exists already
+    # Check if link log files exists already
     # If not exists, then find and write all links to file
     #TODO: what if only one log file is missing??  How could that happen??
     if not os.path.isfile(args_array['grant_process_log_file']) or not os.path.isfile(args_array['application_process_log_file']) or not os.path.isfile(args_array['classification_process_log_file']) or not os.path.isfile(args_array['legal_process_log_file']):
+
+        # If verification is command then files need to be there already.
+        # If they are not, exit execution
+        if "verify" in args_array['command_args']:
+            print("No existing link file lists found. Exiting verification process.  " + time.strftime("%c"))
+            logger.info('No existing link file lists found.  Exiting verification process. ' + time.strftime("%c"))
+            exit()
 
         print("No existing link file lists found. Creating them now.  " + time.strftime("%c"))
         logger.info('No existing link file lists found. Creating them now. ' + time.strftime("%c"))
@@ -337,6 +373,7 @@ def build_or_update_link_files(args_array):
         try:
             # Get List of all links and update the existing links based on found links
             all_links_array = USPTOProcessLinks.get_all_links(args_array)
+            if args_array['stdout_level'] == 1: print(all_links_array)
             update_link_arrays_to_file(all_links_array, args_array)
         except Exception as e:
             print("Failed to get all links from USPTO bulk data site " + time.strftime("%c"))

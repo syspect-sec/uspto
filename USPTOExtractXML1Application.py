@@ -248,12 +248,12 @@ def extract_XML1_application(raw_data, args_array):
         position += 1
 
     # Get inventor data
-    iv = r.find('inventors')
-    if iv is not None:
+    inv = r.find('inventors')
+    if inv is not None:
 
         # Init position
         position = 1
-        for inventor in iv.findall('first-named-inventor'):
+        for inventor in inv.findall('first-named-inventor'):
             n = inventor.find('name')
             try: inventor_first_name = n.findtext('given-name').strip()[:100]
             except: inventor_first_name = None
@@ -295,7 +295,7 @@ def extract_XML1_application(raw_data, args_array):
             position += 1
 
         # For all secordary inventors
-        for inventor in iv.findall('inventor'):
+        for inventor in inv.findall('inventor'):
             if inventor is not None:
                 n = inventor.find('name')
                 if n is not None:
@@ -339,6 +339,7 @@ def extract_XML1_application(raw_data, args_array):
                     position += 1
 
     # Get assignee data
+    # TODO: can this be parsed?
     asn_elem = r.find('assignee')
     if asn_elem is not None:
         # Init position
