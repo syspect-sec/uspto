@@ -388,8 +388,8 @@ def extract_XML1_application_tag_counts(args_array):
     # APPLICANT_A are not include in XML1 applications
     tags_dict = {
         "APPLICATION" : ["<patent-application-publication"],
-        "INTCLASS_A" : ["<classification-ipc>"],
-        "USCLASS_A" : ["<classification-us>"],
+        "INTCLASS_A" : ["<classification-ipc-primary>", "<classification-ipc-secondary>"],
+        "USCLASS_A" : ["<classification-us-primary>", "<classification-us-secondary>"],
         "FOREIGNPRIORITY_A" : ["<priority-application-number"],
         "AGENT_A" : ["<correspondence-address>"],
         "INVENTOR_A" : ["<first-named-inventor", "<inventor>"],

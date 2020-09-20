@@ -173,7 +173,7 @@ def extract_XML1_application(raw_data, args_array):
 
         # Get US classification data
         nc = ti.find('classification-us')
-        position = 1
+        nc_position = 1
         if nc is not None:
             uspc = nc.find('classification-us-primary').find('uspc')
             if uspc is not None:
@@ -188,13 +188,13 @@ def extract_XML1_application(raw_data, args_array):
                 processed_usclass.append({
                     "table_name" : "uspto.USCLASS_A",
                     "ApplicationID" : app_no,
-                    "Position" : position,
+                    "Position" : nc_position,
                     "Class" : n_class_main,
                     "SubClass" : n_subclass,
                     "FileName" : args_array['file_name']
                 })
                 #print(processed_usclass)
-                position += 1
+                nc_position += 1
 
             # Collect all Secondary US class
             ncs = nc.findall('classification-us-secondary')
@@ -212,16 +212,16 @@ def extract_XML1_application(raw_data, args_array):
                     processed_usclass.append({
                         "table_name" : "uspto.USCLASS_A",
                         "ApplicationID" : app_no,
-                        "Position" : position,
+                        "Position" : nc_position,
                         "Class" : n_class_main,
                         "SubClass" : n_subclass,
                         "FileName" : args_array['file_name']
                     })
                     #print(processed_usclass)
-                    position += 1
+                    nc_position += 1
 
     # Get priority claims
-    position = 1
+    pc_position = 1
     pc_kind = None
     for pc in r.findall('foreign-priority-data'):
         try: pc_country = pc.findtext('country-code').strip()[:100]
@@ -235,7 +235,7 @@ def extract_XML1_application(raw_data, args_array):
         processed_foreignpriority.append({
             "table_name" : "uspto.FOREIGNPRIORITY_A",
             "ApplicationID" : app_no,
-            "Position" : position,
+            "Position" : pc_position,
             "Kind" : pc_kind,
             "Country" : pc_country,
             "DocumentID" : pc_doc_num,
@@ -243,7 +243,7 @@ def extract_XML1_application(raw_data, args_array):
             "FileName" : args_array['file_name']
         })
         #print(processed_foreignpriority)
-        position += 1
+        pc_position += 1
 
     # Get inventor data
     invs = r.find('inventors')
