@@ -639,7 +639,7 @@ if __name__=="__main__":
     # be set from the command line argument '-sandbox'
     sandbox = True
     # Log levels
-    log_level = 1 # Log levels 1 = error, 2 = warning, 3 = info
+    log_level = 3 # Log levels 1 = error, 2 = warning, 3 = info
     stdout_level = 1 # Stdout levels 1 = verbose, 0 = non-verbose
 
     # Declare variables
@@ -790,7 +790,7 @@ if __name__=="__main__":
 
             # Collect all links by passing in log files
             # TODO: add classification parsing and PAIR link processing
-            all_links_array = USPTOLogger.collect_all_unstarted_links_from_file(args_array)
+            all_links_array = USPTOLogger.collect_all_required_links_from_file(args_array)
 
             # If collecting the links array failed print error and log error
             if not all_links_array:

@@ -95,7 +95,11 @@ installation/data_summary_postgresql.sql
 
 **Verify Parser Accuracy**
 
-The ability of USPTOParser to accurately extract all the records from the bulk-data files can be verified using a pre-built SQL script and a small Python application.  The pre-built script will compile a count of all records from each source file into a table, and the Python script will search each source bulk-data file for XML tags and compile a count of the number of records that should be in each database table.  To run the Python script, you will must have maintained the source bulk-data files.  You will need to edit the Python script to include the database credentials of your completed USPTO database, and if you have changed the downloads directory you also must specify the new downloads directory.
+The ability of USPTOParser to accurately extract all the records from the bulk-data files can be verified using a pre-built SQL script and a small Python application.  All files must be processed before you start the verification.  Otherwise, you will need to delete the PARSER_VERIFICATION table from the database and run **python USPTOParser.py -verify** again.  
+
+The pre-built script will first build the database table, and then compile a count of all records from each source file into the table.  The Python script will search each source bulk-data file for XML tags and compile a count of the number of records that should be in each database table. You can then run a query to show the completeness of all filename / table combinations.
+
+To run the Python script, you must have maintained the source bulk-data files.  You will need to edit the Python script to include the database credentials of your completed USPTO database, and if you have changed the downloads directory you also must specify the new downloads directory.
 
 _MySQL_
 
@@ -108,6 +112,7 @@ installation/parser_summary_postgresql.sql
 _Python Verification Script_
 
 installation/USPTOparserVefify.py
+
 
 **Remove Duplicate Records**
 

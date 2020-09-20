@@ -46,9 +46,8 @@ def extract_XML1_application(raw_data, args_array):
     # Get and fix the document_id data
     di = r.find('document-id')
     if di is not None:
-        try:
-            # This document ID is NOT application number
-            document_id = di.findtext('doc-number').strip()
+        # This document ID is NOT application number
+        try: document_id = di.findtext('doc-number').strip()
         except:
             document_id = None
             logger.error("No Patent Number was found for: " + url_link)
@@ -64,8 +63,7 @@ def extract_XML1_application(raw_data, args_array):
     # Get application filing data
     ar = r.find('domestic-filing-data')
     if ar is not None:
-        try:
-            app_no = ar.find('application-number').findtext('doc-number').strip()[:20]
+        try: app_no = ar.find('application-number').findtext('doc-number').strip()[:20]
         except: app_no = None
         try: app_date = USPTOSanitizer.return_formatted_date(ar.findtext('filing-date'), args_array, document_id)
         except: app_date = None
@@ -73,15 +71,15 @@ def extract_XML1_application(raw_data, args_array):
         except: series_code = None
 
     # Get technical information
-    ti_elem = r.find('technical-information')
-    if ti_elem is not None:
+    ti = r.find('technical-information')
+    if ti is not None:
 
         # Get invention title
-        try: title = USPTOSanitizer.strip_for_csv(ti_elem.findtext('title-of-invention')[:500])
+        try: title = USPTOSanitizer.strip_for_csv(ti.findtext('title-of-invention')[:500])
         except: title = None
 
         # Get international classification data
-        ic = ti_elem.find('classification-ipc')
+        ic = ti.find('classification-ipc')
         if ic is not None:
             # Init position
             position = 1
@@ -174,7 +172,7 @@ def extract_XML1_application(raw_data, args_array):
                     position += 1
 
         # Get US classification data
-        nc = ti_elem.find('classification-us')
+        nc = ti.find('classification-us')
         position = 1
         if nc is not None:
             uspc = nc.find('classification-us-primary').find('uspc')
@@ -248,12 +246,11 @@ def extract_XML1_application(raw_data, args_array):
         position += 1
 
     # Get inventor data
-    inv = r.find('inventors')
-    if inv is not None:
-
+    invs = r.find('inventors')
+    if invs is not None:
         # Init position
-        position = 1
-        for inventor in inv.findall('first-named-inventor'):
+        inv_position = 1
+        for inventor in invs.findall('first-named-inventor'):
             n = inventor.find('name')
             try: inventor_first_name = n.findtext('given-name').strip()[:100]
             except: inventor_first_name = None
@@ -283,7 +280,7 @@ def extract_XML1_application(raw_data, args_array):
             processed_inventor.append({
                 "table_name" : "uspto.INVENTOR_A",
                 "ApplicationID" : app_no,
-                "Position" : position,
+                "Position" : inv_position,
                 "FirstName" : inventor_first_name,
                 "LastName" : inventor_last_name,
                 "City" : inventor_city,
@@ -292,19 +289,19 @@ def extract_XML1_application(raw_data, args_array):
                 "FileName" : args_array['file_name']
             })
             #print(processed_inventor)
-            position += 1
+            inv_position += 1
 
         # For all secordary inventors
-        for inventor in inv.findall('inventor'):
-            if inventor is not None:
-                n = inventor.find('name')
+        for inv in invs.findall('inventor'):
+            if inv is not None:
+                n = inv.find('name')
                 if n is not None:
                     try: inventor_first_name = n.findtext('given-name').strip()[:100]
                     except: inventor_first_name = None
                     try: inventor_last_name = n.findtext('family-name').strip()[:100]
                     except: inventor_last_name = None
 
-                res = inventor.find('residence')
+                res = inv.find('residence')
                 if res is not None:
                     residence_us = res.find('residence-us')
                     if residence_us is not None:
@@ -327,7 +324,7 @@ def extract_XML1_application(raw_data, args_array):
                     processed_inventor.append({
                         "table_name" : "uspto.INVENTOR_A",
                         "ApplicationID" : app_no,
-                        "Position" : position,
+                        "Position" : inv_position,
                         "FirstName" : inventor_first_name,
                         "LastName" : inventor_last_name,
                         "City" : inventor_city,
@@ -336,19 +333,17 @@ def extract_XML1_application(raw_data, args_array):
                         "FileName" : args_array['file_name']
                     })
                     #print(processed_inventor)
-                    position += 1
+                    inv_position += 1
 
     # Get assignee data
-    # TODO: can this be parsed?
-    asn_elem = r.find('assignee')
-    if asn_elem is not None:
-        # Init position
-        position = 1
-        try: asn_role = asn_elem.findtext('assignee-type').strip()[:100]
+    # Init position
+    asn_position = 1
+    for asn in r.findall('assignee'):
+        try: asn_role = asn.findtext('assignee-type').strip()[:100]
         except: asn_role = None
-        try: asn_orgname = asn_elem.findtext('organization-name').strip()[:300]
+        try: asn_orgname = asn.findtext('organization-name').strip()[:300]
         except: asn_orgname = None
-        adr_elem = asn_elem.find('address')
+        adr_elem = asn.find('address')
         try: asn_city = adr_elem.findtext('city').strip()[:100]
         except: asn_city = None
         try: asn_state = adr_elem.findtext('state').strip()[:100]
@@ -367,7 +362,7 @@ def extract_XML1_application(raw_data, args_array):
         processed_assignee.append({
             "table_name" : "uspto.ASSIGNEE_A",
             "ApplicationID" : app_no,
-            "Position" : position,
+            "Position" : asn_position,
             "OrgName" : asn_orgname,
             "FirstName" : asn_firstname,
             "LastName" : asn_lastname,
@@ -378,22 +373,22 @@ def extract_XML1_application(raw_data, args_array):
             "FileName" : args_array['file_name']
         })
         #print(processed_assignee)
-        position += 1
+        asn_position += 1
 
     # Find the agent element
-    ag_elem = r.find('correspondence-address')
+    agn = r.find('correspondence-address')
     # Init position
-    position = 1
-    if ag_elem is not None:
-        try: agent_orgname = ag_elem.findtext('name-1').strip()
+    agn_position = 1
+    if agn is not None:
+        try: agent_orgname = agn.findtext('name-1').strip()
         except: agent_orgname = None
-        try: agent_orgname_2 = ag_elem.findtext('name-2').strip()
+        try: agent_orgname_2 = agn.findtext('name-2').strip()
         except: agent_orgname_2 = None
         # Combine Orgname 1 and 2 and shorten if needed
         if agent_orgname != None and agent_orgname_2 != None:
             agent_orgname = USPTOSanitizer.strip_for_csv(agent_orgname + " " + agent_orgname_2)[:300]
         # Get the address element
-        addr_elem = ag_elem.find('address')
+        addr_elem = agn.find('address')
         if addr_elem is not None:
             try:
                 try: agent_addr_1 = addr_elem.findtext('address-1').strip()[:100]
@@ -406,19 +401,16 @@ def extract_XML1_application(raw_data, args_array):
             except: agent_city = None
             try: agent_state = addr_elem.findtext('state').strip()[:3]
             except: agent_state = None
-            try:
-                agent_country = addr_elem.find('country').findtext('country-code').strip()[:3]
+            try: agent_country = addr_elem.find('country').findtext('country-code').strip()[:3]
             except:
-                if USPTOSanitizer.is_US_state(agent_state):
-                    agent_country = "US"
-                else:
-                    agent_country = None
+                if USPTOSanitizer.is_US_state(agent_state): agent_country = "US"
+                else: agent_country = None
 
         # Append SQL data into dictionary to be written later
         processed_agent.append({
             "table_name" : "uspto.AGENT_A",
             "ApplicationID" : app_no,
-            "Position" : position,
+            "Position" : agn_position,
             "OrgName" : agent_orgname,
             "Address" : agent_address,
             "City" : agent_city,
@@ -427,7 +419,7 @@ def extract_XML1_application(raw_data, args_array):
             "FileName" : args_array['file_name']
         })
         #print(processed_agent)
-        position += 1
+        agn_position += 1
 
     # Find the abstract of the application
     try: abstract = USPTOSanitizer.strip_for_csv(USPTOSanitizer.return_element_text(document_root.find('subdoc-abstract')))

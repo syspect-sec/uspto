@@ -49,7 +49,7 @@ def extract_XML2_grant(raw_data, args_array):
     processed_foreignpriority = []
 
     # Pass the raw data into Element tree xml object
-    try: patent_root = ET.fromstring(raw_data)
+    try: document_root = ET.fromstring(raw_data)
     except ET.ParseError as e:
         print_xml = raw_data.split("\n")
         for num, line in enumerate(print_xml, start = 1):
@@ -62,8 +62,8 @@ def extract_XML2_grant(raw_data, args_array):
 
 
     # SDOBI is the bibliographic data
-    for r in patent_root.findall('SDOBI'):
-
+    r = document_root.find('SDOBI')
+    if r is not None:
         # B100 Document Identification
         for B100 in r.findall('B100'):
             try:
@@ -105,6 +105,7 @@ def extract_XML2_grant(raw_data, args_array):
 
         # Collect Technical information
         # such as classification and references
+        # TODO: don't need the loop here
         for B500 in r.findall('B500'):
             # US Classification
             for B520 in B500.findall('B520'):
@@ -284,17 +285,17 @@ def extract_XML2_grant(raw_data, args_array):
                         except: pct_kind = None
                         try: citation_date = USPTOSanitizer.return_formatted_date(USPTOSanitizer.return_element_text(doc.find('DATE')), args_array, document_id)
                         except: citation_date = None
-                        p_elem = pcit.find('PARTY-US')
-                        if p_elem is not None:
-                            try: citation_name = USPTOSanitizer.return_element_text(p_elem.find("NAM").find("SNM")).strip()[:100]
+                        prt = pcit.find('PARTY-US')
+                        if prt is not None:
+                            try: citation_name = USPTOSanitizer.return_element_text(prt.find("NAM").find("SNM")).strip()[:100]
                             except: citation_name = None
                             # Citation Address info
-                            try: citation_city = USPTOSanitizer.return_element_text(p_elem.find('ADR').find('CITY')).strip()[:100]
+                            try: citation_city = USPTOSanitizer.return_element_text(prt.find('ADR').find('CITY')).strip()[:100]
                             except: citation_city = None
-                            try: citation_state = USPTOSanitizer.return_element_text(p_elem.find('ADR').find('STATE')).strip()[:3]
+                            try: citation_state = USPTOSanitizer.return_element_text(prt.find('ADR').find('STATE')).strip()[:3]
                             except: citation_state = None
                             # Citation country
-                            try: citation_country = USPTOSanitizer.return_element_text(p_elem.find("ADR").find('CTRY')).strip()[:3]
+                            try: citation_country = USPTOSanitizer.return_element_text(prt.find("ADR").find('CTRY')).strip()[:3]
                             except:
                                 try:
                                     # If state is a US state, set country to US
@@ -609,7 +610,7 @@ def extract_XML2_grant(raw_data, args_array):
 
         # Collect Abstract from data
         try:
-            a_elem = patent_root.find('SDOAB')
+            a_elem = document_root.find('SDOAB')
             if a_elem is not None:
                 abstract = USPTOSanitizer.strip_for_csv(USPTOSanitizer.return_element_text(a_elem))
             else: abstract = None
@@ -621,7 +622,7 @@ def extract_XML2_grant(raw_data, args_array):
 
         # Collect detailed description from DETDESC
         try:
-            d_elem = patent_root.find('SDODE').find('DETDESC')
+            d_elem = document_root.find('SDODE').find('DETDESC')
             if d_elem is not None:
                 description = USPTOSanitizer.strip_for_csv(' '.join(d_elem.itertext()))
             else:
@@ -634,7 +635,7 @@ def extract_XML2_grant(raw_data, args_array):
 
         # Collect claims from data
         try:
-            c_elem = patent_root.find('SDOCL')
+            c_elem = document_root.find('SDOCL')
             if c_elem is not None:
                 claims = USPTOSanitizer.strip_for_csv(' '.join(c_elem.itertext()))
                 #claims = USPTOSanitizer.strip_for_csv(USPTOSanitizer.return_element_text(c_elem))

@@ -136,7 +136,7 @@ def download_zip_file(args_array):
     # Skip download if the resource is local
     else:
         print("-- Skipping the download of local resource: " + args_array['url_link'] + "...")
-        logger.info("-- Skipping the download of local resource: " + args_array['url_link'] + "...")
+        logger.info("- Skipping the download of local resource: " + args_array['url_link'] + "...")
         # Return the original filepath
         return args_array['url_link']
 

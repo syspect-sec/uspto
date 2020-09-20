@@ -41,7 +41,7 @@ def process_XML_grant_content(args_array):
     if xml_file_contents == None or xml_file_contents == False:
         return False
 
-    # create variables needed to parse the file
+    # Create variables needed to parse the file
     xml_string = ''
     patent_xml_started = False
     # read through the file and append into groups of string.
@@ -57,13 +57,13 @@ def process_XML_grant_content(args_array):
             line = USPTOSanitizer.decode_line(line)
 
             # This identifies the start of well formed XML segment for patent
-            # grant bibliographic information
+            # Grant bibliographic information
             if "<us-patent-grant" in line:
                 patent_xml_started = True
                 xml_string += "<us-patent-grant>"
 
             # This identifies end of well-formed XML segement for single patent
-            # grant bibliographic information
+            # Grant bibliographic information
             elif "</us-patent-grant" in line:
                 patent_xml_started = False
                 xml_string += "</us-patent-grant>"
@@ -71,7 +71,7 @@ def process_XML_grant_content(args_array):
                 processed_data_array = USPTOProcessLinks.extract_data_router(xml_string, args_array)
                 # Call function to write data to csv or database
                 USPTOStoreGrantData.store_grant_data(processed_data_array, args_array)
-                # reset the xml string
+                # Reset the xml string
                 xml_string = ''
 
             # This is used to append lines of file when inside single patent grant
@@ -89,13 +89,13 @@ def process_XML_grant_content(args_array):
             line = USPTOSanitizer.decode_line(line)
 
             # This identifies the start of well formed XML segment for patent
-            # grant bibliographic information
+            # Grant bibliographic information
             if "<PATDOC" in line:
                 patent_xml_started = True
                 xml_string += "<PATDOC>"
 
             # This identifies end of well-formed XML segement for single patent
-            # grant bibliographic information
+            # Grant bibliographic information
             elif "</PATDOC" in line:
                 patent_xml_started = False
                 xml_string += "</PATDOC>"
@@ -104,7 +104,7 @@ def process_XML_grant_content(args_array):
                 processed_data_array = USPTOProcessLinks.extract_data_router(xml_string, args_array)
                 # Call function to write data to csv or database
                 USPTOStoreGrantData.store_grant_data(processed_data_array, args_array)
-                # reset the xml string
+                # Reset the xml string
                 xml_string = ''
 
             # This is used to append lines of file when inside single patent grant

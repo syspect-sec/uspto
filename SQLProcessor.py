@@ -854,37 +854,59 @@ class SQLProcess:
         # into PARSER_VERIFICATION for the table / filename combination
         for table_name, count in counts_dict.items():
 
-            print('[Inserting expected value for ' + table_name + ' into PARSER_VERIFICATION table.')
-            logger.info('[Inserting expected value for ' + table_name + ' into PARSER_VERIFICATION table.')
+            try:
 
-            # Check if a record exists for the file_name / table_name
-            check_exists = """
-            SELECT count(*) as count
-            FROM uspto.PARSER_VERIFICATION
-            WHERE FileName = '""" + file_name + """'
-            AND TableName = '""" + table_name + """';"""
-            if args_array['stdout_level'] == 1: print(check_exists)
-            self._cursor.execute(check_exists)
-            result = self._cursor.fetchone()
+                print('-- Inserting expected value for ' + table_name + ' into PARSER_VERIFICATION table.')
+                logger.info('-- Inserting expected value for ' + table_name + ' into PARSER_VERIFICATION table.')
 
-            # Insert or update depending on result of count
-            if result['count'] == 0:
-
-                tag_count_sql = """
-                INSERT INTO uspto.PARSER_VERIFICATION
-                (FileName, TableName, Count, Expected)
-                VALUES ('""" + file_name + """', '""" + table_name + """', 0, """ + str(count) + """);"""
-
-                if args_array['stdout_level'] == 1: print(tag_count_sql)
-                self._cursor.execute(tag_count_sql)
-
-            else:
-
-                tag_count_sql = """
-                UPDATE uspto.PARSER_VERIFICATION
-                SET expected = """ + str(count) +  """
+                # Check if a record exists for the file_name / table_name
+                check_exists = """
+                SELECT count(*) as count
+                FROM uspto.PARSER_VERIFICATION
                 WHERE FileName = '""" + file_name + """'
                 AND TableName = '""" + table_name + """';"""
+                if args_array['stdout_level'] == 1: print(check_exists)
+                self._cursor.execute(check_exists)
+                result = self._cursor.fetchone()
 
-                if args_array['stdout_level'] == 1: print(tag_count_sql)
-                self._cursor.execute(tag_count_sql)
+                # Insert or update depending on result of count
+                if result[0] == 0:
+
+                    tag_count_sql = """
+                    INSERT INTO uspto.PARSER_VERIFICATION
+                    (FileName, TableName, Count, Expected)
+                    VALUES ('""" + file_name + """', '""" + table_name + """', 0, """ + str(count) + """);"""
+
+                    if args_array['stdout_level'] == 1: print(tag_count_sql)
+                    self._cursor.execute(tag_count_sql)
+
+                else:
+
+                    tag_count_sql = """
+                    UPDATE uspto.PARSER_VERIFICATION
+                    SET expected = """ + str(count) +  """
+                    WHERE FileName = '""" + file_name + """'
+                    AND TableName = '""" + table_name + """';"""
+
+                    if args_array['stdout_level'] == 1: print(tag_count_sql)
+                    self._cursor.execute(tag_count_sql)
+
+            except Exception as e:
+                # If there is an error and using databse postgresql
+                # Then rollback the commit??
+                if self.database_type == "postgresql":
+                    self._conn.rollback()
+
+                # Print and log general fail comment
+                print("-- Updating PARSER_VERIFICATION table list failed!")
+                logger.error("-- Updating PARSER_VERIFICATION table list failed!")
+                traceback.print_exc()
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
+                # Return the failed state
+                return False
+
+
+        # Return the sucess message
+        return True
