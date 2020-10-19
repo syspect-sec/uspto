@@ -136,7 +136,7 @@ def extract_csv_file_from_zip(args_array):
         pass
 
 # Extract a zip file and return the contents of the XML file as an array of lines
-def extract_dat_file_from_zip(args_array):
+def extract_dat_file_from_zip(args_array, indexed=False):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
@@ -172,8 +172,17 @@ def extract_dat_file_from_zip(args_array):
 
         # Open the .dat file contents from the extracted zip_file
         data_file_contents = codecs.open(temp_data_file_path, 'r', 'iso-8859-1')
+
+        # If a flag is set for an indexable file object
+        # then parse into a list
+        if indexed:
+            indexed_list = []
+            for item in data_file_contents:
+                indexed_list.append(item)
+            data_file_contents = indexed_list
+
+        # Delete the extracted data file
         if not args_array['sandbox']:
-            # Delete the extracted data file
             os.remove(temp_data_file_path)
 
         # If not sandbox mode, then delete the .zip file
@@ -186,6 +195,7 @@ def extract_dat_file_from_zip(args_array):
         # Print message to stdout
         print('[APS .dat data file contents extracted ' + data_file_name + '...]')
         logger.info('APS .dat data file contents extracted ' + data_file_name + '...')
+
         # Return the file contents as array
         return data_file_contents
 
@@ -216,7 +226,6 @@ def extract_dat_file_from_zip(args_array):
             logger.error('Failed to remove zip file ' + args_array['temp_zip_file_name'])
             # Return False to signify that zip file could not be deleted
             return False
-
 
 # Deletes a zip file
 def delete_zip_file(filename):

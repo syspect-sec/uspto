@@ -89,12 +89,104 @@ def verify_link_file(args_array):
         logger.error("The contents of: " + args_array['file_name'] + " could not be verified. Time Finished: " + time.strftime("%c"))
 
     # Print to stdout and log
-    print("- Finished  the verificaction process for contents of: " + args_array['file_name'] + " Time Finished: " + time.strftime("%c"))
+    print("- Finished the verificaction process for contents of: " + args_array['file_name'] + " Time Finished: " + time.strftime("%c"))
     logger.info("Finished the verification process for contents of: " + args_array['file_name'] + " Time Finished: " + time.strftime("%c"))
 
 # Extract the tag count for APS grant files
 def extract_APS_grant_tag_counts(args_array):
-    pass
+
+    logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+
+    # Extract the .dat file from the .zip file
+    data_file_contents = USPTOProcessZipFile.extract_dat_file_from_zip(args_array, True)
+
+    # If xml_file_contents is None or False, then return False immediately
+    if data_file_contents == None or data_file_contents == False:
+        return False
+
+    # Declare a dictionary to use in counting tags
+    # NOTE: CPCClASS_G, APPLICANT_G, are not available in APS Grant files
+    tags_dict = {
+        "GRANT" : ["PATN"],
+        "INTCLASS_G" : ["ICL"],
+        "USCLASS_G" : ["UREF"],
+        "INVENTOR_G" : ["INVT"],
+        "AGENT_G" : ["FRM", "FR2", "ATT", "AGT", "ATT"],
+        "ASSIGNEE_G" : ["ASSG"],
+        "GRACIT_G" : ["UREF"],
+        "NONPATCIT_G" : ["OREF"],
+        "FORPATCIT_G" : ["FREF"],
+        "EXAMINER_G" : ["EXP", "EXA"],
+        "FOREIGNPRIORITY_G" : ["PRIR"]
+    }
+    sub_tags_dict = {
+        "NONPATCIT_G" : ["PAL"]
+    }
+
+    # Declare a dictionary to hold counts by table
+    counts_dict = {
+        "file_name" : args_array['file_name'],
+        "GRANT" : 0,
+        "INTCLASS_G" : 0,
+        "CPCCLASS_G" : 0,
+        "USCLASS_G" : 0,
+        "INVENTOR_G" : 0,
+        "AGENT_G" : 0,
+        "ASSIGNEE_G" : 0,
+        "APPLICANT_G" : 0,
+        "NONPATCIT_G" : 0,
+        "EXAMINER_G" : 0,
+        "GRACIT_G" : 0,
+        "FORPATCIT_G" : 0,
+        "FOREIGNPRIORITY_G" : 0
+    }
+
+    # Print to stdout and log
+    print("- Starting the APS grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
+    logger.info("Starting the APS grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
+
+    # Loop through the file contents line by line
+    for index, line in enumerate(data_file_contents, start=0):
+        # Loop through tags_dict items and look for XML tag
+        for table, tag in tags_dict.items():
+            item_found = False
+            # Go through each table
+            for item in tag:
+                # Look for field tag
+                if line.strip().startswith(item):
+                    #print(table)
+                    item_found = True
+                    if table in sub_tags_dict:
+                        #print("sub-tag-required")
+                        sub_tag_exit = False
+                        sub_tag_count = 0
+                        # Create a subindex to iterate through
+                        # next lines ahead in file content
+                        sub_index = index + 1
+                        #print(str(sub_index))
+                        while sub_tag_exit == False:
+                            sub_line = data_file_contents[sub_index]
+                            #print(sub_line)
+                            sub_index += 1
+                            if sub_line[:4].strip() in sub_tags_dict[table]:
+                                #print("add one")
+                                sub_tag_count += 1
+                            elif sub_line[:4].strip() != "":
+                                sub_tag_exit = True
+            if item_found == True:
+                if table in sub_tags_dict:
+                    # Increment the count calculated in sub_tag_required
+                    counts_dict[table] += sub_tag_count
+                # Increment the count for appropriate table
+                else: counts_dict[table] += 1
+
+    # Print to stdout and log
+    print("- Finished the APS grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+    logger.info("Finished the APS grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+
+    # Return the dictionary of counts for found tags
+    if args_array['stdout_level'] == 1: pprint(counts_dict)
+    return counts_dict
 
 # Extract the tag count for XML2 grant files
 def extract_XML2_grant_tag_counts(args_array):
@@ -103,6 +195,10 @@ def extract_XML2_grant_tag_counts(args_array):
 
     # Extract the XML file from the ZIP file
     xml_file_contents = USPTOProcessZipFile.extract_xml_file_from_zip(args_array)
+
+    # If xml_file_contents is None or False, then return immediately
+    if xml_file_contents == None or xml_file_contents == False:
+        return False
 
     # Declare a dictionary to use in counting tags
     # NOTE: CPCClASS_G, APPLICANT_G, are not available in XML2 Grant files
@@ -228,7 +324,7 @@ def extract_XML2_grant_tag_counts(args_array):
             xml_string += USPTOSanitizer.replace_old_html_characters(line)
 
     # Print to stdout and log
-    print("- Finished  the XML2 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+    print("- Finished the XML2 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     logger.info("Finished the XML2 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
 
     # Return the dictionary of counts for found tags
@@ -362,7 +458,7 @@ def extract_XML4_grant_tag_counts(args_array):
 
 
     # Print to stdout and log
-    print("- Finished  the XML4 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+    print("- Finished the XML4 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     logger.info("Finished the XML4 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
 
     # Return the dictionary of counts for found tags
@@ -470,7 +566,7 @@ def extract_XML1_application_tag_counts(args_array):
             xml_string += USPTOSanitizer.replace_old_html_characters(line)
 
     # Print to stdout and log
-    print("- Finished  the XML1 appication tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+    print("- Finished the XML1 appication tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     logger.info("Finished the XML1 application tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     # Return the dictionary of counts for found tags
     if args_array['stdout_level'] == 1: pprint(counts_dict)
@@ -539,7 +635,7 @@ def extract_XML4_application_tag_counts(args_array):
                 counts_dict[table] += 1
 
     # Print to stdout and log
-    print("- Finished  the XML4 application tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+    print("- Finished the XML4 application tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     logger.info("Finished the XML4 application tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     # Return the dictionary of counts for found tags
     if args_array['stdout_level'] == 1: pprint(counts_dict)
@@ -549,20 +645,29 @@ def extract_XML4_application_tag_counts(args_array):
 
 # Extract the tag count for legal data files
 def extract_legal_counts(args_array):
-    pass
+    # Get the expected count of records from file
+    expected_count = get_file_length(file_name, args_array)
 
 # Extract the tag count for PAIR data files
 def extract_PAIR_counts(args_array):
-    pass
+    # Get the expected count of records from file
+    expected_count = get_file_length(file_name, args_array)
 
 # Extract the tag count for CPC classification data files
 def extract_CPC_class_counts(args_array):
-    pass
+    # Get the expected count of records from file
+    expected_count = get_file_length(file_name, args_array)
 
 # Extract the tag count for US classification data files
 def extract_US_class_counts(args_array):
-    pass
+    # Get the expected count of records from file
+    expected_count = get_file_length(file_name, args_array)
 
 # Extract the tag count for CPC / US class concordance data files
 def extract_USCPC_class_counts(args_array):
+    # Get the expected count of records from file
+    expected_count = get_file_length(file_name, args_array)
+
+# Gets the number of lines of CSV content in file
+def get_file_length(file_name, args_array):
     pass

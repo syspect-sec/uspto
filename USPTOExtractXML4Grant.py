@@ -48,7 +48,7 @@ def extract_XML4_grant(raw_data, args_array):
     document_root = ET.fromstring(raw_data)
 
     # Start the extraction of XML data
-    r = document_root.findall('us-bibliographic-data-grant')
+    r = document_root.find('us-bibliographic-data-grant')
     if r is not None:
         # Find the main patent grant data
         for pr in r.findall('publication-reference'):

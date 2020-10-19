@@ -647,7 +647,7 @@ def process_APS_grant_content(args_array):
                         # Break the foreign patent citation loop
                         data_parse_completed = True
 
-        # CLAS Classification Data
+        # CLAS is Classification Data
         elif line[0:4] == "CLAS":
             # Define accepted array headers for this section
             accepted_headers_array = ["OCL", "XCL", "UCL", "DCL", "EDF", "ICL", "FSC", "FSS"]
@@ -812,7 +812,7 @@ def process_APS_grant_content(args_array):
                         # Increment position for US class
                         position_usclass += 1 '''
 
-                    # Collect the main class
+                    # Collect the Main International Class
                     if line[0:3] == "ICL":
 
                         # Get the international class text from the line
@@ -1006,7 +1006,7 @@ def process_APS_grant_content(args_array):
                         # Break the foreign patent citation loop
                         data_parse_completed = True
 
-        # INVT is Collect Inventor
+        # INVT is Inventor
         elif line[0:4] == "INVT":
 
             # Set the multi_line_flag to empty
@@ -1080,7 +1080,7 @@ def process_APS_grant_content(args_array):
                                 item_ready_to_insert = False
 
 
-                    # Get and pase the name of the inventor
+                    # Get and parse the name of the inventor
                     elif line[0:3] == "NAM":
                         # Get the citation text from the line
                         try:
@@ -1145,7 +1145,7 @@ def process_APS_grant_content(args_array):
 
                     # If next line does not have a header but more text, it is the continuince of NAM
                     elif not line[0:3].strip():
-                        # Get the citation text from the line
+                        # Get the extended text from the line
                         try:
                             if multi_line_flag == "STR":
                                 inventor_residence += " " + USPTOSanitizer.strip_for_csv(USPTOSanitizer.replace_old_html_characters(line[3:].strip()))[:300]
@@ -1338,7 +1338,9 @@ def process_APS_grant_content(args_array):
             accepted_headers_array = ["LREP", "FRM", "FR2", "AAT", "AGT", "ATT", "REG", "NAM", "STR", "CTY", "STA", "CNT", "ZIP"]
             # Set loop flag for finished reading inventors to false
             data_parse_completed = False
-            # Ensure that all variables that are optionally included will be set.
+            # Ensure that all required database variables that are set
+            agent_first_name = None
+            agent_last_name = None
             agent_country = None
             agent_orgname = None
 
@@ -1352,10 +1354,29 @@ def process_APS_grant_content(args_array):
                     # Get the firm name from line
                     if line[0:3] == "FRM":
                         # Get the firm name from the line
-                        try: agent_orgname = USPTOSanitizer.replace_old_html_characters(line[3:].strip())[:300]
+                        try:
+                            agent_orgname = USPTOSanitizer.replace_old_html_characters(line[3:].strip())[:300]
                         except:
                             agent_orgname = None
                             logger.error("An agent data error occurred for grant_id: " + document_id + " in link: " + args_array['url_link'])
+
+                        # Append data into dictionary to be written later
+                        processed_agent.append({
+                            "table_name" : "uspto.AGENT_G",
+                            "GrantID" : document_id,
+                            "Position" : position_agent,
+                            "OrgName" : agent_orgname,
+                            "LastName" : agent_last_name,
+                            "FirstName" : agent_first_name,
+                            "Country" : agent_country,
+                            "FileName" : args_array['file_name']
+                        })
+                        #print(processed_agent)
+                        position_agent += 1
+                        # Reset all variables so they don't get reused.
+                        agent_first_name = None
+                        agent_last_name = None
+                        agent_country = None
 
                     # Get the principle attorney name and append to array
                     elif line[0:3] == "FR2":
@@ -1386,7 +1407,6 @@ def process_APS_grant_content(args_array):
                         agent_first_name = None
                         agent_last_name = None
                         agent_country = None
-                        agent_orgname = None
 
                     # Get associate attorney name and append to dataset
                     elif line[0:3] == "AAT":
@@ -1417,7 +1437,6 @@ def process_APS_grant_content(args_array):
                         agent_first_name = None
                         agent_last_name = None
                         agent_country = None
-                        agent_orgname = None
 
                     # Get Agent's name and append to dataset
                     elif line[0:3] == "AGT":
@@ -1448,7 +1467,6 @@ def process_APS_grant_content(args_array):
                         agent_first_name = None
                         agent_last_name = None
                         agent_country = None
-                        agent_orgname = None
 
                     # Get Agent's name and append to dataset
                     elif line[0:3] == "ATT":
@@ -1479,14 +1497,12 @@ def process_APS_grant_content(args_array):
                         agent_first_name = None
                         agent_last_name = None
                         agent_country = None
-                        agent_orgname = None
 
                     # Else check if the header is from the next datatype
                     elif line[0:4].strip() not in accepted_headers_array:
                         # End the while loop for agent data
                         data_parse_completed = True
                         next_line_loaded_already = True
-
 
         # ABST is Abstract
         elif line[0:4] == "ABST":

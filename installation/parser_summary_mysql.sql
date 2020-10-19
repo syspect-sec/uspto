@@ -160,7 +160,7 @@ ORDER BY FileName DESC;
 INSERT INTO PARSER_VERIFICATION
 (FileName, TableName, Count)
 SELECT FileName, "GRANT", count(*)
-FROM GRANT
+FROM uspto.GRANT
 GROUP BY FileName
 ORDER BY FileName DESC;
 
