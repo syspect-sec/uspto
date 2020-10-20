@@ -34,9 +34,10 @@ There are three steps.
 
 Run the appropriate database creation scripts depending if you intend to store the USPTO data in MySQL or PostgreSQL.  The script will create a user  'uspto' and limit the scope of the user to the uspto database. If you want to change the default password for the user, edit the appropriate .sql file before running it.  Also, some configuration of your database maybe necessary depending on the settings choose when running the script.  For example the ability to bulk insert CSV files are disabled by default in MySQL.
 
-_MySQL_
+_MySQL or MariaDB_
 
 installation/uspto_create_database_mysql.sql
+installation/uspto_create_database_mariadb.sql
 
 _PostgreSQL_
 
@@ -85,13 +86,13 @@ After the USPTOParser.py finishes building the initial databases, the data can b
 
 The total grants and applications can be compared to the per year summary issued by the USPTO using a pre-built script.  USPTO per year data summary for grants and applications can be found here: https://www.uspto.gov/web/offices/ac/ido/oeip/taf/us_stat.htm
 
-_MySQL_
+_MySQL or MariaDB_
 
-installation/data_summary_mysql.sql
+installation/verification/data_summary_mysql.sql
 
 _PostgreSQL_
 
-installation/data_summary_postgresql.sql
+installation/verification/data_summary_postgresql.sql
 
 **Verify Parser Accuracy**
 
@@ -107,11 +108,11 @@ The USPTO bulk dataset contains some duplicate patent grant and application reco
 
 _MySQL_
 
-installation/remove_duplicates_mysql.sql
+installation/post_parse/remove_duplicates_mysql.sql
 
 _PostgreSQL_
 
-installation/remove_duplicates_postgesql.sql
+installation/post_parse/remove_duplicates_postgesql.sql
 
 **Calculate Additional Statistics**
 
@@ -120,15 +121,15 @@ metrics for statistical analysis. There are some scripts included to calculate s
 
 _MariaDB_
 
-installation/uspto_metrics_mariadb.sql
+installation/metrics/uspto_metrics_mariadb.sql
 
 _MySQL_
 
-installation/uspto_metrics_mysql.sql
+installation/metrics/uspto_metrics_mysql.sql
 
 _PostgreSQL_
 
-installation/uspto_metrics_postgresql.sql
+installation/metrics/uspto_metrics_postgresql.sql
 
 ## **Further Information:**
 

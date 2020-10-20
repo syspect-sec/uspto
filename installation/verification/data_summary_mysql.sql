@@ -7,6 +7,11 @@
 -- Website: https://www.ripplesoftware.ca
 -- Github: https://github.com/rippledj/uspto
 --
+-- This file creates a tables and populates them with
+-- the expected number of grants and applications published
+-- by the USPTO website: https://www.uspto.gov/web/offices/ac/ido/oeip/taf/us_stat.htm
+--
+
 
 -- -----------------------------------------------------
 -- Table uspto.GRANT_SUMMARY

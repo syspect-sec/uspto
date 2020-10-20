@@ -134,7 +134,7 @@ def set_table_name_from_type(pair_type):
 # named for the database columns
 def extract_csv_line(args_array, line):
 
-    #print(line)
+    print(line)
     # Declare a processed array to append to
     processed_array = {
         "table_name" : set_table_name_from_type(args_array['extraction_type']),
@@ -164,6 +164,7 @@ def extract_csv_line(args_array, line):
         processed_array['ContinuationType'] = USPTOSanitizer.clean_PAIR_csv_item(line[3])
 
     elif args_array['extraction_type'] == "continuitychild":
+        print(str(len(line)))
         processed_array['ApplicationID'] = USPTOSanitizer.strip_leading_zeros(USPTOSanitizer.clean_PAIR_csv_item(line[0]))
         processed_array['ChildApplicationID'] = USPTOSanitizer.strip_leading_zeros(USPTOSanitizer.clean_PAIR_csv_item(line[1]))
         processed_array['FileDate'] = USPTOSanitizer.clean_PAIR_csv_item(line[2])

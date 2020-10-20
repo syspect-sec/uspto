@@ -7,6 +7,12 @@
 -- Website: https://www.ripplesoftware.ca
 -- Github: https://github.com/rippledj/uspto
 --
+-- This script creates a table and populates it with
+-- the number of records for each table and FileName.
+-- To populate the Expected column run:
+-- `python USPTOParser.py -verify`
+-- To verify a file or group of files run the `parser_verification.sql`
+-- query and replace the filenames with the ones you want to verify.
 
 -- -----------------------------------------------------
 -- Table uspto.PARSER_VERIFICATION

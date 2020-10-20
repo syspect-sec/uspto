@@ -40,6 +40,8 @@ Grant XML2
   the manual says that US citations are first.  The ones without a `kind` are always last... but some without `kind`
   also seem to have a US patent number?
 6. APPLICANT_G : XML2 grants do not have any applicant data available
+7. ASSIGNEE_G: First and Last Name maybe available in the XML2 data but Its not being parsed.  Only orgname is.
+  The reason is because First and Last Name are not available in the grant XML4 data.
 
 Grant XML4
 ==========

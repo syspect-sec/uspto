@@ -1,9 +1,0 @@
---
--- Calculate Basic Metrics Tables
---
--- Author: Joseph Lee
--- Company: Ripple Software
--- Email: joseph@ripplesoftware.ca
--- Website: https://www.ripplesoftware.ca
--- Github: https://github.com/rippledj/uspto
---
