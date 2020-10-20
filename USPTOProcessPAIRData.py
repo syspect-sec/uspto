@@ -134,7 +134,7 @@ def set_table_name_from_type(pair_type):
 # named for the database columns
 def extract_csv_line(args_array, line):
 
-    print(line)
+    #print(line)
     # Declare a processed array to append to
     processed_array = {
         "table_name" : set_table_name_from_type(args_array['extraction_type']),
@@ -144,19 +144,18 @@ def extract_csv_line(args_array, line):
 
     # Handle a correspondance items
     if args_array['extraction_type'] == "correspondence":
-        print(str(len(line)))
         processed_array['ApplicationID'] = USPTOSanitizer.strip_leading_zeros(USPTOSanitizer.clean_PAIR_csv_item(line[0]))
         processed_array['Name1'] = USPTOSanitizer.clean_PAIR_csv_item(line[1])
-        processed_array['Name2'] = USPTOSanitizer.clean_PAIR_csv_item(line[2])
-        try: processed_array['Address'] = USPTOSanitizer.clean_PAIR_csv_item(line[3]) + " " + USPTOSanitizer.clean_PAIR_csv_item(line[4])
+        processed_array['Name2'] = None
+        try: processed_array['Address'] = USPTOSanitizer.clean_PAIR_csv_item(line[2]) + " " + USPTOSanitizer.clean_PAIR_csv_item(line[3]) + " " + USPTOSanitizer.clean_PAIR_csv_item(line[4])
         except: processed_array['Address'] = None;
         processed_array['City'] = USPTOSanitizer.clean_PAIR_csv_item(line[5])
         processed_array['PostalCode'] = USPTOSanitizer.clean_PAIR_csv_item(line[6])
         processed_array['RegionCode'] = USPTOSanitizer.clean_PAIR_csv_item(line[7])
-        processed_array['RegionName'] = USPTOSanitizer.clean_PAIR_csv_item(line[8])
-        processed_array['CountryCode'] = USPTOSanitizer.clean_PAIR_csv_item(line[9])
-        processed_array['CountryName'] = USPTOSanitizer.clean_PAIR_csv_item(line[10])
-        processed_array['CustomerNum'] = USPTOSanitizer.clean_PAIR_csv_item(line[11])
+        processed_array['RegionName'] = None
+        processed_array['CountryCode'] = USPTOSanitizer.clean_PAIR_csv_item(line[8])
+        processed_array['CountryName'] = None
+        processed_array['CustomerNum'] = USPTOSanitizer.clean_PAIR_csv_item(line[9])
 
     elif args_array['extraction_type'] == "continuityparent":
         processed_array['ApplicationID'] = USPTOSanitizer.strip_leading_zeros(USPTOSanitizer.clean_PAIR_csv_item(line[0]))
