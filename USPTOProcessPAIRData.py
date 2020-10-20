@@ -144,6 +144,7 @@ def extract_csv_line(args_array, line):
 
     # Handle a correspondance items
     if args_array['extraction_type'] == "correspondence":
+        print(str(len(line)))
         processed_array['ApplicationID'] = USPTOSanitizer.strip_leading_zeros(USPTOSanitizer.clean_PAIR_csv_item(line[0]))
         processed_array['Name1'] = USPTOSanitizer.clean_PAIR_csv_item(line[1])
         processed_array['Name2'] = USPTOSanitizer.clean_PAIR_csv_item(line[2])
@@ -164,11 +165,11 @@ def extract_csv_line(args_array, line):
         processed_array['ContinuationType'] = USPTOSanitizer.clean_PAIR_csv_item(line[3])
 
     elif args_array['extraction_type'] == "continuitychild":
-        print(str(len(line)))
         processed_array['ApplicationID'] = USPTOSanitizer.strip_leading_zeros(USPTOSanitizer.clean_PAIR_csv_item(line[0]))
         processed_array['ChildApplicationID'] = USPTOSanitizer.strip_leading_zeros(USPTOSanitizer.clean_PAIR_csv_item(line[1]))
         processed_array['FileDate'] = USPTOSanitizer.clean_PAIR_csv_item(line[2])
-        processed_array['ContinuationType'] = USPTOSanitizer.clean_PAIR_csv_item(line[3])
+        if len(line) == 4: processed_array['ContinuationType'] = USPTOSanitizer.clean_PAIR_csv_item(line[3])
+        else: processed_array['ContinuationType'] = None
 
     # Return the array for storage
     return processed_array

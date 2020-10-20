@@ -637,7 +637,7 @@ if __name__=="__main__":
     # Sandbox mode will keep all downloaded data files locally to
     # prevent having to download them multiple times, this can also
     # be set from the command line argument '-sandbox'
-    sandbox = True
+    sandbox = False
     # Log levels
     log_level = 3 # Log levels 1 = error, 2 = warning, 3 = info
     stdout_level = 1 # Stdout levels 1 = verbose, 0 = non-verbose
