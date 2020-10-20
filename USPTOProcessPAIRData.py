@@ -147,7 +147,7 @@ def extract_csv_line(args_array, line):
         processed_array['ApplicationID'] = USPTOSanitizer.strip_leading_zeros(USPTOSanitizer.clean_PAIR_csv_item(line[0]))
         processed_array['Name1'] = USPTOSanitizer.clean_PAIR_csv_item(line[1])
         processed_array['Name2'] = None
-        try: processed_array['Address'] = USPTOSanitizer.clean_PAIR_csv_item(line[2]) + " " + USPTOSanitizer.clean_PAIR_csv_item(line[3]) + " " + USPTOSanitizer.clean_PAIR_csv_item(line[4])
+        try: processed_array['Address'] = (USPTOSanitizer.clean_PAIR_csv_item(line[2]) + " " + USPTOSanitizer.clean_PAIR_csv_item(line[3]) + " " + USPTOSanitizer.clean_PAIR_csv_item(line[4])).strip()
         except: processed_array['Address'] = None;
         processed_array['City'] = USPTOSanitizer.clean_PAIR_csv_item(line[5])
         processed_array['PostalCode'] = USPTOSanitizer.clean_PAIR_csv_item(line[6])
