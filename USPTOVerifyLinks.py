@@ -644,30 +644,30 @@ def extract_XML4_application_tag_counts(args_array):
     return counts_dict
 
 # Extract the tag count for legal data files
-def extract_legal_counts(args_array):
+def extract_legal_counts(args_array, file_name):
     # Get the expected count of records from file
     expected_count = get_file_length(file_name, args_array)
 
 # Extract the tag count for PAIR data files
-def extract_PAIR_counts(args_array):
+def extract_PAIR_counts(args_array, file_name):
     # Get the expected count of records from file
     expected_count = get_file_length(file_name, args_array)
 
 # Extract the tag count for CPC classification data files
-def extract_CPC_class_counts(args_array):
+def extract_CPC_class_counts(args_array, file_name):
     # Get the expected count of records from file
     expected_count = get_file_length(file_name, args_array)
 
 # Extract the tag count for US classification data files
-def extract_US_class_counts(args_array):
+def extract_US_class_counts(args_array, file_name):
     # Get the expected count of records from file
     expected_count = get_file_length(file_name, args_array)
 
 # Extract the tag count for CPC / US class concordance data files
-def extract_USCPC_class_counts(args_array):
+def extract_USCPC_class_counts(args_array, file_name):
     # Get the expected count of records from file
     expected_count = get_file_length(file_name, args_array)
 
 # Gets the number of lines of CSV content in file
-def get_file_length(file_name, args_array):
+def get_file_length(args_array, file_name):
     pass

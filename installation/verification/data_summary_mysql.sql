@@ -87,25 +87,6 @@ VALUES
 ("50389","1964"),
 ("48971","1963");
 
---
--- Calculate the difference between the USPTO Patent Summary Chart and
--- values parsed into the main database.
---
-
-SELECT
-	YEAR(a.IssueDate) AS `Year`,
-	b.Count AS `Official Total`,
-	count(*) AS `Database Total`,
-	count(*) - b.Count AS `Difference`,
-	100 - ABS(ROUND(count(*) / b.Count * 100, 2) - 100) AS `Accuracy %`
-FROM uspto.GRANT AS a
-JOIN uspto.GRANT_SUMMARY AS b ON
-YEAR(a.IssueDate) = b.Year
-WHERE YEAR(a.IssueDate) IS NOT NULL
-GROUP BY YEAR(a.IssueDate)
-ORDER BY YEAR(a.IssueDate) DESC;
-
-
 -- -----------------------------------------------------
 -- Table uspto.APPLICATION_SUMMARY
 -- -----------------------------------------------------
@@ -185,7 +166,27 @@ VALUES
 -- values parsed into the main database.
 --
 
+SELECT *
+FROM (
 SELECT
+	"GRANT" as `Type`,
+	YEAR(a.IssueDate) AS `Year`,
+	b.Count AS `Official Total`,
+	count(*) AS `Database Total`,
+	count(*) - b.Count AS `Difference`,
+	100 - ABS(ROUND(count(*) / b.Count * 100, 2) - 100) AS `Accuracy %`
+FROM uspto.GRANT AS a
+JOIN uspto.GRANT_SUMMARY AS b ON
+YEAR(a.IssueDate) = b.Year
+WHERE YEAR(a.IssueDate) IS NOT NULL
+GROUP BY YEAR(a.IssueDate)
+ORDER BY YEAR(a.IssueDate) DESC
+) as t1
+UNION
+SELECT *
+FROM (
+SELECT
+	"APPLICATION" as `Type`,
 	YEAR(a.FileDate) AS `Year`,
 	b.Count AS `Official Total`,
 	count(*) AS `Database Total`,
@@ -196,4 +197,5 @@ JOIN uspto.APPLICATION_SUMMARY AS b ON
 YEAR(a.FileDate) = b.Year
 WHERE YEAR(a.FileDate) IS NOT NULL
 GROUP BY YEAR(a.FileDate)
-ORDER BY YEAR(a.FileDate) DESC;
+ORDER BY YEAR(a.FileDate) DESC
+) as t2;

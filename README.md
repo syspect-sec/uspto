@@ -94,14 +94,6 @@ _PostgreSQL_
 
 installation/verification/data_summary_postgresql.sql
 
-**Verify Parser Accuracy**
-
-The ability of USPTOParser to accurately extract all the records from the bulk-data files can be verified using a pre-built SQL script and a small Python application.  All files must be processed before you start the verification.  Otherwise, you will need to delete the PARSER_VERIFICATION table from the database and run **python USPTOParser.py -verify** again.  
-
-The verify process will first build a database table PARSER_VERIFICATION, then compile a count of all records from each data-table / source-file combination into the table 'Count' column.  The verify process with then search each source bulk-data file for XML tags and compile an expected count for the number of records that should be in each database table. You can then run a query to show the completeness of all filename / table combinations.
-
-To run the verify process, you should have maintained the source bulk-data files by usign the **-sandbox** flag when processing the bulk-data into the database. However, otherwise the files will be downloaded again from the USPTO bulk-data site.
-
 **Remove Duplicate Records**
 
 The USPTO bulk dataset contains some duplicate patent grant and application records.  These records are initially inserted into the database and the GRANT and APPLICATION tables which use a combination of the id and source filename as primary keys.  Since the duplicate records may be in different source files, they will not violate the primary key restraint and will be inserted into the database. The duplicate patent grant records can be removed from the database using scripts below, but duplicate application ids are left in the database.  If you want to remove them, you can modify the script and run it again to remove duplicate application numbers.
@@ -113,6 +105,14 @@ installation/post_parse/remove_duplicates_mysql.sql
 _PostgreSQL_
 
 installation/post_parse/remove_duplicates_postgesql.sql
+
+**Verify Parser Accuracy**
+
+The ability of USPTOParser to accurately extract all the records from the bulk-data files can be verified using a pre-built SQL script and a small Python application.  All files must be processed before you start the verification.  Otherwise, you will need to delete the PARSER_VERIFICATION table from the database and run **python USPTOParser.py -verify** again.  
+
+The verify process will first build a database table PARSER_VERIFICATION, then compile a count of all records from each data-table / source-file combination into the table 'Count' column.  The verify process with then search each source bulk-data file for XML tags and compile an expected count for the number of records that should be in each database table. You can then run a query to show the completeness of all filename / table combinations.
+
+To run the verify process, you can maintain the source bulk-data files by using the **-sandbox** flag when processing the bulk-data into the database. However, otherwise the files will be downloaded again from the USPTO bulk-data site.
 
 **Calculate Additional Statistics**
 

@@ -9,9 +9,9 @@
 --
 -- This script creates a table and populates it with
 -- the number of records for each table and FileName.
--- To populate the Expected column run:
+-- Then populate the `Expected` column by running:
 -- `python USPTOParser.py -verify`
--- To verify a file or group of files run the `parser_verification.sql`
+-- Finally, verify a file or group of files run the `parser_verification.sql`
 -- query and replace the filenames with the ones you want to verify.
 
 -- -----------------------------------------------------
@@ -186,7 +186,7 @@ ORDER BY FileName DESC;
 
 INSERT INTO PARSER_VERIFICATION
 (FileName, TableName, Count)
-SELECT FileName, "INTVENTOR_A", count(*)
+SELECT FileName, "INVENTOR_A", count(*)
 FROM INVENTOR_A
 GROUP BY FileName
 ORDER BY FileName DESC;
