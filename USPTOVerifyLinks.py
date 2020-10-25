@@ -43,15 +43,15 @@ def verification_extract_data_router(args_array):
         elif args_array['uspto_xml_format'] == "gXML4":
             counts_dict = extract_XML4_grant_tag_counts(args_array)
         elif args_array['uspto_xml_format'] == "PAIR":
-            counts_dict = extract_PAIR_counts(args_array)
+            counts_dict = extract_csv_line_counts(args_array)
         elif args_array['uspto_xml_format'] == "LEGAL":
-            counts_dict = extract_legal_counts(args_array)
+            counts_dict = extract_csv_line_counts(args_array)
         elif args_array['uspto_xml_format'] == "CPCCLS":
-            counts_dict = extract_CPC_class_counts(args_array)
+            counts_dict = extract_csv_line_counts(args_array)
         elif args_array['uspto_xml_format'] == "USCLS":
-            counts_dict = extract_US_class_counts(args_array)
+            counts_dict = extract_csv_line_counts(args_array)
         elif args_array['uspto_xml_format'] == "USCPCCLS":
-            counts_dict = extract_USCPC_class_counts(args_array)
+            counts_dict = extract_csv_line_counts(args_array)
 
         # Return the dictionary of table, filenames and counts
         return counts_dict
@@ -644,30 +644,26 @@ def extract_XML4_application_tag_counts(args_array):
     return counts_dict
 
 # Extract the tag count for legal data files
-def extract_legal_counts(args_array, file_name):
+def extract_csv_line_counts(args_array, file_name):
+    # Print to stdout and log
+    print("- Starting the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+    logger.info("- Starting the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
     # Get the expected count of records from file
     expected_count = get_file_length(file_name, args_array)
-
-# Extract the tag count for PAIR data files
-def extract_PAIR_counts(args_array, file_name):
-    # Get the expected count of records from file
-    expected_count = get_file_length(file_name, args_array)
-
-# Extract the tag count for CPC classification data files
-def extract_CPC_class_counts(args_array, file_name):
-    # Get the expected count of records from file
-    expected_count = get_file_length(file_name, args_array)
-
-# Extract the tag count for US classification data files
-def extract_US_class_counts(args_array, file_name):
-    # Get the expected count of records from file
-    expected_count = get_file_length(file_name, args_array)
-
-# Extract the tag count for CPC / US class concordance data files
-def extract_USCPC_class_counts(args_array, file_name):
-    # Get the expected count of records from file
-    expected_count = get_file_length(file_name, args_array)
+    # Print to stdout and log
+    print("- Finished the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+    logger.info("- Finished the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+    counts_dict = { "expected_count" : expected_count }
+    return counts_dict
 
 # Gets the number of lines of CSV content in file
 def get_file_length(args_array, file_name):
-    pass
+    # Open file and get contents
+    with open(file_name, "r") as infile:
+        contents = infile.readlines()
+    # Calculate the length of array
+    # remove 1 for the header of file
+    length = len(contents) - 1
+    # Clear the contents from memory
+    del contents
+    return length
