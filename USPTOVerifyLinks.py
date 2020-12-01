@@ -647,12 +647,12 @@ def extract_XML4_application_tag_counts(args_array):
 def extract_csv_line_counts(args_array, file_name):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
-    
+
     # Print to stdout and log
     print("- Starting the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
     logger.info("- Starting the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
     # Get the expected count of records from file
-    expected_count = get_file_length(file_name, args_array)
+    expected_count = get_file_length(args_array, file_name)
     # Print to stdout and log
     print("- Finished the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
     logger.info("- Finished the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
@@ -661,12 +661,31 @@ def extract_csv_line_counts(args_array, file_name):
 
 # Gets the number of lines of CSV content in file
 def get_file_length(args_array, file_name):
-    # Open file and get contents
-    with open(file_name, "r") as infile:
-        contents = infile.readlines()
-    # Calculate the length of array
-    # remove 1 for the header of file
-    length = len(contents) - 1
-    # Clear the contents from memory
-    del contents
-    return length
+
+    logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+
+    # Print to stdout and log
+    print("- Opening file for line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+    logger.info("- Opening file for line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+
+    try:
+
+        # Open file and get contents
+        with open(file_name, "r") as infile:
+            contents = infile.readlines()
+        # Calculate the length of array
+        # remove 1 for the header of file
+        length = len(contents) - 1
+        # Clear the contents from memory
+        del contents
+        return length
+
+    except Exception as e:
+        # If the file cannot be opened then log error and return false
+        traceback.print_exc()
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
+        print("-- Failed open file for line count during verification process")
+        logger.info("-- Failed open file for line count during verification process")
+        return False
