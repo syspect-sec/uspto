@@ -42,16 +42,16 @@ def verification_extract_data_router(args_array):
             counts_dict = extract_XML2_grant_tag_counts(args_array)
         elif args_array['uspto_xml_format'] == "gXML4":
             counts_dict = extract_XML4_grant_tag_counts(args_array)
-        elif args_array['uspto_xml_format'] == "PAIR":
-            counts_dict = extract_csv_line_counts(args_array)
-        elif args_array['uspto_xml_format'] == "LEGAL":
-            counts_dict = extract_csv_line_counts(args_array)
-        elif args_array['uspto_xml_format'] == "CPCCLS":
-            counts_dict = extract_csv_line_counts(args_array)
-        elif args_array['uspto_xml_format'] == "USCLS":
-            counts_dict = extract_csv_line_counts(args_array)
-        elif args_array['uspto_xml_format'] == "USCPCCLS":
-            counts_dict = extract_csv_line_counts(args_array)
+        #elif args_array['uspto_xml_format'] == "PAIR":
+            #counts_dict = extract_csv_line_counts(args_array, args_array['file_name'])
+        #elif args_array['uspto_xml_format'] == "LEGAL":
+            #counts_dict = extract_csv_line_counts(args_array, args_array['file_name'])
+        #elif args_array['uspto_xml_format'] == "CPCCLS":
+            #counts_dict = extract_csv_line_counts(args_array, args_array['file_name'])
+        #elif args_array['uspto_xml_format'] == "USCLS":
+            #counts_dict = extract_csv_line_counts(args_array, args_array['file_name'])
+        #elif args_array['uspto_xml_format'] == "USCPCCLS":
+            #counts_dict = extract_csv_line_counts(args_array, args_array['file_name'])
 
         # Return the dictionary of table, filenames and counts
         return counts_dict
