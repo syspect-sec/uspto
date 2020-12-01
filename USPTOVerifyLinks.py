@@ -656,7 +656,7 @@ def extract_csv_line_counts(args_array, file_name):
     # Print to stdout and log
     print("- Finished the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
     logger.info("- Finished the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
-    counts_dict = { "expected_count" : expected_count }
+    counts_dict = { "expected_count" : expected_count, "file_name" : file_name }
     return counts_dict
 
 # Gets the number of lines of CSV content in file
@@ -678,6 +678,12 @@ def get_file_length(args_array, file_name):
         length = len(contents) - 1
         # Clear the contents from memory
         del contents
+
+        # Print to stdout and log
+        print("- " + length + " lines found in contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+        logger.info("- " + length + " lines found in contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+
+        # Return the file length
         return length
 
     except Exception as e:
