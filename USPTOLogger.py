@@ -40,7 +40,7 @@ def write_process_log(args_array):
 
     # Set the document type for processing
     document_type = args_array['document_type']
-
+    # Import Logger
     logger = logging.getLogger("USPTO_Database_Construction")
 
     # Print message to stdout and log file
@@ -54,17 +54,18 @@ def write_process_log(args_array):
     elif document_type == "PAIR" : log_file_to_rewrite = args_array['pair_process_log_file']
     elif document_type == "legal" : log_file_to_rewrite = args_array['legal_process_log_file']
 
-    # variable hold while loop running
+    # Variable hold while loop running
     log_rewrite_success = 0
 
     while log_rewrite_success == 0:
+
         # Create an array to store all lines to be rewritten after
         log_rewrite_array = []
+
         # Open log_lock_file to check status
         log_lock = open(args_array["log_lock_file"], "r")
         locked_status = log_lock.read().strip()
         log_lock.close()
-        #print locked_status
 
         # If the log lock file is set to open, rewrite log with changes and end while loop
         if locked_status == "0":
@@ -82,7 +83,6 @@ def write_process_log(args_array):
             for line in log_file_data_array:
                 # If the first element in line is the link we have just processed
                 line = line.split(",")
-                #print line
                 if line[0] == args_array["url_link"]:
                     print("- Found the URL link in log file")
                     # Append the line with "Processed"
@@ -139,17 +139,17 @@ def write_verified_log(args_array):
     elif document_type == "PAIR" : log_file_to_rewrite = args_array['pair_process_log_file']
     elif document_type == "legal" : log_file_to_rewrite = args_array['legal_process_log_file']
 
-    # variable hold while loop running
+    # Variable hold while loop running
     log_rewrite_success = 0
-
+    # Hold the loop until log has been modified
     while log_rewrite_success == 0:
+
         # Create an array to store all lines to be rewritten after
         log_rewrite_array = []
         # Open log_lock_file to check status
         log_lock = open(args_array["log_lock_file"], "r")
         locked_status = log_lock.read().strip()
         log_lock.close()
-        #print locked_status
 
         # If the log lock file is set to open, rewrite log with changes and end while loop
         if locked_status == "0":
@@ -167,7 +167,6 @@ def write_verified_log(args_array):
             for line in log_file_data_array:
                 # If the first element in line is the link we have just processed
                 line = line.split(",")
-                #print line
                 if line[0] == args_array["url_link"]:
                     print("- Found the URL link in log file")
                     # Append the line with "Processed"
@@ -179,7 +178,6 @@ def write_verified_log(args_array):
 
             # Rewrite the new array to the log file in csv
             log_file = open(log_file_to_rewrite, "w")
-            #print log_rewrite_array
             for line in log_rewrite_array:
                 #print line[0] + "," + line[1] + "," + line[2]
                 log_file.write(",".join(line))
@@ -199,14 +197,15 @@ def write_verified_log(args_array):
 
         # If the file was found to be locked by another process, close file then wait 1 second
         else:
-            #print "waiting on log lock to be opened"
             log_lock.close()
             time.sleep(1)
 
 # Write all log links to files
 def write_link_arrays_to_file(all_links_array, args_array):
 
+    # Import logger
     logger = logging.getLogger("USPTO_Database_Construction")
+    # Log writing of link arrays to file
     logger.info('Writing all required links to file ' + time.strftime("%c"))
 
     # Write all required links into file
@@ -235,12 +234,14 @@ def write_link_arrays_to_file(all_links_array, args_array):
     pair_process_file.close()
     legal_process_file.close()
 
+    # Write finished message to log
     logger.info('Finished writing all patent data links to files. Finshed Time: ' + time.strftime("%c"))
     print("Finished writing all patent data links to files. Finshed Time: " + time.strftime("%c"))
 
 # Write all log links to files
 def update_link_arrays_to_file(all_links_array, args_array):
 
+    # Import logger
     logger = logging.getLogger("USPTO_Database_Construction")
     print('Updating all source data links to file ' + time.strftime("%c"))
     logger.info('Updating all source data links to file ' + time.strftime("%c"))

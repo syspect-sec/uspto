@@ -27,6 +27,19 @@ def check_tag_exists(x, tag_name):
     if(x.tag == tag_name): return True
     else: return False
 
+# Extract the Google Big Query CPC code string to dictionary
+def extract_BQ_CPC_string_to_dict(code_string):
+    # Create a dict to hold the items
+    code_dict = {}
+    #
+    #code_dict[''] =
+    #code_dict[''] =
+    #code_dict[''] =
+    #code_dict[''] =
+
+    # Return the dict
+    return code_dict
+
 # Function to parse the class and return array of class and subclass
 def return_US_class_XML4_application(class_string):
 

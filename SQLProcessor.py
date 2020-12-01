@@ -842,7 +842,7 @@ class SQLProcess:
 
         # Set the start time of operation
         start_time = time.time()
-
+        # Import logger
         logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
         # Extract the file_name from args_array
@@ -910,3 +910,60 @@ class SQLProcess:
 
         # Return the sucess message
         return True
+
+
+    # Inserts additional CPC classes collected from Google BigQuery
+    def insert_CPC_patched_item(grant_id, cpc_array):
+
+        # Set the start time of operation
+        start_time = time.time()
+        # Import logger
+        logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+
+        try:
+
+            # Set the position
+            position = 1
+
+            # Loop through all CPC code dictionaries and insert to CPCCLASS_G
+            for cpc_code in cpc_array:
+
+                insert_CPC_sql = """
+                INSERT INTO uspto.CPCCLASS_G
+                (GrantID, Position, Section, Class, SubClass, MainGroup, SubGroup, Malformed, FileName)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """
+                values = (
+                    grant_id,
+                    position,
+                    cpc_code['Section'],
+                    cpc_code['Class'],
+                    cpc_code['SubClass'],
+                    cpc_code['MainGroup'],
+                    cpc_code['SubGroup'],
+                    0,
+                    "big_query"
+                )
+                if args_array['stdout_level'] == 1: print(insert_CPC_sql)
+                self._cursor.execute(insert_CPC_sql, values)
+                print('- Finished inserting ' + publication_number + ' into CPCCLASS_G table. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+                logger.info('- Finished inserting ' + publication_number + ' into CPCCLASS_G table. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
+
+                # Increment position for next item
+                position += 1
+
+        except Exception as e:
+            # If there is an error and using databse postgresql
+            # Then rollback the commit??
+            if self.database_type == "postgresql":
+                self._conn.rollback()
+
+            # Print and log general fail comment
+            print("-- Inserting 2005 grant CPC data into CPCCLASS_G table list failed!")
+            logger.error("-- Inserting 2005 grant CPC data into CPCCLASS_G table list failed!")
+            traceback.print_exc()
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
+            # Return the failed state
+            return False

@@ -448,11 +448,9 @@ def validate_existing_database_structure(args_array):
         database_connection.close()
     else:
         pass
+        # TODO:
         # Check if database exists and if not create it
         # Check if all required tables exist and if not run creation script
-
-        # Run the initial queries to populate the PARSER_VERIFICATION table
-        # with counts of parsed data already in the database
 
 # Parses the command argument sys.arg into command set, also encrypt password for use
 def build_command_arguments(argument_array, args_array):
@@ -478,7 +476,7 @@ def build_command_arguments(argument_array, args_array):
                 if argument_array[i] == "-h" or argument_array[i] == "-help":
                     # Print out full argument help menu
                     print(build_argument_output())
-                    exit()
+                    exit(0)
                 elif argument_array[i] == "-t":
                     # Check that next argument is integer between 0 and 20
                     if int(argument_array[i + 1]) > 0 and int(argument_array[i + 1]) < 20:
@@ -493,7 +491,7 @@ def build_command_arguments(argument_array, args_array):
                         print("Command argument error: Too many threads.  Max threads is 20.")
                         # Print out full argument help menu
                         print(build_argument_output())
-                        exit()
+                        exit(1)
                 # If command to select bibliographic or full-text source
                 elif argument_array[i] == "-biblio":
                     command_args['source_type'] = "biblio"
@@ -563,6 +561,7 @@ def build_argument_output():
     argument_output += "-full       : parse the USPTO bulk-data Red Book full-text data-set.\n"
     argument_output += "-update     : check for new patent bulk data files and process them.\n"
     argument_output += "-verify     : verify the completed database against source bulk-data files.\n"
+    argument_output += "-patch      : patches missing data in the USPTO bulk data.  Requires Google BigQuery credentials.\n"
     return argument_output
 
 # Set the config settings in file based on command arguments
@@ -634,10 +633,14 @@ def handle_application_close(start_time, all_files_processed, args_array):
 
 if __name__=="__main__":
 
-    # Sandbox mode will keep all downloaded data files locally to
+    # Sandbox mode `True` will keep all downloaded data files locally to
     # prevent having to download them multiple times, this can also
     # be set from the command line argument '-sandbox'
+    # Consider using this mode if you are going to run the -verify
+    # process after database has been populated to prevent re-downloading
+    # all the bulk data files again.
     sandbox = False
+
     # Log levels
     log_level = 3 # Log levels 1 = error, 2 = warning, 3 = info
     stdout_level = 1 # Stdout levels 1 = verbose, 0 = non-verbose
@@ -649,14 +652,16 @@ if __name__=="__main__":
         "-csv", "-database", "-update", "-t",
         "-biblio", "-full",
         "-balance", "-sandbox", "-h", "-help",
-        "-verify"
+        "-verify", "-supplement", "-patch"
     ]
     # Default number of threads to use if not specified.
     # 5 threads is good on 4 core processor.
     # General rule of 1 thread per core, plus one seems to work well.
     default_threads = 5
+
     # Whether to insert the data after each item, or after each file.
     # `bulk` inserts after each file, `each` after each item.
+    # Bulk insertion is much faster.
     database_insert_mode = "bulk" # values include `each` and `bulk`
 
     # Declare filepaths
@@ -679,6 +684,7 @@ if __name__=="__main__":
     postgresql_database_reset_filename = working_directory + "/installation/uspto_create_database_postgres.sql"
     if sandbox: sandbox_downloads_dirpath = "/Volumes/Thar/uspto/TMP/downloads/"
     else: sandbox_downloads_dirpath = working_directory + "/TMP/downloads/"
+    CPC_2005_dataframe_filename = working_directory + "/installation/post_parse/patch_data/CPC_2005.dat"
 
     # Database args
     database_args = {
@@ -707,10 +713,10 @@ if __name__=="__main__":
         "/TMP/unzip"
     ]
 
-    # Create an array of args that can be passed as a group
+    # Create an array of variables that can be passed as a group
     # and appended to as needed
     args_array = {
-        "bulk_data_source" : "uspto", # uspto or reedtech
+        "bulk_data_source" : "uspto", # uspto or reedtech (no longer available)
         "uspto_bulk_data_url" : 'https://bulkdata.uspto.gov/',
         "reedtech_bulk_data_url" : "https://patents.reedtech.com/",
         "uspto_classification_data_url" : 'https://www.uspto.gov/web/patents/classification/selectnumwithtitle.htm',
@@ -742,7 +748,8 @@ if __name__=="__main__":
         "pair_process_log_file" : pair_process_log_file,
         "temp_directory" : app_temp_dirpath,
         "csv_directory" : app_csv_dirpath,
-        "sandbox_downloads_dirpath" : sandbox_downloads_dirpath
+        "sandbox_downloads_dirpath" : sandbox_downloads_dirpath,
+        "CPC_2005_dataframe_filename" : CPC_2005_dataframe_filename
     }
 
     # Setup logger
@@ -802,10 +809,30 @@ if __name__=="__main__":
             # Else if the read list of unprocessed links is not empty
             elif len(all_links_array["grants"]) != 0 or len(all_links_array["applications"]) != 0 or len(all_links_array["PAIR"]) != 0 or len(all_links_array["classifications"]) != 0 or len(all_links_array["legal"]) != 0:
 
+
+                # If the command args specify to patch missing data
+                # from the UPSTO bulk dataset
+                if "patch" in args_array['command_args']:
+                    # Import the USPTOBigQuery module
+                    import USPTOBigQuery
+                    # Create a database connection
+                    database_connection = SQLProcessor.SQLProcess(database_args)
+                    #database_connection.connect()
+                    #args_array['database_connection'] = database_connection
+                    # Instansiate class object
+                    bq = USPTOBigQuery.PatentBigQuery(args_array)
+                    # Collect the CPC classification for all 2005 patents
+                    json_obj = bq.get_2005_grant_cpc(args_array)
+                    # Insert the CPC class into the main database
+                    insert_2005_grant_cpc(args_array, json_obj)
+                    # Exit with success status
+                    # Since if patch-missing no other process will be done
+                    exit(0)
+
                 # Set the string for the output depeding on whether verification or parsing bulk-data
                 if "verify" in args_array['command_args']: action = "verified"
                 else: action = "collected"
-                # TODO update with classifcation data and PAIR data output
+                # Print the output showing links for each data classification
                 print(str(len(all_links_array["grants"])) + " grant links will be " + action + ". Start time: " + time.strftime("%c"))
                 print(str(len(all_links_array["applications"])) + " application links will be " + action + ". Start time: " + time.strftime("%c"))
                 print(str(len(all_links_array["classifications"])) + " classification links will be " + action + ". Start time: " + time.strftime("%c"))
