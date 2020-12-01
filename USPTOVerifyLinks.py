@@ -645,6 +645,9 @@ def extract_XML4_application_tag_counts(args_array):
 
 # Extract the tag count for legal data files
 def extract_csv_line_counts(args_array, file_name):
+
+    logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+    
     # Print to stdout and log
     print("- Starting the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
     logger.info("- Starting the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
