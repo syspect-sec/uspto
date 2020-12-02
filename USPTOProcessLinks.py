@@ -83,7 +83,7 @@ def return_file_format_from_filename(file_name):
             if re.compile(value).match(file_name.split("/")[-1]):
                 return key
 
-# Download a link into temporary memory and return filename
+# Download a link into temporary path and return filename
 def download_zip_file(args_array):
 
     # Set process start time

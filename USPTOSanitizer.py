@@ -36,7 +36,6 @@ def extract_BQ_CPC_string_to_dict(code_string):
     #code_dict[''] =
     #code_dict[''] =
     #code_dict[''] =
-
     # Return the dict
     return code_dict
 

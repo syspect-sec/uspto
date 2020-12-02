@@ -49,6 +49,11 @@ Grant XML4
 1. Grant length is available sometimes, but it's 0 in the database instead of null?
 2. AGENT_G if no country provided then unknown is provided
 3. GRACIT_G many citation records do not have name.
+4. Not handling the <additional-info> element, is optional and can occur one time identifying an unstructured US classification referenced within the <us-field-of-classification-search> element, and terminated by the </additional-info> end tag.
+An unstructured US classification would identify a sub-class as a range as defined in the example below:
+<main-classification> 2247-250</main-classification> <additional-info>unstructured</additional-info>
+5. 
+
 
 ST.32
 =====

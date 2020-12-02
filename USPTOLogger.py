@@ -12,6 +12,7 @@ import traceback
 import time
 import os
 import sys
+import pprint
 
 # Import USPTO Parser Functions
 import USPTOProcessLinks
@@ -129,8 +130,8 @@ def write_verified_log(args_array):
     logger = logging.getLogger("USPTO_Database_Construction")
 
     # Print message to stdout and log file
-    print("Updating the log for verified file: " + args_array['url_link'])
-    logger.info("Updating the log for verified file: " + args_array['url_link'])
+    print("[Updating the log for verified file: " + args_array['url_link'] + "]")
+    logger.info("[Updating the log for verified file: " + args_array['url_link'] + "]")
 
     # Set the log file to check and rewrite based on the document_type passed
     if document_type == "grant" : log_file_to_rewrite = args_array['grant_process_log_file']
@@ -168,7 +169,7 @@ def write_verified_log(args_array):
                 # If the first element in line is the link we have just processed
                 line = line.split(",")
                 if line[0] == args_array["url_link"]:
-                    print("- Found the URL link in log file")
+                    print("-- Found the URL link in log file")
                     # Append the line with "Processed"
                     log_rewrite_array.append([line[0], line[1], "Processed", "Verified\n"])
                 # If the first element is not the line we are looking for
@@ -364,7 +365,7 @@ def collect_all_required_links_from_file(args_array):
             for line in classification_process_file:
                 # If doing verification, collect processed files
                 if "verify" in args_array['command_args']:
-                    if line.split(",")[2].replace("\n", "") == "Processed":
+                    if line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
                         classification_temp_array.append(line.split(","))
                 # If parsing bulk-data, collect all unprocessed files
                 else:
@@ -376,7 +377,7 @@ def collect_all_required_links_from_file(args_array):
             for line in pair_process_file:
                 # If doing verification, collect processed files
                 if "verify" in args_array['command_args']:
-                    if line.split(",")[2].replace("\n", "") == "Processed":
+                    if line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
                         pair_temp_array.append(line.split(","))
                 # If parsing bulk-data, collect all unprocessed files
                 else:
@@ -388,7 +389,7 @@ def collect_all_required_links_from_file(args_array):
             for line in legal_process_file:
                 # If doing verification, collect processed files
                 if "verify" in args_array['command_args']:
-                    if line.split(",")[2].replace("\n", "") == "Processed":
+                    if line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
                         legal_temp_array.append(line.split(","))
                 # If parsing bulk-data, collect all unprocessed files
                 else:

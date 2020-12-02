@@ -1,6 +1,7 @@
 --
 -- Create users and permissions for USPTO database configuration
 --
+-- From the command line run: mysql -u user -p mysql < uspto_create_database_mariadb.sql
 
 -- First Flush all privileges from mysql
 FLUSH PRIVILEGES;

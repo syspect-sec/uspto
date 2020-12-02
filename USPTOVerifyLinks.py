@@ -89,7 +89,7 @@ def verify_link_file(args_array):
         logger.error("The contents of: " + args_array['file_name'] + " could not be verified. Time Finished: " + time.strftime("%c"))
 
     # Print to stdout and log
-    print("- Finished the verificaction process for contents of: " + args_array['file_name'] + " Time Finished: " + time.strftime("%c"))
+    print("-- Finished the verificaction process for contents of: " + args_array['file_name'] + " Time Finished: " + time.strftime("%c"))
     logger.info("Finished the verification process for contents of: " + args_array['file_name'] + " Time Finished: " + time.strftime("%c"))
 
 # Extract the tag count for APS grant files
@@ -142,7 +142,7 @@ def extract_APS_grant_tag_counts(args_array):
     }
 
     # Print to stdout and log
-    print("- Starting the APS grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
+    print("-- Starting the APS grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
     logger.info("Starting the APS grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
 
     # Loop through the file contents line by line
@@ -181,7 +181,7 @@ def extract_APS_grant_tag_counts(args_array):
                 else: counts_dict[table] += 1
 
     # Print to stdout and log
-    print("- Finished the APS grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+    print("-- Finished the APS grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     logger.info("Finished the APS grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
 
     # Return the dictionary of counts for found tags
@@ -233,7 +233,7 @@ def extract_XML2_grant_tag_counts(args_array):
     }
 
     # Print to stdout and log
-    print("- Starting the XML2 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
+    print("-- Starting the XML2 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
     logger.info("Starting the XML2 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
 
     # Loop through the file contents line by line
@@ -324,7 +324,7 @@ def extract_XML2_grant_tag_counts(args_array):
             xml_string += USPTOSanitizer.replace_old_html_characters(line)
 
     # Print to stdout and log
-    print("- Finished the XML2 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+    print("-- Finished the XML2 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     logger.info("Finished the XML2 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
 
     # Return the dictionary of counts for found tags
@@ -375,7 +375,7 @@ def extract_XML4_grant_tag_counts(args_array):
     }
 
     # Print to stdout and log
-    print("- Starting the XML4 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
+    print("-- Starting the XML4 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
     logger.info("Starting the XML4 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
 
     # Loop through the file contents line by line
@@ -458,7 +458,7 @@ def extract_XML4_grant_tag_counts(args_array):
 
 
     # Print to stdout and log
-    print("- Finished the XML4 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+    print("-- Finished the XML4 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     logger.info("Finished the XML4 grant tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
 
     # Return the dictionary of counts for found tags
@@ -506,7 +506,7 @@ def extract_XML1_application_tag_counts(args_array):
     }
 
     # Print to stdout and log
-    print("- Starting the XML1 application tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
+    print("-- Starting the XML1 application tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
     logger.info("Starting the XML1 application tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
 
     # Loop through the file contents line by line
@@ -566,7 +566,7 @@ def extract_XML1_application_tag_counts(args_array):
             xml_string += USPTOSanitizer.replace_old_html_characters(line)
 
     # Print to stdout and log
-    print("- Finished the XML1 appication tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+    print("-- Finished the XML1 appication tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     logger.info("Finished the XML1 application tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     # Return the dictionary of counts for found tags
     if args_array['stdout_level'] == 1: pprint(counts_dict)
@@ -614,7 +614,7 @@ def extract_XML4_application_tag_counts(args_array):
     }
 
     # Print to stdout and log
-    print("- Starting the XML4 application tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
+    print("-- Starting the XML4 application tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
     logger.info("Starting the XML4 application tag counting process for contents of: " + args_array['file_name'] + ". Time Started: " + time.strftime("%c"))
 
     # Loop through the file contents line by line
@@ -635,7 +635,7 @@ def extract_XML4_application_tag_counts(args_array):
                 counts_dict[table] += 1
 
     # Print to stdout and log
-    print("- Finished the XML4 application tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
+    print("-- Finished the XML4 application tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     logger.info("Finished the XML4 application tag counting process for contents of: " + args_array['file_name'] + ". Time Finished: " + time.strftime("%c"))
     # Return the dictionary of counts for found tags
     if args_array['stdout_level'] == 1: pprint(counts_dict)
@@ -649,29 +649,47 @@ def extract_csv_line_counts(args_array, file_name):
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
     # Print to stdout and log
-    print("- Starting the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
-    logger.info("- Starting the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+    print("-- Starting the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+    logger.info("-- Starting the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
     # Get the expected count of records from file
     expected_count = get_file_length(args_array, file_name)
+    # Convert the filename to a table name
+    table_name = convert_filename_to_table_name(file_name)
     # Print to stdout and log
-    print("- Finished the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
-    logger.info("- Finished the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
-    counts_dict = { "expected_count" : expected_count, "file_name" : file_name }
+    print("-- Finished the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+    logger.info("-- Finished the line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+    counts_dict = { table_name : expected_count, "file_name" : file_name }
     return counts_dict
 
 # Gets the number of lines of CSV content in file
 def get_file_length(args_array, file_name):
 
+    print(file_name)
+
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
     # Print to stdout and log
-    print("- Opening file for line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
-    logger.info("- Opening file for line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+    print("-- Opening file for line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+    logger.info("-- Opening file for line counting process for contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
 
     try:
 
+        # Send any zip files to the extractor
+        if ".zip" in args_array['temp_zip_file_name']:
+            # Extract the XML file from the ZIP file
+            csv_file_name = USPTOProcessZipFile.extract_csv_file_from_zip(args_array)
+            # If csv_file_contents is None or False, then return immediately
+            if csv_file_name == None or csv_file_name == False:
+                # If zipped file is not available then download again
+                args_array['temp_zip_file_name'] = USPTOProcessLinks.download_zip_file(args_array)
+                # Extract the XML file from the ZIP file
+                csv_file_name = USPTOProcessZipFile.extract_csv_file_from_zip(args_array)
+        # Use any non-zip files as is
+        else:
+            csv_file_name = args_array['temp_zip_file_name']
+
         # Open file and get contents
-        with open(file_name, "r") as infile:
+        with open(csv_file_name, "r") as infile:
             contents = infile.readlines()
         # Calculate the length of array
         # remove 1 for the header of file
@@ -680,8 +698,8 @@ def get_file_length(args_array, file_name):
         del contents
 
         # Print to stdout and log
-        print("- " + length + " lines found in contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
-        logger.info("- " + length + " lines found in contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+        print("-- " + str(length) + " lines found in contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
+        logger.info("-- " + str(length) + " lines found in contents of: " + file_name + ". Time Started: " + time.strftime("%c"))
 
         # Return the file length
         return length
@@ -695,3 +713,18 @@ def get_file_length(args_array, file_name):
         print("-- Failed open file for line count during verification process")
         logger.info("-- Failed open file for line count during verification process")
         return False
+
+# Return the table name for the csv bulk-data filename
+def convert_filename_to_table_name(file_name):
+    # Legal csv files
+    if file_name == "attorneys": return "ATTORNEY_L"
+    elif file_name == "cases": return "CASE_L"
+    elif file_name == "names": return "PARTY_L"
+    elif file_name == "patents": return "PATENT_L"
+    # Classification csv files
+    elif file_name == "usclass": return "USCLASS_C"
+    elif file_name == "cpcclass": return "CPCCLASS_C"
+    # PAIR csv files
+    elif file_name == "continuity_children": return "CONTINUITYCHILD_P"
+    elif file_name == "continuity_parents": return "CONTINUITYPARENT_P"
+    elif file_name == "correspondence_address": return "CORRESPONDENCE_P"

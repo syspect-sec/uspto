@@ -201,6 +201,43 @@ def extract_XML4_grant(raw_data, args_array):
                     cpc_position += 1
         """
 
+        # Find all US classifications if they are embedded in a "field-of-search" tag (XML4 2005 files)
+        foc = r.find('field-of-search')
+        if foc is not None:
+            nc_position = 1
+            # Create list of all items
+            ncs = foc.findall('classification-national')
+            for nc in ncs:
+                # Find the main classification tag
+                ncm = nc.find('main-classification')
+                if ncm is not None:
+                    #print(ncm.text)
+                    n_class_main = None
+                    n_subclass = None
+                    n_malformed = None
+                    try:
+                        n_class_main, n_subclass = USPTOSanitizer.return_class_XML4_grant(ncm.text)
+                    except Exception as e:
+                        traceback.print_exc()
+                        n_class_main = None
+                        n_subclass = None
+                        n_malformed = 1
+
+                    # Some are labelled as "None"
+                    if n_class_main != None or n_subclass != None:
+                        # Append SQL data into dictionary to be written later
+                        processed_usclass.append({
+                            "table_name" : "uspto.USCLASS_G",
+                            "GrantID" : document_id,
+                            "Position" : nc_position,
+                            "Class" : n_class_main,
+                            "SubClass" : n_subclass,
+                            "Malformed" : n_malformed,
+                            "FileName" : args_array['file_name']
+                        })
+                        #print(processed_usclass)
+                        nc_position += 1
+
         # Find all CPC classifications
         foc = r.find('us-field-of-classification-search')
         if foc is not None:

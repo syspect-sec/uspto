@@ -182,13 +182,13 @@ def verification_process(link_queue, args_array, database_args, spooling_value):
         # passed with the item through parsing route
         args_array['url_link'] = item[0]
         args_array['uspto_xml_format'] = item[1]
-        args_array['document_type'] = item[3]
+        args_array['document_type'] = item[-1]
 
         # file_name is used to keep track of the downloaded file's
         # base filename (no file extension)
         args_array['file_name'] = os.path.basename(args_array['url_link']).replace(".zip", "").replace(".csv", "").replace(".txt", "")
 
-        print("Verifying " + args_array['uspto_xml_format'] + " file: " + args_array['file_name'] + " Started at: " + time.strftime("%c"))
+        print("-- Verifying " + args_array['uspto_xml_format'] + " file: " + args_array['file_name'] + " Started at: " + time.strftime("%c"))
 
         # Call function to verify data for each link
         # and store the expected values in the PARSER_VERIFICATION table
@@ -207,7 +207,7 @@ def verification_process(link_queue, args_array, database_args, spooling_value):
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
 
-    # At this point all links have bene processed
+    # At this point all links have been processed
     #
     # TODO: check logs files again for unprocessed files
     # (will have to add an additional "processing" flag to links in log file.)
@@ -808,7 +808,6 @@ if __name__=="__main__":
 
             # Else if the read list of unprocessed links is not empty
             elif len(all_links_array["grants"]) != 0 or len(all_links_array["applications"]) != 0 or len(all_links_array["PAIR"]) != 0 or len(all_links_array["classifications"]) != 0 or len(all_links_array["legal"]) != 0:
-
 
                 # If the command args specify to patch missing data
                 # from the UPSTO bulk dataset

@@ -1,5 +1,5 @@
 --
--- Data Summary of the USPTOParser Database
+-- Create PARSER_VERIFICATION for USPTOParser Database
 --
 -- Author: Joseph Lee
 -- Company: Ripple Software
@@ -104,6 +104,13 @@ INSERT INTO PARSER_VERIFICATION
 (FileName, TableName, Count)
 SELECT FileName, "CONTINUITYCHILD_P", count(*)
 FROM CONTINUITYCHILD_P
+GROUP BY FileName
+ORDER BY FileName DESC;
+
+INSERT INTO PARSER_VERIFICATION
+(FileName, TableName, Count)
+SELECT FileName, "CORRESPONDENCE_P", count(*)
+FROM CORRESPONDENCE_P
 GROUP BY FileName
 ORDER BY FileName DESC;
 

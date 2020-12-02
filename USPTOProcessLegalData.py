@@ -31,7 +31,6 @@ def process_legal_content(args_array):
 
     # Extract the .CSV file from the ZIP file
     csv_file_name = USPTOProcessZipFile.extract_csv_file_from_zip(args_array)
-
     # If csv_file_contents is None or False, then return immediately
     if csv_file_name == None or csv_file_name == False:
         return False

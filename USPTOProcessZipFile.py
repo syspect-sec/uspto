@@ -95,7 +95,7 @@ def extract_csv_file_from_zip(args_array):
         zip_file = zipfile.ZipFile(args_array['temp_zip_file_name'], 'r')
         # Find the csv file from the extracted filenames
         for filename in zip_file.namelist():
-            if '.csv' in filename :
+            if '.csv' in filename:
                 csv_file_name = filename
         # Print stdout message that csv file was found
         print('[csv file found. Filename: {0}]'.format(csv_file_name))

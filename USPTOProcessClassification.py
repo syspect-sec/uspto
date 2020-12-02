@@ -121,7 +121,7 @@ def set_extraction_type(code):
         return "cpcclass"
     elif code == "USCPCCLS":
         return "uscpc"
-        
+
 # This funtion accepts a line from the class text file and
 # parses it and returns a dictionary to build an sql query string
 def return_US_class_dict(line):
