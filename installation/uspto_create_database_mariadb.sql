@@ -20,14 +20,14 @@ GRANT ALL ON `uspto`.* TO `uspto`@`localhost`;
 -- Create the USPTO database
 -- -----------------------------------------------------
 DROP SCHEMA IF EXISTS `uspto` ;
-CREATE SCHEMA IF NOT EXISTS `uspto` DEFAULT CHARACTER SET utf8 ;
-USE `uspto` ;
+CREATE SCHEMA IF NOT EXISTS `uspto` DEFAULT CHARACTER SET utf8;
+USE `uspto`;
 
 
 -- -----------------------------------------------------
 -- Table `uspto`.`APPLICATION_PAIR`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `uspto`.`APPLICATION_PAIR` ;
+DROP TABLE IF EXISTS `uspto`.`APPLICATION_PAIR`;
 
 CREATE TABLE IF NOT EXISTS `uspto`.`APPLICATION_PAIR` (
   `ApplicationID` VARCHAR(20) NOT NULL,

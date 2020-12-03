@@ -108,9 +108,9 @@ installation/post_parse/remove_duplicates_postgesql.sql
 
 **Verify Parser Accuracy**
 
-The USPTOParser accuracy can be verified using a pre-built SQL script and a small Python application.  All files must be processed before you start the verification.  Otherwise, you will need to delete the PARSER_VERIFICATION table from the database and run **python USPTOParser.py -verify** again.  
+The USPTOParser accuracy can be verified by running a pre-built SQL script **installation/verification/create_parser_verification_table_mysql.sql** and then running **python USPTOParser.py -verify**.  All files must be processed before you start the verification.  Otherwise, you will need to delete the PARSER_VERIFICATION table from the database and run the verification again.  
 
-The verify process will first build a database table PARSER_VERIFICATION, then compile a count of all records from each data-table / source-file combination into the table 'Count' column.  The verify process with then search each source bulk-data file for XML tags and compile an expected count for the number of records that should be in each database table. Then  query to show the completeness of all filename / table combinations.
+The verification process will first build a database table PARSER_VERIFICATION, then compile a count of all records from each data-table / source-file combination into the table 'Count' column.  The verify process with then search each source bulk-data file for XML tags and compile an expected count for the number of records that should be in each database table. Then  query to show the completeness of all filename / table combinations.
 
 To maintain the source bulk-data files use the **-sandbox** flag when processing the bulk-data into the database. Otherwise the files will be downloaded again from the USPTO bulk-data site to do the verification process.
 
@@ -118,6 +118,10 @@ To maintain the source bulk-data files use the **-sandbox** flag when processing
 
 The USPTO data contains a wealth of information.  The data can be used to calculate patent
 metrics for statistical analysis. There are some scripts included to calculate some common statistical metrics such as forward and backward citation counts.
+
+**Patch Missing Data With Google BigQuery**
+
+The USPTO bulk-data is missing some information.  This data can be collected from Google BigQuery Patent database.  First the credentials for the Google BigQuery API must be downloaded as a JSON file and added to the \_\_init\_\_ function of the PatentBigQuery Class in the USPTOBigQuery.py file. Then the database can be automatically patched by running the command **python USPTOParser.py -patch**
 
 _MariaDB_
 

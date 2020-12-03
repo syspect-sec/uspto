@@ -684,7 +684,7 @@ if __name__=="__main__":
     postgresql_database_reset_filename = working_directory + "/installation/uspto_create_database_postgres.sql"
     if sandbox: sandbox_downloads_dirpath = "/Volumes/Thar/uspto/TMP/downloads/"
     else: sandbox_downloads_dirpath = working_directory + "/TMP/downloads/"
-    CPC_2005_dataframe_filename = working_directory + "/installation/post_parse/patch_data/CPC_2005.dat"
+    BQ_2005_classification_dataframe_filename = working_directory + "/installation/post_parse/patch_data/BQ_classification_2005.dat"
 
     # Database args
     database_args = {
@@ -749,7 +749,7 @@ if __name__=="__main__":
         "temp_directory" : app_temp_dirpath,
         "csv_directory" : app_csv_dirpath,
         "sandbox_downloads_dirpath" : sandbox_downloads_dirpath,
-        "CPC_2005_dataframe_filename" : CPC_2005_dataframe_filename
+        "BQ_2005_classification_dataframe_filename" : BQ_2005_classification_dataframe_filename
     }
 
     # Setup logger
@@ -821,9 +821,9 @@ if __name__=="__main__":
                     # Instansiate class object
                     bq = USPTOBigQuery.PatentBigQuery(args_array)
                     # Collect the CPC classification for all 2005 patents
-                    json_obj = bq.get_2005_grant_cpc(args_array)
+                    json_obj = bq.get_2005_grant_classifications(args_array)
                     # Insert the CPC class into the main database
-                    insert_2005_grant_cpc(args_array, json_obj)
+                    insert_2005_grant_classifications(args_array, json_obj)
                     # Exit with success status
                     # Since if patch-missing no other process will be done
                     exit(0)

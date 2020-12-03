@@ -58,66 +58,81 @@ def write_process_log(args_array):
     # Variable hold while loop running
     log_rewrite_success = 0
 
-    while log_rewrite_success == 0:
+    try:
 
-        # Create an array to store all lines to be rewritten after
-        log_rewrite_array = []
+        while log_rewrite_success == 0:
 
-        # Open log_lock_file to check status
-        log_lock = open(args_array["log_lock_file"], "r")
-        locked_status = log_lock.read().strip()
-        log_lock.close()
+            # Create an array to store all lines to be rewritten after
+            log_rewrite_array = []
 
-        # If the log lock file is set to open, rewrite log with changes and end while loop
-        if locked_status == "0":
-            # Write log lock as closed
-            log_lock = open(args_array["log_lock_file"], "w")
-            log_lock.write("1")
-            log_lock.close()
-            # Open the appropriate log file
-            log_file = open(log_file_to_rewrite, "r")
-            # Separate into array of arrays of original csv
-            log_file_data_array = log_file.readlines()
-            log_file.close()
-
-            # Loop through each line in the file
-            for line in log_file_data_array:
-                # If the first element in line is the link we have just processed
-                line = line.split(",")
-                if line[0] == args_array["url_link"]:
-                    print("- Found the URL link in log file")
-                    # Append the line with "Processed"
-                    log_rewrite_array.append([line[0], line[1], "Processed\n"])
-                # If the first element is not the line we are looking for
-                else:
-                    # Append the line as is
-                    log_rewrite_array.append(line)
-
-            # Rewrite the new array to the log file in csv
-            log_file = open(log_file_to_rewrite, "w")
-            #print log_rewrite_array
-            for line in log_rewrite_array:
-                #print line[0] + "," + line[1] + "," + line[2]
-                log_file.write(",".join(line))
-            log_file.close()
-
-            # Set the log_lock to open again and close the file.
-            log_lock = open(args_array["log_lock_file"], "w")
-            log_lock.write("0")
+            # Open log_lock_file to check status
+            print("-- File locking log file for complete " + document_type + " file: " + args_array['url_link'])
+            logger.info("-- File locking log file for complete " + document_type + " file: " + args_array['url_link'])
+            log_lock = open(args_array["log_lock_file"], "r")
+            locked_status = log_lock.read().strip()
             log_lock.close()
 
-            # Print message to stdout and log file
-            print("Log updated for processed file: " + args_array['url_link'])
-            logger.info("Log updated for processed file: " + args_array['url_link'])
+            # If the log lock file is set to open, rewrite log with changes and end while loop
+            if locked_status == "0":
+                # Write log lock as closed
+                log_lock = open(args_array["log_lock_file"], "w")
+                log_lock.write("1")
+                log_lock.close()
+                # Open the appropriate log file
+                log_file = open(log_file_to_rewrite, "r")
+                # Separate into array of arrays of original csv
+                log_file_data_array = log_file.readlines()
+                log_file.close()
 
-            # End the while loop while by setting file_locked
-            log_rewrite_success = 1
+                # Loop through each line in the file
+                for line in log_file_data_array:
+                    # If the first element in line is the link we have just processed
+                    line = line.split(",")
+                    if line[0] == args_array["url_link"]:
+                        print("-- Found the URL link in log file")
+                        logger.info("-- Found the URL link: " + args_array['url_link'] + " in log file")
+                        # Append the line with "Processed"
+                        log_rewrite_array.append([line[0], line[1], "Processed\n"])
+                    # If the first element is not the line we are looking for
+                    else:
+                        # Append the line as is
+                        log_rewrite_array.append(line)
 
-        # If the file was found to be locked by another process, close file then wait 1 second
-        else:
-            #print "waiting on log lock to be opened"
-            log_lock.close()
-            time.sleep(1)
+                # Rewrite the new array to the log file in csv
+                log_file = open(log_file_to_rewrite, "w")
+                #print log_rewrite_array
+                for line in log_rewrite_array:
+                    #print line[0] + "," + line[1] + "," + line[2]
+                    log_file.write(",".join(line))
+                log_file.close()
+
+                # Set the log_lock to open again and close the file.
+                log_lock = open(args_array["log_lock_file"], "w")
+                log_lock.write("0")
+                log_lock.close()
+
+                # Print message to stdout and log file
+                print("-- Log updated for processed file: " + args_array['url_link'])
+                logger.info("-- Log updated for processed file: " + args_array['url_link'])
+
+                # End the while loop while by setting file_locked
+                log_rewrite_success = 1
+
+            # If the file was found to be locked by another process, close file then wait 1 second
+            else:
+                #print "waiting on log lock to be opened"
+                log_lock.close()
+                time.sleep(1)
+
+    except Exception as e:
+        # Print and log general fail comment
+        print("-- Exception during the writing of " + document_type + " log file: " + args_array['url_link'])
+        logger.error("-- Exception during the writing of " + document_type + " log file: " + args_array['url_link'])
+        traceback.print_exc()
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
+
 
 # Check the args_array log_lock_file and switch and write file as 'Verified'
 # TODO accept a passed arg to also write the log as processing, if needed by
