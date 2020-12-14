@@ -351,6 +351,8 @@ def collect_all_required_links_from_file(args_array):
     logger.info('Reading all required links to download and parse ' + time.strftime("%c"))
 
     try:
+        print('Reading all required grant links ' + time.strftime("%c"))
+        logger.info('Reading all required grant links ' + time.strftime("%c"))
         # Read all required grant links into array
         with open(args_array['grant_process_log_file'], "r") as grant_process_file:
             for line in grant_process_file:
@@ -366,6 +368,8 @@ def collect_all_required_links_from_file(args_array):
                         if line.strip() != "" and line.split(",")[2].replace("\n", "") != "Processed":
                             grant_temp_array.append(line.split(","))
 
+        print('Reading all required application links ' + time.strftime("%c"))
+        logger.info('Reading all required application links ' + time.strftime("%c"))
         # Read all required applicaton links into array
         with open(args_array['application_process_log_file'], "r") as application_process_file:
             for line in application_process_file:
@@ -381,6 +385,8 @@ def collect_all_required_links_from_file(args_array):
                         if line.split(",")[2].replace("\n", "") != "Processed":
                             application_temp_array.append(line.split(","))
 
+        print('Reading all required classification links ' + time.strftime("%c"))
+        logger.info('Reading all required classification links ' + time.strftime("%c"))
         # Read all required classification links into array
         with open(args_array['classification_process_log_file'], "r") as classification_process_file:
             for line in classification_process_file:
@@ -393,6 +399,8 @@ def collect_all_required_links_from_file(args_array):
                     if line.split(",")[2].replace("\n", "") != "Processed":
                         classification_temp_array.append(line.split(","))
 
+        print('Reading all required PAIR links ' + time.strftime("%c"))
+        logger.info('Reading all required PAIR links ' + time.strftime("%c"))
         # Read all required PAIR links into array
         with open(args_array['pair_process_log_file'], "r") as pair_process_file:
             for line in pair_process_file:
@@ -405,6 +413,8 @@ def collect_all_required_links_from_file(args_array):
                     if line.split(",")[2].replace("\n", "") != "Processed":
                         pair_temp_array.append(line.split(","))
 
+        print('Reading all required legal links ' + time.strftime("%c"))
+        logger.info('Reading all required legal links ' + time.strftime("%c"))
         # Read all required legal links into array
         with open(args_array['legal_process_log_file'], "r") as legal_process_file:
             for line in legal_process_file:
