@@ -356,6 +356,7 @@ def collect_all_required_links_from_file(args_array):
             for line in grant_process_file:
                 # If doing verification, collect processed files that are not verified already
                 if "verify" in args_array['command_args']:
+                    print(line)
                     if line.strip() != "" and line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
                         grant_temp_array.append(line.split(","))
                 # If parsing bulk-data, collect all unprocessed files
@@ -366,7 +367,6 @@ def collect_all_required_links_from_file(args_array):
         # Read all required applicaton links into array
         with open(args_array['application_process_log_file'], "r") as application_process_file:
             for line in application_process_file:
-                print(line)
                 # If doing verification, collect processed files that are not verified already
                 if "verify" in args_array['command_args']:
                     if line.split(",")[2].replace("\n", "") == "Processed"  and len(line.split(",")) == 3:
