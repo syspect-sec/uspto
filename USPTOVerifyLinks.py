@@ -205,12 +205,12 @@ def extract_XML2_grant_tag_counts(args_array):
     tags_dict = {
         "GRANT" : ["<PATDOC"],
         "INTCLASS_G" : ["<B510"],
-        "USCLASS_G" : ["<B520"],
-        "INVENTOR_G" : ["<B720"],
-        "AGENT_G" : ["<B740]"],
+        "USCLASS_G" : ["<B521", "<B522"],
+        "INVENTOR_G" : ["<B721"],
+        "AGENT_G" : ["<B740"],
         "ASSIGNEE_G" : ["<B730"],
         "NONPATCIT_G" : ["<B562"],
-        "EXAMINER_G" : ["<B745"],
+        "EXAMINER_G" : ["<B746", "<B747"],
         "FOREIGNPRIORITY_G" : ["<B310"]
     }
 
@@ -350,7 +350,7 @@ def extract_XML4_grant_tag_counts(args_array):
         "AGENT_G" : ["<agent>", "<agent "],
         "ASSIGNEE_G" : ["<assignee>", "<assignee "],
         "APPLICANT_G" : ["<us-applicant>", "<us-applicant ", "<applicant", "<applicant>"],
-        "INVENTOR_G" : ["<inventor>", "<inventor "],
+        "INVENTOR_G" : ["<inventor>", "<inventor ", "applicant-inventor"],
         "NONPATCIT_G" : ["<nplcit"],
         "EXAMINER_G" : ["<primary-examiner", "<assistant-examiner"],
         "FOREIGNPRIORITY_G" : ["<priority-claim>", "<priority-claim "]
@@ -426,6 +426,10 @@ def extract_XML4_grant_tag_counts(args_array):
             foc = r.find('us-field-of-classification-search')
             if foc is not None:
                 counts_dict["CPCCLASS_G"] += len(foc.findall('classification-cpc-text'))
+                counts_dict["USCLASS_G"] += len(foc.findall('classification-national'))
+            # Get USCLASS_G count if file format uses field-of-search
+            foc = r.find('field-of-search')
+            if foc is not None:
                 counts_dict["USCLASS_G"] += len(foc.findall('classification-national'))
             # Count the citation / reference tags
             if r.find('us-references-cited') != None: ref_cited_id_string = "us-references-cited"

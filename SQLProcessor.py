@@ -1,5 +1,10 @@
-# Used to operate the database.
-# Remind to replace the arguments in the following funciton '__init__' with your own database parameters
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# USPTO SQLProcessor
+# Author: Joseph Lee
+# Email: joseph@ripplesoftware.ca
+# Website: www.ripplesoftware.ca
+# Github: www.github.com/rippledj/uspto
 
 import MySQLdb
 import psycopg2

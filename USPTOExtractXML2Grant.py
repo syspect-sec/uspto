@@ -400,7 +400,6 @@ def extract_XML2_grant(raw_data, args_array):
         # B700 is Parties
         # TODO: find the applicant data and append to array
         for B700 in r.findall('B700'):
-
             # B720 Inventor
             for B720 in B700.findall('B720'):
                 # Reset position for inventors

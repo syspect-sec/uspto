@@ -42,6 +42,7 @@ Grant XML2
 6. APPLICANT_G : XML2 grants do not have any applicant data available
 7. ASSIGNEE_G: First and Last Name maybe available in the XML2 data but Its not being parsed.  Only orgname is.
   The reason is because First and Last Name are not available in the grant XML4 data.
+8. FORPATCIT_G : I don't know if the method for parsing out is OK or not.  The verification script does not deal with FORPATCIT_G for grant XML2.
 
 Grant XML4
 ==========
@@ -52,7 +53,7 @@ Grant XML4
 4. Not handling the <additional-info> element, is optional and can occur one time identifying an unstructured US classification referenced within the <us-field-of-classification-search> element, and terminated by the </additional-info> end tag.
 An unstructured US classification would identify a sub-class as a range as defined in the example below:
 <main-classification> 2247-250</main-classification> <additional-info>unstructured</additional-info>
-5. 
+5.
 
 
 ST.32
@@ -67,3 +68,8 @@ ST.32
 07 Foreign government
 08 County government (US)
 09 State government (US)-->
+
+WIPO ST.3
+=========
+CSV File was created from table on following USPTO link:
+https://www.uspto.gov/patents-application-process/applying-online/country-codes-wipo-st3-table
