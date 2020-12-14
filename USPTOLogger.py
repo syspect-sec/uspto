@@ -354,27 +354,32 @@ def collect_all_required_links_from_file(args_array):
         # Read all required grant links into array
         with open(args_array['grant_process_log_file'], "r") as grant_process_file:
             for line in grant_process_file:
-                # If doing verification, collect processed files that are not verified already
-                if "verify" in args_array['command_args']:
-                    print(line)
-                    if line.strip() != "" and line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
-                        grant_temp_array.append(line.split(","))
-                # If parsing bulk-data, collect all unprocessed files
-                else:
-                    if line.strip() != "" and line.split(",")[2].replace("\n", "") != "Processed":
-                        grant_temp_array.append(line.split(","))
+                print(line)
+                # Remove any blank lines
+                if line.strip() != "":
+                    # If doing verification, collect processed files that are not verified already
+                    if "verify" in args_array['command_args']:
+                        if line.strip() != "" and line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
+                            grant_temp_array.append(line.split(","))
+                    # If parsing bulk-data, collect all unprocessed files
+                    else:
+                        if line.strip() != "" and line.split(",")[2].replace("\n", "") != "Processed":
+                            grant_temp_array.append(line.split(","))
 
         # Read all required applicaton links into array
         with open(args_array['application_process_log_file'], "r") as application_process_file:
             for line in application_process_file:
-                # If doing verification, collect processed files that are not verified already
-                if "verify" in args_array['command_args']:
-                    if line.split(",")[2].replace("\n", "") == "Processed"  and len(line.split(",")) == 3:
-                        application_temp_array.append(line.split(","))
-                # If parsing bulk-data, collect all unprocessed files
-                else:
-                    if line.split(",")[2].replace("\n", "") != "Processed":
-                        application_temp_array.append(line.split(","))
+                print(line)
+                # Remove any blank lines
+                if line.strip() != "":
+                    # If doing verification, collect processed files that are not verified already
+                    if "verify" in args_array['command_args']:
+                        if line.split(",")[2].replace("\n", "") == "Processed"  and len(line.split(",")) == 3:
+                            application_temp_array.append(line.split(","))
+                    # If parsing bulk-data, collect all unprocessed files
+                    else:
+                        if line.split(",")[2].replace("\n", "") != "Processed":
+                            application_temp_array.append(line.split(","))
 
         # Read all required classification links into array
         with open(args_array['classification_process_log_file'], "r") as classification_process_file:
