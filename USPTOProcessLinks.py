@@ -14,6 +14,7 @@ import sys
 import shutil
 import traceback
 import urllib.request, urllib.parse, urllib.error
+#from urllib.request import Request
 import ssl
 from bs4 import BeautifulSoup
 
@@ -228,14 +229,14 @@ def get_all_links(args_array):
 
     # Get all patent grant data
     print('Started grabbing patent grant bulk-data links... ' + time.strftime("%c"))
-    grant_linklist = links_parser(args_array['command_args']['source_type'], "PG", args_array['bulk_data_source'], bulk_data_url)
+    grant_linklist = links_parser(args_array, args_array['command_args']['source_type'], "PG", args_array['bulk_data_source'], bulk_data_url)
     print('Finished grabbing patent grant bibliographic links... ' + time.strftime("%c"))
     # Log finished building all zip filepaths
     logger.info('Finished grabbing patent grant bulk-data links: ' + time.strftime("%c"))
 
     # Get all patent application data
     print('Started grabbing patent application bulk-data links... ' + time.strftime("%c"))
-    application_linklist = links_parser(args_array['command_args']['source_type'], "PA", args_array['bulk_data_source'], bulk_data_url)
+    application_linklist = links_parser(args_array, args_array['command_args']['source_type'], "PA", args_array['bulk_data_source'], bulk_data_url)
     print('Finished grabbing patent application bulk-data links... ' + time.strftime("%c"))
     # Log finished building all zip filepaths
     logger.info('Finished grabbing patent application bulk-data links: ' + time.strftime("%c"))
@@ -309,7 +310,7 @@ def legal_links_parser(bulk_source_url):
     return link_array
 
 # Parse USPTO bulk-data site to get document links
-def links_parser(source_type, link_type, bulk_data_source, bulk_source_url):
+def links_parser(args_array, source_type, link_type, bulk_data_source, bulk_source_url):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
     print("Grabbing " + source_type + " " + link_type + " links using " + bulk_data_source + " data source...")
@@ -352,6 +353,9 @@ def links_parser(source_type, link_type, bulk_data_source, bulk_source_url):
         # Go through each found link on the main USPTO page and get the
         # zip files as links and return that array.
         for item in link_array:
+            # Sleep the process to prevent getting blocked
+            if args_array['sleep_link_building']: time.sleep(2)
+            print(item)
             # Collect link
             content = urllib.request.urlopen(item, context=context).read()
             #print("-- Collected link in link array: " + item)

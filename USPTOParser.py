@@ -730,6 +730,7 @@ if __name__=="__main__":
         'default_source_type' : "biblio",
         "target_load_float" : 0.75,
         "thread_spool_delay" : 3600,
+        "sleep_link_building" : True,
         "database_type" : database_args['database_type'],
         "database_args" : database_args,
         "database_insert_mode" : database_insert_mode,
