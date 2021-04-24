@@ -243,14 +243,14 @@ def get_all_links(args_array):
 
     # Get all patent application pair data
     print('Started grabbing PAIR pair bulk-data links... ' + time.strftime("%c"))
-    pair_linklist = PAIR_links_parser(args_array['uspto_PAIR_data_url'])
+    pair_linklist = PAIR_links_parser(args_array, args_array['uspto_PAIR_data_url'])
     print('Finished grabbing PAIR bulk-data links... ' + time.strftime("%c"))
     # Log finished building all zip filepaths
     logger.info('Finished grabbing PAIR bulk-data links: ' + time.strftime("%c"))
 
     # Get all patent legal data
     print('Started grabbing patent legal bulk-data links... ' + time.strftime("%c"))
-    legal_linklist = legal_links_parser(args_array['uspto_legal_data_url'])
+    legal_linklist = legal_links_parser(args_array, args_array['uspto_legal_data_url'])
     print('Finished grabbing PAIR bulk-data links... ' + time.strftime("%c"))
     # Log finished building all zip filepaths
     logger.info('Finished grabbing patent legal bulk-data links: ' + time.strftime("%c"))
@@ -265,7 +265,7 @@ def get_all_links(args_array):
     }
 
 # Parse USPTO bulk-data site to get PAIR data links
-def PAIR_links_parser(bulk_source_url):
+def PAIR_links_parser(args_array, bulk_source_url):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
     print("Grabbing PAIR links from USPTO bulk data source...")
@@ -287,7 +287,7 @@ def PAIR_links_parser(bulk_source_url):
     return link_array
 
 # Parse USPTO bulk-data site to get legal data links
-def legal_links_parser(bulk_source_url):
+def legal_links_parser(args_array, bulk_source_url):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
     print("Grabbing legal data links from USPTO bulk data source...")
