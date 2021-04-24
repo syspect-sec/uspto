@@ -64,6 +64,8 @@ def verification_extract_data_router(args_array):
         exc_type, exc_obj, exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
+        # Return false
+        return False
 
 # Function to route the extraction of expected XML tags
 def verify_link_file(args_array):

@@ -17,10 +17,9 @@ You should have received a copy of the GNU General Public License along with thi
 **Github Repository:** https://github.com/rippledj/uspto
 
 ## **Description:**
-This python script is based on a project from University of Illinois (http://abel.lis.illinois.edu/UPDC/Downloads.html). Several parts of the script have been improved to increase the data integrity and performance of the original script.  The script requires Python 3.6 or higher and will not work properly with Python 2.7
+This python script is based on a project from University of Illinois (http://abel.lis.illinois.edu/UPDC/Downloads.html). Several parts of the script have been improved to increase the data integrity and performance of the original script.  The script requires Python 3.6 or higher and will not work properly with Python 2.
 
-The script is run from the command line and will populate a PostgreSQL or MySQL database with the USPTO patent grant and patent application red-book bulk-data.
-It is recommended to use PostgreSQL since PG provides better performance over the large data-set.
+The script is run from the command line and will populate a PostgreSQL or MySQL database with the USPTO patent grant and patent application red-book bulk-data. It is recommended to use PostgreSQL since PG provides better performance over the large data-set.
 
 The usage of the script is outlined below:
 
@@ -32,7 +31,7 @@ There are three steps.
 
 ### 1. Install the database
 
-Run the appropriate database creation scripts depending if you intend to store the USPTO data in MySQL or PostgreSQL.  The script will create a user  'uspto' and limit the scope of the user to the uspto database. If you want to change the default password for the user, edit the appropriate .sql file before running it.  Also, some configuration of your database maybe necessary depending on the settings choose when running the script.  For example the ability to bulk insert CSV files are disabled by default in MySQL.
+Run the appropriate database creation scripts depending if you intend to store the USPTO data in MySQL or PostgreSQL.  The script will create a user 'uspto' and limit the scope of the user to the uspto database. If you want to change the default password for the user, edit the appropriate .sql file before running it.  Also, some configuration of your database maybe necessary depending on the settings choose when running the script.  For example the ability to bulk insert CSV files are disabled by default in MySQL.
 
 _MySQL or MariaDB_
 
@@ -145,7 +144,7 @@ The script uses a load balancer which detects the number of CPU cores and create
 
 The method used to insert data into the database can be configured in two ways.  The script can insert each document record immediately after it is parsed or in bulk after a file is finished being parsed.  Using bulk storage utilizes .csv files to temporarily store the data before it is inserted in bulk.  If the '-database' flag is set but the '-csv' is not set, then the .csv. files are erased after being used to load the data.  
 
-### USTPTO Contact
+### USPTO Contact
 
 If you have questions about the USPTO patent data you can contact:
 Author, Joseph Lee: joseph@ripplesoftware.ca

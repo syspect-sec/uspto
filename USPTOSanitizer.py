@@ -42,7 +42,7 @@ def extract_BQ_CPC_string_to_dict(code_string):
 # Function to parse the class and return array of class and subclass
 def return_US_class_XML4_application(class_string):
 
-    # TODO: check the proper way to check parse class string
+    # TODO: check the proper way to validate class string
     # This is problematic but may be handled almost well enough
     # Strings sometimess have spaces but not always, so just cutting the string 0:3 possible takes the first character of the subclass
     main_c = class_string[0:3].replace(' ','')
