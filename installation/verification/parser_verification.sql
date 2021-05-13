@@ -8,12 +8,13 @@
 -- Github: https://github.com/rippledj/uspto
 --
 -- This file will output the number of records in
--- the database against the expected numbmer that
+-- the database against the expected number that
 -- should be found based on tags found in the
 -- original USPTO bulk-data file.
 -- This script can only be run after the
 -- PARSER_VERIFICATION table has been created using
--- the parser_summary_mysql.sql or parser_summary_postgresql.sql
+-- the create_parser_verification_mysql.sql or
+-- create_parser_verification_postgresql.sql
 -- files and then running `python USPTOParser.py -verify`
 --
 

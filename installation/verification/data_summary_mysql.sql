@@ -17,6 +17,7 @@
 -- Table uspto.GRANT_SUMMARY
 -- -----------------------------------------------------
 
+
 CREATE TABLE IF NOT EXISTS uspto.GRANT_SUMMARY (
   `count` INT NOT NULL,
   `year` INT NOT NULL,
@@ -169,7 +170,7 @@ VALUES
 SELECT *
 FROM (
 SELECT
-	"GRANT" as `Type`,
+	"GRANT" AS `Type`,
 	YEAR(a.IssueDate) AS `Year`,
 	b.Count AS `Official Total`,
 	count(*) AS `Database Total`,
@@ -181,12 +182,12 @@ YEAR(a.IssueDate) = b.Year
 WHERE YEAR(a.IssueDate) IS NOT NULL
 GROUP BY YEAR(a.IssueDate)
 ORDER BY YEAR(a.IssueDate) DESC
-) as t1
+) AS t1
 UNION
 SELECT *
 FROM (
 SELECT
-	"APPLICATION" as `Type`,
+	"APPLICATION" AS `Type`,
 	YEAR(a.FileDate) AS `Year`,
 	b.Count AS `Official Total`,
 	count(*) AS `Database Total`,
@@ -198,4 +199,4 @@ YEAR(a.FileDate) = b.Year
 WHERE YEAR(a.FileDate) IS NOT NULL
 GROUP BY YEAR(a.FileDate)
 ORDER BY YEAR(a.FileDate) DESC
-) as t2;
+) AS t2;

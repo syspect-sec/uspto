@@ -5,6 +5,8 @@
 DROP DATABASE IF EXISTS uspto;
 CREATE DATABASE uspto;
 
+\c uspto;
+
 DROP SCHEMA IF EXISTS uspto CASCADE;
 CREATE SCHEMA IF NOT EXISTS uspto;
 
@@ -646,6 +648,8 @@ CREATE USER uspto LOGIN PASSWORD 'Ld58KimTi06v2PnlXTFuLG4';
 
 -- Change the owner of uspto database to uspto user
 ALTER DATABASE uspto OWNER TO uspto;
+ALTER SCHEMA uspto OWNER to uspto;
+ALTER DATABASE uspto SET search_path TO uspto;
 
 -- Grant privileges to all corresponding databases
 GRANT USAGE ON SCHEMA uspto TO uspto;
