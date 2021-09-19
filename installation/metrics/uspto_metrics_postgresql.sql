@@ -13,18 +13,17 @@
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS uspto.METRICS_G (
-  `GrantID` VARCHAR(20) NOT NULL,
-  `ForwardCitCnt` INT DEFAULT NULL,
-  `BackwardCitCnt` INT DEFAULT NULL,
-  `TCT` INT DEFAULT NULL,
-  `FamilySize` INT DEFAULT NULL,
-  PRIMARY KEY (`GrantID`))
-  ENGINE = InnoDB;
+  GrantID VARCHAR(20) NOT NULL,
+  ForwardCitCnt INT DEFAULT NULL,
+  BackwardCitCnt INT DEFAULT NULL,
+  TCT INT DEFAULT NULL,
+  FamilySize INT DEFAULT NULL,
+  PRIMARY KEY (GrantID));
 
 --
 -- Create metrics Record for all GrantID
 --
-INSERT INTO uspto.METRICS_G (`GrantID`) SELECT `GrantID` FROM uspto.GRANT;
+INSERT INTO uspto.METRICS_G (GrantID) SELECT GrantID FROM uspto.GRANT;
 --
 -- Calculate Forward Citations for all GrantID
 --

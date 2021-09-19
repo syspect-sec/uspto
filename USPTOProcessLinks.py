@@ -152,6 +152,7 @@ def process_link_file(args_array):
 
     # Loop until file extraction completes or attempts exhausted
     while file_processed_success == False:
+
         # Download the file and append temp location to args array
         args_array['temp_zip_file_name'] = download_zip_file(args_array)
 

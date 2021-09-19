@@ -30,7 +30,7 @@ def process_XML_application_content(args_array):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
-    # If csv file insertion is required, then open all the files
+    # If csv files is required, then open all the files
     # into args_array
     if "csv" in args_array['command_args'] or ("database" in args_array['command_args'] and args_array['database_insert_mode'] == "bulk"):
         args_array['csv_file_array'] = USPTOCSVHandler.open_csv_files(args_array['document_type'], args_array['file_name'], args_array['csv_directory'])
