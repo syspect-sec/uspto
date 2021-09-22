@@ -15,7 +15,7 @@ import os
 from pprint import pprint
 
 # Import USPTO Parser Functions
-import USPTOLogger
+import ReloadUSPTOLogger
 
 class SQLProcess:
 
@@ -700,6 +700,3 @@ class SQLProcess:
         else: table_name = csv_file
         # return with extension
         return "uspto." + table_name + table_ext
-
-
-    

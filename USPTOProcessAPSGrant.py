@@ -818,36 +818,54 @@ def process_APS_grant_content(args_array):
                         # Get the international class text from the line
                         # TODO: find out how to parse the int class code.
                         try:
-                            i_class_string = USPTOSanitizer.replace_old_html_characters(line[3:].strip().replace("  ", " ")).split(" ")
+                            #i_class_string = USPTOSanitizer.replace_old_html_characters(line[3:].strip().replace("  ", " ")).split(" ")
+                            i_class_string = USPTOSanitizer.replace_old_html_characters(line[3:].strip().replace("  ", " ")).replace(" ", "")
                         except:
                             # Print exception information to file
                             traceback.print_exc()
                             exc_type, exc_obj, exc_tb = sys.exc_info()
                             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                             logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
+                            logger.error("An International classification error occurred that could not be extracted for grant_id: " + document_id + " in link: " + args_array['url_link'])
+                            i_section = None
                             i_class_main = None
                             i_subclass = None
-                            logger.error("An International classification error occurred that could not be extracted for grant_id: " + document_id + " in link: " + args_array['url_link'])
+                            i_class_mgr = None
+                            i_class_sgr = None
+                            malformed_class = 1
 
                         try:
-                            if len(i_class_string) == 1:
-                                i_class_main = i_class_string[0][:15]
-                                i_subclass = None
-                                malformed_class = 1
-                            elif len(i_class_string) == 2:
-                                if len(i_class_string[0]) > 3:
-                                    i_class_main = i_class_string[0][:15]
-                                    i_subclass = i_class_string[0][3:len(i_class_string)] + i_class_string[1]
-                                    i_subclass = i_subclass[:15]
+                            # If there length for a maingroup or subgroup
+                            if len(i_class_string) > 6:
+                                i_section = i_class_string[0]
+                                i_class_main = i_class_string[1:3]
+                                i_subclass = i_class_string[3]
+                                i_subclass = i_class_string[4:6]
+                                group_string = i_class_string[6:]
+                                # If the group string includes a subgroup
+                                if len(group_string) > 2:
+                                    i_class_mgr = group_string[0:2]
+                                    i_class_sgr = group_string[2:]
+                                # If the group string only enough for maingroup
                                 else:
-                                    i_class_main = i_class_string[0][:15]
-                                    i_subclass = i_class_string[1][:15]
-                            elif len(i_class_string) == 3:
-                                n_class_main = i_class_string[0][:15]
-                                n_subclass = i_class_string[1] + " " + i_class_string[2]
-                                n_subclass = n_subclass[:15]
-                                malformed_class = 1
+                                    i_class_mgr = group_string
+                                    i_class_sgr = None
+                            # If length is only enough for section, class, and subclass
+                            elif len(i_class_string) == 6:
+                                i_section = i_class_string[0]
+                                i_class_main = i_class_string[1:3]
+                                i_subclass = i_class_string[3]
+                                i_subclass = i_class_string[4:6]
+                                i_class_mgr = None
+                                i_class_sgr = None
+                            # The class is malformed
                             else:
+                                i_section = None
+                                i_class_main = None
+                                i_subclass = None
+                                i_class_mgr = None
+                                i_class_sgr = None
+                                malformed_class = 1
                                 logger.warning("A mal-formed international class was found (" + ' '.join(i_class_string) + ") with more than two spaces: " + document_id + " in link: " + args_array['url_link'])
                         except:
                             # Print exception information to file
@@ -855,9 +873,13 @@ def process_APS_grant_content(args_array):
                             exc_type, exc_obj, exc_tb = sys.exc_info()
                             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                             logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
+                            logger.error("An International classification error occurred for grant_id: " + document_id + " in link: " + args_array['url_link'])
+                            i_section = None
                             i_class_main = None
                             i_subclass = None
-                            logger.error("An International classification error occurred for grant_id: " + document_id + " in link: " + args_array['url_link'])
+                            i_class_mgr = None
+                            i_class_sgr = None
+                            malformed_class = 1
 
 
                         # TODO: find out if field of search is same as Main Group, etc.
@@ -866,6 +888,7 @@ def process_APS_grant_content(args_array):
                             "table_name" : "uspto.INTCLASS_G",
                             "GrantID" : document_id,
                             "Position" : position_intclass,
+                            "Section" : i_section,
                             "Class" : i_class_main,
                             "SubClass" : i_subclass,
                             "MainGroup" : i_class_mgr,
@@ -877,8 +900,11 @@ def process_APS_grant_content(args_array):
                         position_intclass += 1
                         # Reset the class and subclass
                         i_class_string = None
+                        i_section = None
                         i_class_main = None
                         i_subclass = None
+                        i_class_mgr = None
+                        i_class_sgr = None
                         malformed_class = 0
 
                     # Looking for next line in reference, id'd by not empty temp_data_string and not empty line

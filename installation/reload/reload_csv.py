@@ -76,12 +76,12 @@ if __name__=="__main__":
     }
 
     # Setup logger
-    USPTOLogger.setup_logger(log_level, app_log_file)
+    ReloadUSPTOLogger.setup_logger(log_level, app_log_file)
     # Include logger
-    logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+    logger = ReloadUSPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
     # Create a database connection
-    database_connection = SQLProcessor.SQLProcess(database_args)
+    database_connection = ReloadSQLProcessor.SQLProcess(database_args)
 
     # Get list of all csv to reload
     csv_list = get_csv_file_list(args)

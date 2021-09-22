@@ -108,7 +108,9 @@ def return_class_XML4_grant(class_string):
 # Function to parse section, class, and subclass out of XML1 appication data
 def return_international_class_XML1_application(class_string):
 
-    # parse the section as first character
+    # Strip any whitespace
+    class_string = class_string.strip()
+    # Parse the section as first character
     i_class_sec = class_string[0]
     # The Int classification for applications is formatted A00A00/00 so, the first four digits can reliably
     # parsed as the class, and the second group can be parsed as subclass
@@ -117,11 +119,11 @@ def return_international_class_XML1_application(class_string):
     i_class_mgr = class_string[5:7]
     i_class_sgr = class_string[7:len(class_string)].replace("/", "")
 
-    #print i_class_sec
-    #print i_class
-    #print i_subclass
-    #print i_class_mgr
-    #print i_class_sgr
+    #print(i_class_sec)
+    #print(i_class)
+    #print(i_subclass)
+    #print(i_class_mgr)
+    #print(i_class_sgr)
 
     # Return array of data
     return [i_class_sec, i_class, i_subclass, i_class_mgr, i_class_sgr]
@@ -162,7 +164,7 @@ def return_CPC_class_application(class_string):
     # Return array of data
     return [cpc_class_sec, cpc_class, cpc_subclass, cpc_class_mgr, cpc_class_sgr]
 
-# returns the cpc class breakdown by class and subclass
+# Returns the CPC class breakdown by class and subclass
 def return_cpc_class(class_string):
     cpc_class_sec = class_string[0]
     class_string = class_string[1:len(class_string)]
