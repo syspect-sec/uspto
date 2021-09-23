@@ -95,8 +95,7 @@ class SQLProcess:
                 while bulk_insert_successful == False:
 
                     try:
-                        sql = "COPY uspto." + csv_file_obj['table_name'] + " FROM STDIN DELIMITER '|' CSV HEADER"
-                        #self._cursor.copy_from(open(csv_file['csv_file_name'], "r"), csv_file['table_name'], sep = "|", null = "")
+                        sql = "COPY " + self._dbname + "." + csv_file_obj['table_name'] + " FROM STDIN DELIMITER '|' CSV HEADER"
                         self._cursor.copy_expert(sql, open(csv_file_obj['csv_file_name'], "r"))
                         # Return a successfull insertion flag
                         bulk_insert_successful = True
@@ -208,7 +207,7 @@ class SQLProcess:
         table_name = "STARTED_FILES"
 
         # Build query to check the STARTED_FILES table to see if this file has been started already.
-        check_file_started_sql = "SELECT COUNT(*) as count FROM uspto." + table_name + " WHERE FileName = '" + file_name + "' LIMIT 1"
+        check_file_started_sql = "SELECT COUNT(*) as count FROM " + self._dbname + "." + table_name + " WHERE FileName = '" + file_name + "' LIMIT 1"
 
         # Execute the query to check if file has been stared before
         try:
@@ -224,8 +223,8 @@ class SQLProcess:
             if self.database_type == "postgresql":
                 self._conn.rollback()
 
-            print("Database check if " + call_type + " file started failed... " + file_name + " from table: uspto.STARTED_FILES")
-            logger.error("Database check if " + call_type + " file started failed... " + file_name + " from table: uspto.STARTED_FILES")
+            print("Database check if " + call_type + " file started failed... " + file_name + " from table: " + self._dbname + ".STARTED_FILES")
+            logger.error("Database check if " + call_type + " file started failed... " + file_name + " from table: " + self._dbname + ".STARTED_FILES")
             traceback.print_exc()
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -235,12 +234,12 @@ class SQLProcess:
         if check_file_started[0] == 0:
             # Insert the file_name into the table keeping track of STARTED_FILES
             if self.database_type == "postgresql":
-                insert_file_started_sql = "INSERT INTO uspto." + table_name + "  (FileName) VALUES($$" + file_name + "$$)"
+                insert_file_started_sql = "INSERT INTO " + self._dbname + "." + table_name + "  (FileName) VALUES($$" + file_name + "$$)"
             elif self.database_type == "mysql":
-                insert_file_started_sql = "INSERT INTO uspto." + table_name + " (FileName) VALUES('" + file_name + "')"
+                insert_file_started_sql = "INSERT INTO " + self._dbname + "." + table_name + " (FileName) VALUES('" + file_name + "')"
 
-            print("No previous attempt found to process the " + call_type + " file: " + file_name + " in table: uspto.STARTED_FILES")
-            logger.info("No previous attempt found to process the " + call_type + " file:" + file_name + " in table: uspto.STARTED_FILES")
+            print("No previous attempt found to process the " + call_type + " file: " + file_name + " in table: " + self._dbname + ".STARTED_FILES")
+            logger.info("No previous attempt found to process the " + call_type + " file:" + file_name + " in table: " + self._dbname + ".STARTED_FILES")
 
             # Insert the record into the database that the file has been started.
             try:
@@ -251,8 +250,8 @@ class SQLProcess:
                 # Then rollback the commit??
                 if self.database_type == "postgresql":
                     self._conn.rollback()
-                print("Database check for previous attempt to process " + call_type + " file failed... " + file_name + " into table: uspto.STARTED_FILES")
-                logger.error("Database check for previous attempt to process " + call_type + " file failed... " + file_name + " into table: uspto.STARTED_FILES")
+                print("Database check for previous attempt to process " + call_type + " file failed... " + file_name + " into table: " + self._dbname + ".STARTED_FILES")
+                logger.error("Database check for previous attempt to process " + call_type + " file failed... " + file_name + " into table: " + self._dbname + ".STARTED_FILES")
                 traceback.print_exc()
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -263,8 +262,8 @@ class SQLProcess:
         # delete all the records of that file in all tables.
         elif check_file_started[0] != 0:
 
-            print("Found previous attempt to process the " + call_type + " file: " + file_name + " in table: uspto.STARTED_FILES")
-            logger.info("Found previous attempt to process the " + call_type + " file:" + file_name + " in table: uspto.STARTED_FILES")
+            print("Found previous attempt to process the " + call_type + " file: " + file_name + " in table: " + self._dbname + ".STARTED_FILES")
+            logger.info("Found previous attempt to process the " + call_type + " file:" + file_name + " in table: " + self._dbname + ".STARTED_FILES")
 
             # Build array to hold all table names to have
             # records deleted for patent grants
@@ -328,14 +327,14 @@ class SQLProcess:
                     "PARTY_L"
                 ]
 
-            print("Starting to remove previous attempt to process the " + call_type + " file: " + file_name + " in table: uspto.STARTED_FILES")
-            logger.info("Starting to remove previous attempt to process the " + call_type + " file:" + file_name + " in table: uspto.STARTED_FILES")
+            print("Starting to remove previous attempt to process the " + call_type + " file: " + file_name + " in table: " + self._dbname + ".STARTED_FILES")
+            logger.info("Starting to remove previous attempt to process the " + call_type + " file:" + file_name + " in table: " + self._dbname + ".STARTED_FILES")
 
             # Loop through each table_name defined by call_type
             for table_name in table_name_array:
 
                 # Build the SQL query here
-                remove_previous_record_sql = "DELETE FROM uspto." + table_name + " WHERE FileName = '" + file_name + "'"
+                remove_previous_record_sql = "DELETE FROM " + self._dbname + "." + table_name + " WHERE FileName = '" + file_name + "'"
 
                 # Set flag to determine if the query was successful
                 records_deleted = False
@@ -596,7 +595,7 @@ class SQLProcess:
         if "_" in csv_file: table_name = csv_file.split("_")[0].upper()
         else: table_name = csv_file
         # return with extension
-        return "uspto." + table_name + table_ext
+        return self._dbname + "." + table_name + table_ext
 
 
     # This function accepts a table name and a dictionary
@@ -741,7 +740,7 @@ class SQLProcess:
                     logger.info('- Creating PARSER_VERIFICATION table in uspto database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
 
                     create_table_sql = """
-                    CREATE TABLE IF NOT EXISTS uspto.PARSER_VERIFICATION (
+                    CREATE TABLE IF NOT EXISTS """ + self._dbname + """.PARSER_VERIFICATION (
                       FileName VARCHAR(45) NOT NULL,
                       TableName VARCHAR(45) NOT NULL,
                       Count INT(11) NOT NULL,
@@ -761,10 +760,10 @@ class SQLProcess:
                         logger.info('- Populating PARSER_VERIFICATION with ' + table + ' table counts in database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
 
                         populate_count_sql = """
-                        INSERT INTO uspto.PARSER_VERIFICATION
+                        INSERT INTO """ + self._dbname + """.PARSER_VERIFICATION
                         (FileName, TableName, Count)
                         SELECT FileName, '""" + table +  """', count(*)
-                        FROM uspto.""" + table + """
+                        FROM """ + self._dbname + """.""" + table + """
                         GROUP BY FileName;
                         """
                         if args_array['stdout_level'] == 1: print(populate_count_sql)
@@ -793,7 +792,7 @@ class SQLProcess:
                     logger.info('- Creating PARSER_VERIFICATION table in uspto database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
 
                     create_table_sql = """
-                    CREATE TABLE IF NOT EXISTS uspto.PARSER_VERIFICATION (
+                    CREATE TABLE IF NOT EXISTS """ + self._dbname + """.PARSER_VERIFICATION (
                       `FileName` VARCHAR(45) NOT NULL,
                       `TableName` VARCHAR(45) NOT NULL,
                       `Count` INT(11) NOT NULL,
@@ -813,10 +812,10 @@ class SQLProcess:
                         logger.info('- Populating PARSER_VERIFICATION with ' + table + ' table counts in database. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
 
                         populate_count_sql = """
-                        INSERT INTO uspto.PARSER_VERIFICATION
+                        INSERT INTO """ + self._dbname + """.PARSER_VERIFICATION
                         (FileName, TableName, Count)
                         SELECT FileName, '""" + table +  """', count(*)
-                        FROM uspto.""" + table + """
+                        FROM """ + self._dbname + """.""" + table + """
                         GROUP BY FileName;
                         """
                         if args_array['stdout_level'] == 1: print(populate_count_sql)
@@ -867,7 +866,7 @@ class SQLProcess:
                 # Check if a record exists for the file_name / table_name
                 check_exists = """
                 SELECT count(*) as count
-                FROM uspto.PARSER_VERIFICATION
+                FROM """ + self._dbname + """.PARSER_VERIFICATION
                 WHERE FileName = '""" + file_name + """'
                 AND TableName = '""" + table_name + """';"""
                 if args_array['stdout_level'] == 1: print(check_exists)
@@ -878,7 +877,7 @@ class SQLProcess:
                 if result[0] == 0:
 
                     tag_count_sql = """
-                    INSERT INTO uspto.PARSER_VERIFICATION
+                    INSERT INTO """ + self._dbname + """.PARSER_VERIFICATION
                     (FileName, TableName, Count, Expected)
                     VALUES ('""" + file_name + """', '""" + table_name + """', 0, """ + str(count) + """);"""
 
@@ -888,7 +887,7 @@ class SQLProcess:
                 else:
 
                     tag_count_sql = """
-                    UPDATE uspto.PARSER_VERIFICATION
+                    UPDATE """ + self._dbname + """.PARSER_VERIFICATION
                     SET expected = """ + str(count) +  """
                     WHERE FileName = '""" + file_name + """'
                     AND TableName = '""" + table_name + """';"""
@@ -934,7 +933,7 @@ class SQLProcess:
             for cpc_code in cpc_array:
 
                 insert_CPC_sql = """
-                INSERT INTO uspto.CPCCLASS_G
+                INSERT INTO """ + self._dbname + """.CPCCLASS_G
                 (GrantID, Position, Section, Class, SubClass, MainGroup, SubGroup, Malformed, FileName)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
@@ -990,7 +989,7 @@ class SQLProcess:
             for cpc_code in cpc_array:
 
                 insert_IPC_sql = """
-                INSERT INTO uspto.INTCLASS_G
+                INSERT INTO """ + self._dbname + """.INTCLASS_G
                 (GrantID, Position, Section, Class, SubClass, MainGroup, SubGroup, Malformed, FileName)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """

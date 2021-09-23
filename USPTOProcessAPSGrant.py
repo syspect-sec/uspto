@@ -816,10 +816,12 @@ def process_APS_grant_content(args_array):
                     if line[0:3] == "ICL":
 
                         # Get the international class text from the line
+                        # Documentation found in PatentFullTextAPSGreenBook.pdf page 90.
                         # TODO: find out how to parse the int class code.
                         try:
                             #i_class_string = USPTOSanitizer.replace_old_html_characters(line[3:].strip().replace("  ", " ")).split(" ")
-                            i_class_string = USPTOSanitizer.replace_old_html_characters(line[3:].strip().replace("  ", " ")).replace(" ", "")
+                            i_class_string = USPTOSanitizer.replace_old_html_characters(line[3:].strip())
+                            #i_class_sring = i_class_string.replace(" ", "")
                         except:
                             # Print exception information to file
                             traceback.print_exc()
@@ -836,28 +838,22 @@ def process_APS_grant_content(args_array):
 
                         try:
                             # If there length for a maingroup or subgroup
-                            if len(i_class_string) > 6:
+                            if len(i_class_string) >= 6:
                                 i_section = i_class_string[0]
                                 i_class_main = i_class_string[1:3]
                                 i_subclass = i_class_string[3]
-                                i_subclass = i_class_string[4:6]
-                                group_string = i_class_string[6:]
-                                # If the group string includes a subgroup
-                                if len(group_string) > 2:
-                                    i_class_mgr = group_string[0:2]
-                                    i_class_sgr = group_string[2:]
-                                # If the group string only enough for maingroup
+                                # The group string is
+                                group_string = i_class_string[4:]
+                                # If there is a space separating group and subgroup
+                                if len(group_string) >= 4:
+                                    i_class_mgr = group_string[:3].strip()
+                                    i_class_sgr = group_string[3:].strip()
+                                # If no space in
                                 else:
-                                    i_class_mgr = group_string
+                                    i_class_mgr = group_string.strip()
                                     i_class_sgr = None
-                            # If length is only enough for section, class, and subclass
-                            elif len(i_class_string) == 6:
-                                i_section = i_class_string[0]
-                                i_class_main = i_class_string[1:3]
-                                i_subclass = i_class_string[3]
-                                i_subclass = i_class_string[4:6]
-                                i_class_mgr = None
-                                i_class_sgr = None
+                                    malformed_class = 1
+                                    logger.warning("A mal-formed international class with no subgroup was found (" + ' '.join(i_class_string) + ") with more than two spaces: " + document_id + " in link: " + args_array['url_link'])
                             # The class is malformed
                             else:
                                 i_section = None
@@ -866,7 +862,7 @@ def process_APS_grant_content(args_array):
                                 i_class_mgr = None
                                 i_class_sgr = None
                                 malformed_class = 1
-                                logger.warning("A mal-formed international class was found (" + ' '.join(i_class_string) + ") with more than two spaces: " + document_id + " in link: " + args_array['url_link'])
+                                #logger.warning("A mal-formed international class was found (" + ' '.join(i_class_string) + ") with more than two spaces: " + document_id + " in link: " + args_array['url_link'])
                         except:
                             # Print exception information to file
                             traceback.print_exc()
@@ -1583,8 +1579,8 @@ def process_APS_grant_content(args_array):
         # DCLM is Design Claims and CLMS is Claims
         elif line[0:4] == "DCLM" or line[0:4] == "CLMS":
 
-            if line[0:4] == "DCLM":
-                logger.warning("A DCLM header tag found in grant_id: " + document_id + " in link: " + args_array['url_link'])
+            #if line[0:4] == "DCLM":
+                #logger.warning("A DCLM header tag found in grant_id: " + document_id + " in link: " + args_array['url_link'])
 
             accepted_headers_array = ["PAL", "STM", "NUM", "PAR", "PA1", "PA2"]
             # Initialize empty string to to hold multi-line entries

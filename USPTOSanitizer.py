@@ -188,7 +188,7 @@ def return_formatted_date(time_str, args_array, document_id):
         return datetime.date(int(0000), int(1), int(1))
     # Check if '0000-00-00' has been passed in
     elif time_str == '0000-00-00' or time_str == "00000000":
-        logger.warning("'0000-00-00' was found as date for " + args_array['document_type'] + " documentID: " + document_id + " in the link: " + args_array['url_link'])
+        #logger.warning("'0000-00-00' was found as date for " + args_array['document_type'] + " documentID: " + document_id + " in the link: " + args_array['url_link'])
         # Return false date as flag
         return datetime.date(int(0000), int(1), int(1))
 
