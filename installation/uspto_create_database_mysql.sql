@@ -464,6 +464,18 @@ CREATE TABLE IF NOT EXISTS `uspto`.`USCPC_C` (
 ENGINE = InnoDB;
 
 -- -----------------------------------------------------
+-- Table `uspto`.`WIPOST3_C`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `uspto`.`WIPOST3_C` ;
+
+CREATE TABLE IF NOT EXISTS `uspto`.`WIPOST3_C` (
+  `Country` VARCHAR(100) NOT NULL,
+  `Code` VARCHAR(2) NOT NULL,
+  PRIMARY KEY (`Code`)
+)
+ENGINE = InnoDB;
+
+-- -----------------------------------------------------
 -- Table `uspto`.`INTCLASS_G`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `uspto`.`INTCLASS_G` ;
@@ -746,6 +758,17 @@ CREATE TABLE IF NOT EXISTS `uspto`.`PATENT_L` (
   `FileName` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`CaseID`, `PatentID`, `FileName`))
 ENGINE = InnoDB;
+
+-- -----------------------------------------------------
+-- Table uspto.assignee_d
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS uspto.ASSIGNEE_D (
+  `GrantID` VARCHAR(20) NOT NULL,
+  `OrgName` VARCHAR(300) DEFAULT NULL,
+  `FirstName` VARCHAR(150) DEFAULT NULL,
+  `LastName` VARCHAR(150) DEFAULT NULL
+);
 
 -- -----------------------------------------------------
 -- Table `uspto`.`STARTED_FILES`
