@@ -12,11 +12,6 @@
 -- Table uspto.GRANT_SUMMARY
 -- -----------------------------------------------------
 
---
--- Populate the GRANT_SUMMARY table with values from USPTO website
--- Source: https://www.uspto.gov/web/offices/ac/ido/oeip/taf/us_stat.htm
---
-DROP TABLE IF EXISTS uspto.GRANT_SUMMARY;
 
 CREATE TABLE IF NOT EXISTS uspto.GRANT_SUMMARY (
   count INT NOT NULL,
@@ -91,7 +86,6 @@ VALUES
 -- -----------------------------------------------------
 -- Table uspto.APPLICATION_SUMMARY
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS uspto.APPLICATION_SUMMARY;
 
 CREATE TABLE IF NOT EXISTS uspto.APPLICATION_SUMMARY (
   count INT NOT NULL,
@@ -163,8 +157,6 @@ VALUES
 ('92971','1964'),
 ('90982','1963');
 
---
--- Calculate the difference between the USPTO Patent Summary Chart and
 -- values parsed into the main database.
 --
 
@@ -172,32 +164,32 @@ SELECT *
 FROM (
 SELECT
 	'GRANT' AS Type,
-	EXTRACT(YEAR FROM a.IssueDate) AS Year,
-	b.Count AS Official_Total,
-	count(*) AS Database_Total,
+	date_part('year', a.IssueDate) AS Year,
+	b.count AS Official,
+	count(*) AS Database,
 	count(*) - b.Count AS Difference,
-	100 - ABS(ROUND(count(*) / b.Count * 100, 2) - 100) AS Accuracy_Pct
+	100 - ABS(ROUND(count(*) / b.Count * 100, 2) - 100) AS Accuracy
 FROM uspto.GRANT AS a
 JOIN uspto.GRANT_SUMMARY AS b ON
-EXTRACT(YEAR FROM a.IssueDate) = b.Year
-WHERE EXTRACT(YEAR FROM a.IssueDate) IS NOT NULL
-GROUP BY EXTRACT(YEAR FROM a.IssueDate), b.Count
-ORDER BY EXTRACT(YEAR FROM a.IssueDate) DESC
+date_part('year', a.IssueDate) = b.Year
+WHERE date_part('year', a.IssueDate) IS NOT NULL
+GROUP BY date_part('year', a.IssueDate)
+ORDER BY date_part('year', a.IssueDate) DESC
 ) AS t1
 UNION
 SELECT *
 FROM (
 SELECT
 	'APPLICATION' AS Type,
-	EXTRACT(YEAR FROM a.FileDate) AS Year,
-	b.Count AS Official_Total,
-	count(*) AS Database_Total,
+	date_part('year', a.FileDate) AS Year,
+	b.Count AS Official,
+	count(*) AS Database,
 	count(*) - b.Count AS Difference,
-	100 - ABS(ROUND(count(*) / b.Count * 100, 2) - 100) AS Accuracy_Pct
+	100 - ABS(ROUND(count(*) / b.Count * 100, 2) - 100) AS Accuracy
 FROM uspto.APPLICATION AS a
 JOIN uspto.APPLICATION_SUMMARY AS b ON
-EXTRACT(YEAR FROM a.FileDate) = b.Year
-WHERE EXTRACT(YEAR FROM a.FileDate) IS NOT NULL
-GROUP BY EXTRACT(YEAR FROM a.FileDate), b.Count
-ORDER BY EXTRACT(YEAR FROM a.FileDate) DESC
+date_part('year', a.FileDate) = b.Year
+WHERE date_part('year', a.FileDate) IS NOT NULL
+GROUP BY date_part('year', a.FileDate)
+ORDER BY date_part('year', a.FileDate) DESC
 ) AS t2;
