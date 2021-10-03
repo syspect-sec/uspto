@@ -20,11 +20,13 @@ ORDER BY count(*) DESC;
 --
 -- Delete GrantID duplicates
 --
-DELETE uspto.GRANT
-FROM uspto.GRANT
-INNER JOIN (
-SELECT MAX(FileName) AS lastId, GrantID
-FROM uspto.GRANT
-GROUP BY GrantID
-HAVING count(*) > 1) duplic ON duplic.GrantID = uspto.GRANT.GrantID
-WHERE uspto.GRANT.FileName < duplic.lastId;
+DELETE
+FROM uspto.GRANT AS a
+USING uspto.GRANT as b
+WHERE a.FileName < b.FileName
+AND a.GrantID = b.GrantID;
+
+
+--
+-- Also need to expunge duplicate records from other tables with same source file and grantid
+--
