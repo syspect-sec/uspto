@@ -24,26 +24,31 @@ CREATE TABLE IF NOT EXISTS uspto.METRICS_G (
 -- Create metrics Record for all GrantID
 --
 INSERT INTO uspto.METRICS_G (GrantID) SELECT GrantID FROM uspto.GRANT;
+
 --
 -- Calculate Forward Citations for all GrantID
 --
-UPDATE uspto.METRICS_G, (select CitedID, count(*) AS count
+UPDATE uspto.METRICS_G AS a
+SET ForwardCitCnt = t2.count
+FROM (SELECT CitedID, count(*) count
 FROM uspto.GRACIT_G GROUP BY CitedID) AS t2
-SET uspto.METRICS_G.ForwardCitCnt = t2.count
-WHERE uspto.METRICS_G.GrantID = t2.CitedID;
+WHERE a.GrantID = t2.CitedID;
+
 --
 -- Set all patents without FWD citations to 0
 --
 UPDATE uspto.METRICS_G
-SET uspto.METRICS_G.ForwardCitCnt = 0
-WHERE uspto.METRICS_G.ForwardCitCnt IS NULL;
+SET ForwardCitCnt = 0
+WHERE ForwardCitCnt IS NULL;
+
 --
 -- Calculate Backward Citations for all GrantID
 --
-UPDATE uspto.METRICS_G, (select GrantID, count(*) AS count
+UPDATE uspto.METRICS_G AS a
+SET BackwardCitCnt = t2.count
+FROM (SELECT GrantID, count(*) AS count
 FROM uspto.GRACIT_G GROUP BY GrantID) AS t2
-SET uspto.METRICS_G.BackwardCitCnt = t2.count
-WHERE uspto.METRICS_G.GrantID = t2.GrantID;
+WHERE a.GrantID = t2.GrantID;
 --
 -- Set all patents without BWD citations to 0
 --
