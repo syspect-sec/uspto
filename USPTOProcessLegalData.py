@@ -152,8 +152,8 @@ def extract_csv_line(args_array, line):
         processed_array['Cause'] = USPTOSanitizer.clean_PAIR_csv_item(line[8])
         processed_array['JurisdictionBasis'] = USPTOSanitizer.clean_PAIR_csv_item(line[9])
         processed_array['FileDate'] = USPTOSanitizer.clean_PAIR_csv_item(line[10])
-        processed_array['CloseDate'] = USPTOSanitizer.clean_PAIR_csv_item(line[11])
-        processed_array['LastFileDate'] = USPTOSanitizer.clean_PAIR_csv_item(line[12])
+        processed_array['CloseDate'] = USPTOSanitizer.clean_PAIR_csv_item(line[11], True)
+        processed_array['LastFileDate'] = USPTOSanitizer.clean_PAIR_csv_item(line[12], True)
         processed_array['JuryDemand'] = USPTOSanitizer.clean_PAIR_csv_item(line[13])
         processed_array['Demand'] = USPTOSanitizer.clean_PAIR_csv_item(line[14])
         processed_array['LeadCase'] = USPTOSanitizer.clean_PAIR_csv_item(line[15])
@@ -168,7 +168,7 @@ def extract_csv_line(args_array, line):
     elif args_array['extraction_type'] == "pacercases":
         processed_array['ApplicationID'] = USPTOSanitizer.clean_PAIR_csv_item(line[0])
         processed_array['ParentApplicationID'] = USPTOSanitizer.clean_PAIR_csv_item(line[1])
-        processed_array['FileDate'] = USPTOSanitizer.clean_PAIR_csv_item(line[2])
+        processed_array['FileDate'] = USPTOSanitizer.clean_PAIR_csv_item(line[2], True)
         processed_array['ContinuationType'] = USPTOSanitizer.clean_PAIR_csv_item(line[3])
 
     elif args_array['extraction_type'] == "names":

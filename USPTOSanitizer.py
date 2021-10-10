@@ -154,7 +154,7 @@ def return_CPC_class_application(class_string):
         cpc_class = class_string[1:3]
         cpc_subclass = class_string[3]
         try:
-            cpc_groups = class_string[4:].split("/")
+            cpc_fgroups = class_string[4:].split("/")
             cpc_class_mgr = cpc_groups[0]
             cpc_class_sgr = cpc_groups[1]
         except:
@@ -717,11 +717,11 @@ def strip_for_csv(string):
         return string.replace('"', '').replace("\n", "").replace("\r", "").replace(" |", ", ").replace("| ", ", ").replace("|", ",").replace("\\", "").strip()
 
 # Cleans a csv item and returns string
-def clean_PAIR_csv_item(string):
+def clean_PAIR_csv_item(string, is_date=None):
     if string is None:
         return None
     else:
         string = string.replace('"', '').replace("\n", "").replace("\r", "").replace(" |", ", ").replace("| ", ", ").replace("|", ",").replace("\\", "").strip()
-        if string == "none" or string == "none none": string = ""
-        if string == "": string = "none"
+        if is_date and string == "none" or string == "none none": return None
+        elif string == "none" or string == "none none": string = ""
         return string
