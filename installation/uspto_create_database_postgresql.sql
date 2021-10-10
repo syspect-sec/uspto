@@ -611,7 +611,7 @@ CREATE TABLE IF NOT EXISTS uspto.CASE_L (
 CREATE TABLE IF NOT EXISTS uspto.ATTORNEY_L (
   CaseID VARCHAR(15) NOT NULL,
   CaseIDRaw VARCHAR(50) DEFAULT NULL,
-  PartyType VARCHAR(30) DEFAULT NULL,
+  PartyType VARCHAR(50) DEFAULT NULL,
   Name VARCHAR(100) NOT NULL,
   ContactInfo TEXT DEFAULT NULL,
   Position VARCHAR(200) DEFAULT NULL,
@@ -637,8 +637,7 @@ CREATE TABLE IF NOT EXISTS uspto.PATENT_L (
   NOS VARCHAR(10) DEFAULT NULL,
   PatentID VARCHAR(20) NOT NULL,
   PatentDocType VARCHAR(30) DEFAULT NULL,
-  FileName VARCHAR(45) NOT NULL,
-  PRIMARY KEY (CaseID, PatentID, FileName));
+  FileName VARCHAR(45) NOT NULL);
 
 -- -----------------------------------------------------
 -- Table uspto.assignee_d

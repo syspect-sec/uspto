@@ -133,22 +133,22 @@ def return_CPC_class_application(class_string):
 
     if len(class_string) == 1:
         cpc_class_sec = class_string[0]
-        cpc_class = None
-        cpc_subclass = None
-        cpc_class_mgr = None
-        cpc_class_sgr = None
+        cpc_class = "00"
+        cpc_subclass = "00"
+        cpc_class_mgr = "00"
+        cpc_class_sgr = "00"
     elif len(class_string) == 3:
         cpc_class_sec = class_string[0]
         cpc_class = class_string[1:3]
-        cpc_subclass = None
-        cpc_class_mgr = None
-        cpc_class_sgr = None
+        cpc_subclass = "00"
+        cpc_class_mgr = "00"
+        cpc_class_sgr = "00"
     elif len(class_string) == 4:
         cpc_class_sec = class_string[0]
         cpc_class = class_string[1:3]
         cpc_subclass = class_string[3]
-        cpc_class_mgr = None
-        cpc_class_sgr = None
+        cpc_class_mgr = "00"
+        cpc_class_sgr = "00"
     else:
         cpc_class_sec = class_string[0]
         cpc_class = class_string[1:3]
@@ -158,8 +158,8 @@ def return_CPC_class_application(class_string):
             cpc_class_mgr = cpc_groups[0]
             cpc_class_sgr = cpc_groups[1]
         except:
-            cpc_class_mgr = None
-            cpc_class_sgr = None
+            cpc_class_mgr = "00"
+            cpc_class_sgr = "00"
 
     # Return array of data
     return [cpc_class_sec, cpc_class, cpc_subclass, cpc_class_mgr, cpc_class_sgr]
