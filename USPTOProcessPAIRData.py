@@ -12,6 +12,8 @@ import os
 import sys
 import traceback
 from csv import reader
+import operator
+import json
 
 # Import USPTO Parser Functions
 import USPTOLogger
@@ -45,6 +47,9 @@ def process_PAIR_content(args_array):
     if "csv" in args_array['command_args'] or ("database" in args_array['command_args'] and args_array['database_insert_mode'] == "bulk"):
         args_array['csv_file_array'] = USPTOCSVHandler.open_csv_files(args_array['document_type'], csv_output_filename, args_array['csv_directory'], args_array['extraction_type'])
 
+    # Declare a list to hold all items incoming from csv to prevent duplicate rows
+    already = []
+
     # Open file in read mode
     with open(csv_file_name, 'r') as read_obj:
         # Pass the file object to reader() to get the reader object
@@ -56,9 +61,17 @@ def process_PAIR_content(args_array):
             if line_cnt != 0:
                 # Extract the line into array
                 processed_data_array = extract_csv_line(args_array, line)
-                # Store the array into newly formatted CSV
-                USPTOStorePAIRData.store_PAIR_data(processed_data_array, args_array)
+                # Check if already in list if not, then process
+                is_stored = is_stored_already(already, processed_data_array)
+                if is_stored != True:
+                    already.extend(is_stored)
+                    # Store the array into newly formatted CSV
+                    USPTOStorePAIRData.store_PAIR_data(processed_data_array, args_array)
+                else:
+                    print("Line number: " + line_cnt + " is duplicate and has been removed from: " + csv_file_name)
+                    logger.waring("Line number: " + line_cnt + " is duplicate and has been removed from: " + csv_file_name)
             line_cnt += 1
+            print(line_cnt)
 
     # If not sandbox mode, then delete the .zip file
     if args_array['sandbox'] == False and os.path.exists(args_array['temp_zip_file_name']):
@@ -172,3 +185,10 @@ def extract_csv_line(args_array, line):
 
     # Return the array for storage
     return processed_array
+
+# Check if record is in array already
+def is_stored_already(already, new_record):
+    new_record = dict(sorted(new_record.items(), key=operator.itemgetter(0)))
+    new_record = json.dumps(new_record)
+    if new_record in already: return True
+    else: return new_record

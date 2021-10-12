@@ -853,3 +853,4 @@ if __name__=="__main__":
 
         # Handle the closing of the application
         handle_application_close(start_time, all_files_processed, args_array)
+        exit(0)
