@@ -316,6 +316,7 @@ class SQLProcess:
                     "USCLASS_C",
                     "CPCCLASS_C",
                     "USCPC_C",
+                    "WIPOST3_C"
                 ]
 
             # Records deleted for patent litigation data

@@ -212,7 +212,7 @@ CREATE TABLE IF NOT EXISTS uspto.CONTINUITYPARENT_P (
   Position INT DEFAULT NULL,
   ParentApplicationID VARCHAR(45) NOT NULL,
   FileDate DATE DEFAULT NULL,
-  ContinuationType VARCHAR(50) NOT NULL,
+  ContinuationType VARCHAR(50) DEFAULT NULL,
   FileName VARCHAR(45),
   PRIMARY KEY (ApplicationID, ParentApplicationID, FileName));
 
@@ -225,7 +225,7 @@ CREATE TABLE IF NOT EXISTS uspto.CONTINUITYCHILD_P (
   Position INT DEFAULT NULL,
   ChildApplicationID VARCHAR(45) NOT NULL,
   FileDate DATE DEFAULT NULL,
-  ContinuationType VARCHAR(50) NOT NULL,
+  ContinuationType VARCHAR(50) DEFAULT NULL,
   FileName VARCHAR(45),
   PRIMARY KEY (ApplicationID, ChildApplicationID, FileName));
 
@@ -580,7 +580,7 @@ CREATE TABLE IF NOT EXISTS uspto.FOREIGNPRIORITY_G (
 
 CREATE TABLE IF NOT EXISTS uspto.CASE_L (
   CaseID VARCHAR(15) NOT NULL,
-  PacerID VARCHAR(10) NOT NULL,
+  PacerID VARCHAR(10) DEFAULT NULL,
   CourtTitle VARCHAR(150) DEFAULT NULL,
   DistrictID VARCHAR(15) DEFAULT NULL,
   CaseTitle VARCHAR(250) DEFAULT NULL,
@@ -601,8 +601,7 @@ CREATE TABLE IF NOT EXISTS uspto.CASE_L (
   CaseType2 VARCHAR(20) DEFAULT NULL,
   CaseType3 VARCHAR(20) DEFAULT NULL,
   CaseTypeNote VARCHAR(30) DEFAULT NULL,
-  FileName VARCHAR(45) NOT NULL,
-  PRIMARY KEY (CaseID, FileName));
+  FileName VARCHAR(45) NOT NULL);
 
 -- -----------------------------------------------------
 -- Table uspto.ATTORNEY_L
