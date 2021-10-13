@@ -49,7 +49,7 @@ def process_PAIR_content(args_array):
 
     # Eliminate duplicate lines from the file
     print("-- Eliminating duplicate lines from " + args_array['document_type'] + " file : " + csv_file_name)
-    logger.info("-- Eliminating duplicate lines from " + args_array['document_type'] + " file : " + csv_file_name)
+    logger.info("Eliminating duplicate lines from " + args_array['document_type'] + " file : " + csv_file_name)
     clean_csv_file_name = csv_file_name + ".tmp"
     already = set()
     output_file = open(clean_csv_file_name, "w")
@@ -60,15 +60,19 @@ def process_PAIR_content(args_array):
             already.add(line)
     input_file.close()
     output_file.close()
+    # Delete the original file
+    os.remove(csv_file_name)
+    # Rename the clean file to original filename
+    os.rename(clean_csv_file_name, csv_file_name)
     # Eliminate duplicate lines from the file
     print("-- Finished eliminating duplicate lines from " + args_array['document_type'] + " file : " + csv_file_name)
-    logger.info("-- Finished eliminating duplicate lines from " + args_array['document_type'] + " file : " + csv_file_name)
+    logger.info("Finished eliminating duplicate lines from " + args_array['document_type'] + " file : " + csv_file_name)
 
 
     # Open file in read mode
-    with open(clean_csv_file_name, 'r') as read_obj:
-        print("-- Opening clean " + args_array['document_type'] + " .csv file:" + clean_csv_file_name)
-        logger.info("-- Opening clean " + args_array['document_type'] + " .csv file:" + clean_csv_file_name)
+    with open(csv_file_name, 'r') as read_obj:
+        print("-- Opening clean " + args_array['document_type'] + " .csv file:" + csv_file_name)
+        logger.info("Opening clean " + args_array['document_type'] + " .csv file:" + csv_file_name)
         # Pass the file object to reader() to get the reader object
         csv_reader = reader(read_obj)
         # Iterate over each row in the csv using reader object
