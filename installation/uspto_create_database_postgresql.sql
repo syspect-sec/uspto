@@ -214,7 +214,7 @@ CREATE TABLE IF NOT EXISTS uspto.CONTINUITYPARENT_P (
   FileDate DATE DEFAULT NULL,
   ContinuationType VARCHAR(50) DEFAULT NULL,
   FileName VARCHAR(45),
-  PRIMARY KEY (ApplicationID, ParentApplicationID, FileName));
+  PRIMARY KEY (ApplicationID, ParentApplicationID,FileDate,ContinuationType, FileName));
 
 -- -----------------------------------------------------
 -- Table uspto.CONTINUITYCHILD_P

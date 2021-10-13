@@ -47,11 +47,28 @@ def process_PAIR_content(args_array):
     if "csv" in args_array['command_args'] or ("database" in args_array['command_args'] and args_array['database_insert_mode'] == "bulk"):
         args_array['csv_file_array'] = USPTOCSVHandler.open_csv_files(args_array['document_type'], csv_output_filename, args_array['csv_directory'], args_array['extraction_type'])
 
-    # Declare a list to hold all items incoming from csv to prevent duplicate rows
-    already = []
+    # Eliminate duplicate lines from the file
+    print("-- Eliminating duplicate lines from " + args_array['document_type'] + " file : " + csv_file_name)
+    logger.info("-- Eliminating duplicate lines from " + args_array['document_type'] + " file : " + csv_file_name)
+    clean_csv_file_name = csv_file_name + ".tmp"
+    already = set()
+    output_file = open(clean_csv_file_name, "w")
+    input_file = open(csv_file_name, "r")
+    for line in input_file:
+        if line not in already:
+            output_file.write(line)
+            already.add(line)
+    input_file.close()
+    output_file.close()
+    # Eliminate duplicate lines from the file
+    print("-- Finished eliminating duplicate lines from " + args_array['document_type'] + " file : " + csv_file_name)
+    logger.info("-- Finished eliminating duplicate lines from " + args_array['document_type'] + " file : " + csv_file_name)
+
 
     # Open file in read mode
-    with open(csv_file_name, 'r') as read_obj:
+    with open(clean_csv_file_name, 'r') as read_obj:
+        print("-- Opening clean " + args_array['document_type'] + " .csv file:" + clean_csv_file_name)
+        logger.info("-- Opening clean " + args_array['document_type'] + " .csv file:" + clean_csv_file_name)
         # Pass the file object to reader() to get the reader object
         csv_reader = reader(read_obj)
         # Iterate over each row in the csv using reader object
@@ -61,17 +78,9 @@ def process_PAIR_content(args_array):
             if line_cnt != 0:
                 # Extract the line into array
                 processed_data_array = extract_csv_line(args_array, line)
-                # Check if already in list if not, then process
-                is_stored = is_stored_already(already, processed_data_array)
-                if is_stored != True:
-                    already.extend(is_stored)
-                    # Store the array into newly formatted CSV
-                    USPTOStorePAIRData.store_PAIR_data(processed_data_array, args_array)
-                else:
-                    print("Line number: " + line_cnt + " is duplicate and has been removed from: " + csv_file_name)
-                    logger.waring("Line number: " + line_cnt + " is duplicate and has been removed from: " + csv_file_name)
+                # Store the array into newly formatted CSV
+                USPTOStorePAIRData.store_PAIR_data(processed_data_array, args_array)
             line_cnt += 1
-            print(line_cnt)
 
     # If not sandbox mode, then delete the .zip file
     if args_array['sandbox'] == False and os.path.exists(args_array['temp_zip_file_name']):

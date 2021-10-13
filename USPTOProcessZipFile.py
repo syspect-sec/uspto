@@ -39,7 +39,7 @@ def extract_xml_file_from_zip(args_array):
         xml_file = zip_file.open(xml_file_name, 'r')
         # If sandbox mode then extract the xml file
         if args_array['sandbox'] == True:
-            zip_file.extract(xml_file_name, args_array['temp_directory'] + "/unzip/" + args_array['file_name'])
+            zip_file.extract(xml_file_name, args_array['temp_directory'] + "unzip/" + args_array['file_name'])
         # Extract the contents from the file
         xml_file_contents = xml_file.readlines()
         # Close the file being read from
@@ -101,7 +101,7 @@ def extract_csv_file_from_zip(args_array):
         print('[csv file found. Filename: {0}]'.format(csv_file_name))
         logger.info('csv file found. Filename: ' + csv_file_name)
         # If extract the csv file
-        extracted_csv_filepath = args_array['temp_directory'] + "/unzip/"
+        extracted_csv_filepath = args_array['temp_directory'] + "unzip/"
         zip_file.extract(csv_file_name, extracted_csv_filepath)
         # Close the zip file being read from
         zip_file.close()
@@ -156,19 +156,19 @@ def extract_dat_file_from_zip(args_array, indexed=False):
             logger.error('APS .dat file not found. Filename: ' + args_array['url_link'])
 
         # Check if an unzip directory exists in the temp directory
-        if not os.path.exists(args_array['temp_directory'] + "/unzip"):
-            os.mkdir(args_array['temp_directory'] + "/unzip")
+        if not os.path.exists(args_array['temp_directory'] + "unzip"):
+            os.mkdir(args_array['temp_directory'] + "unzip")
         # Check if a directory exists for the specific file being unzipped
-        if not os.path.exists(args_array['temp_directory'] + "/unzip/" + args_array['file_name']):
+        if not os.path.exists(args_array['temp_directory'] + "unzip/" + args_array['file_name']):
             # Make a directory for the particular downloaded zip file
-            os.mkdir(args_array['temp_directory'] + "/unzip/" + args_array['file_name'])
+            os.mkdir(args_array['temp_directory'] + "unzip/" + args_array['file_name'])
 
         # Open the zip file and extract the .dat file contents
-        zip_file.extract(data_file_name, args_array['temp_directory'] + "/unzip/" + args_array['file_name'])
+        zip_file.extract(data_file_name, args_array['temp_directory'] + "unzip/" + args_array['file_name'])
         # Close the zip file
         zip_file.close()
         # Create a temp file name for the extracted .dat file
-        temp_data_file_path = args_array['temp_directory'] + "/unzip/" + args_array['file_name'] + "/" + data_file_name
+        temp_data_file_path = args_array['temp_directory'] + "unzip/" + args_array['file_name'] + "/" + data_file_name
 
         # Open the .dat file contents from the extracted zip_file
         data_file_contents = codecs.open(temp_data_file_path, 'r', 'iso-8859-1')
