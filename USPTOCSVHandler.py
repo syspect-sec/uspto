@@ -209,14 +209,14 @@ def open_csv_files(file_type, file_name, csv_directory, extraction_type=None):
             csv_writer_array['correspondence']['csv_writer'].writeheader()
         elif extraction_type == "continuitychild":
             csv_writer_array['continuitychild'] = {}
-            field_names_array['continuitychild'] = ['ApplicationID', 'Position', 'ChildApplicationID', 'FileDate', 'ContinuationType', 'FileName']
+            field_names_array['continuitychild'] = ['ApplicationID', 'ChildApplicationID', 'FileDate', 'ContinuationType', 'FileName']
             csv_writer_array['continuitychild']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
             csv_writer_array['continuitychild']['file'] = open(csv_writer_array['continuitychild']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['continuitychild']['csv_writer'] = csv.DictWriter(csv_writer_array['continuitychild']['file'], fieldnames = field_names_array['continuitychild'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['continuitychild']['csv_writer'].writeheader()
         elif extraction_type == "continuityparent":
             csv_writer_array['continuityparent'] = {}
-            field_names_array['continuityparent'] = ['ApplicationID', 'Position', 'ParentApplicationID', 'FileDate', 'ContinuationType', 'FileName']
+            field_names_array['continuityparent'] = ['ApplicationID', 'ParentApplicationID', 'FileDate', 'ContinuationType', 'FileName']
             csv_writer_array['continuityparent']['csv_file_name'] = csv_directory + 'CSV_P/' + csv_file_name
             csv_writer_array['continuityparent']['file'] = open(csv_writer_array['continuityparent']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['continuityparent']['csv_writer'] = csv.DictWriter(csv_writer_array['continuityparent']['file'], fieldnames = field_names_array['continuityparent'], delimiter = '|', lineterminator = "\n")

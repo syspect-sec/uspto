@@ -209,12 +209,11 @@ CREATE TABLE IF NOT EXISTS uspto.CORRESPONDENCE_P (
 
 CREATE TABLE IF NOT EXISTS uspto.CONTINUITYPARENT_P (
   ApplicationID VARCHAR(20) NOT NULL,
-  Position INT DEFAULT NULL,
   ParentApplicationID VARCHAR(45) NOT NULL,
   FileDate DATE DEFAULT NULL,
   ContinuationType VARCHAR(50) DEFAULT NULL,
   FileName VARCHAR(45),
-  PRIMARY KEY (ApplicationID, ParentApplicationID,FileDate,ContinuationType, FileName));
+  PRIMARY KEY (ApplicationID, ParentApplicationID, ContinuationType, FileName));
 
 -- -----------------------------------------------------
 -- Table uspto.CONTINUITYCHILD_P
@@ -222,7 +221,6 @@ CREATE TABLE IF NOT EXISTS uspto.CONTINUITYPARENT_P (
 
 CREATE TABLE IF NOT EXISTS uspto.CONTINUITYCHILD_P (
   ApplicationID VARCHAR(20) NOT NULL,
-  Position INT DEFAULT NULL,
   ChildApplicationID VARCHAR(45) NOT NULL,
   FileDate DATE DEFAULT NULL,
   ContinuationType VARCHAR(50) DEFAULT NULL,
