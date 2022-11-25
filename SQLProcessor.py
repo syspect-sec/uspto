@@ -36,6 +36,51 @@ class SQLProcess:
         self._conn = None
         self._cursor = None
 
+    def connect(self):
+
+        logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
+
+        # Connect to MySQL
+        if self.database_type == "mysql":
+
+            try:
+                if self._conn == None:
+                    self._conn = MySQLdb.connect(
+                        host = self._host,
+                        user = self._username,
+                        passwd = self._password,
+                        db = self._dbname,
+                        port = self._port,
+                        charset = self._charset
+                    )
+                    print("Connection to MySQL database established.")
+                    logger.info("Connection to MySQL database established.")
+
+                if self._cursor == None:
+                    self._cursor = self._conn.cursor()
+                    self._cursor.connection.autocommit(True)
+            except:
+                traceback.print_exc()
+                exit()
+
+        # Connect to PostgreSQL
+        if self.database_type == "postgresql":
+
+            if self._conn == None:
+                # Get a connection, if a connect cannot be made an exception will be raised here
+                self._conn = psycopg2.connect("host=" + self._host +  " dbname=" + self._dbname + " user=" + self._username + " password=" + self._password + " port=" + str(self._port))
+                self._conn.autocommit = True
+
+            if self._cursor == None:
+                # conn.cursor will return a cursor object, you can use this cursor to perform queries
+                self._cursor = self._conn.cursor()
+                print("Connection to PostgreSQL database established.")
+                logger.info("Connection to PostgreSQL database established.")
+
+            # Get a list of all tables available in the database
+            table_list = self.get_list_of_all_uspto_tables();
+
+
     # Load the insert query into the database
     def load(self, sql, args_array):
 
@@ -395,51 +440,6 @@ class SQLProcess:
             return result  #return a tuple ((),())
         #finally:
             #self.close()
-
-    def connect(self):
-
-        logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
-
-        # Connect to MySQL
-        if self.database_type == "mysql":
-
-            try:
-                if self._conn == None:
-                    self._conn = MySQLdb.connect(
-                        host = self._host,
-                        user = self._username,
-                        passwd = self._password,
-                        db = self._dbname,
-                        port = self._port,
-                        charset = self._charset
-                    )
-                    print("Connection to MySQL database established.")
-                    logger.info("Connection to MySQL database established.")
-
-                if self._cursor == None:
-                    self._cursor = self._conn.cursor()
-                    self._cursor.connection.autocommit(True)
-            except:
-                traceback.print_exc()
-                exit()
-
-        # Connect to PostgreSQL
-        if self.database_type == "postgresql":
-
-            if self._conn == None:
-                # Get a connection, if a connect cannot be made an exception will be raised here
-                self._conn = psycopg2.connect("host=" + self._host +  " dbname=" + self._dbname + " user=" + self._username + " password=" + self._password + " port=" + str(self._port))
-                self._conn.autocommit = True
-
-            if self._cursor == None:
-                # conn.cursor will return a cursor object, you can use this cursor to perform queries
-                self._cursor = self._conn.cursor()
-                print("Connection to PostgreSQL database established.")
-                logger.info("Connection to PostgreSQL database established.")
-
-            # Get a list of all tables available in the database
-            table_list = self.get_list_of_all_uspto_tables();
-
 
     # Get a list of all tables in the uspto database
     def get_list_of_all_uspto_tables(self):

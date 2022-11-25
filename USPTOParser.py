@@ -645,7 +645,7 @@ if __name__=="__main__":
     log_level = 3 # Log levels 1 = error, 2 = warning, 3 = info
     stdout_level = 1 # Stdout levels 1 = verbose, 0 = non-verbose
 
-    # Declare variables
+    # Declare some core startup variables
     start_time = time.time()
     working_directory = os.getcwd()
     allowed_args_array = [
@@ -713,7 +713,7 @@ if __name__=="__main__":
         "/TMP/unzip"
     ]
 
-    # Create an array of variables that can be passed as a group
+    # Create an array of core variables that can be passed as a group
     # and appended to as needed
     args_array = {
         "bulk_data_source" : "uspto", # uspto or reedtech (no longer available)
@@ -817,8 +817,6 @@ if __name__=="__main__":
                     import USPTOBigQuery
                     # Create a database connection
                     database_connection = SQLProcessor.SQLProcess(database_args)
-                    #database_connection.connect()
-                    #args_array['database_connection'] = database_connection
                     # Instansiate class object
                     bq = USPTOBigQuery.PatentBigQuery(args_array)
                     # Collect the CPC classification for all 2005 patents
