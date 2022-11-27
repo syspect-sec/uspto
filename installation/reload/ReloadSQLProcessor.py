@@ -80,8 +80,8 @@ class SQLProcess:
             self.connect()
 
         # Print message to stdout and log about which table is being inserted
-        print("Database bulk load query started for: " + data_type + " from filename: " + csv_file)
-        logger.info("Database bulk load query started for: " + data_type + " from filename: " + csv_file)
+        print("[*] Database bulk load query started for: " + data_type + " from filename: " + csv_file)
+        logger.info("[*] Database bulk load query started for: " + data_type + " from filename: " + csv_file)
 
         # Set flag to determine if the query was successful
         bulk_insert_successful = False
@@ -127,23 +127,6 @@ class SQLProcess:
 
         # Return a successfull message from the database query insert.
         return True
-
-    # Used to retrieve ID by matching fields of values
-    def query(self,sql):
-        #try:
-        if self._conn == None:
-            self.connect()
-            self._cursor.execute(sql)
-            #self._conn.commit()
-            result = self._cursor.fetchone()
-            return int(result[0])
-        else:
-            self._cursor.execute(sql)
-            #self._conn.commit()
-            result = self._cursor.fetchone()
-            return int(result[0])
-        #finally:
-            #self.close()
 
     # Used to remove records from database when a file previously
     # started being processed and did not finish. (when insert duplicate ID error happens)
@@ -469,35 +452,6 @@ class SQLProcess:
                         exc_type, exc_obj, exc_tb = sys.exc_info()
                         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                         logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
-
-
-    # Used to verify whether the applicationID is in the current table APPLICATION
-    def verify(self,sql):
-        if self._conn == None:
-            self.connect()
-            self._cursor.execute(sql)
-            #self._conn.commit()
-            return self._cursor.fetchone()
-        else:
-            self._cursor.execute(sql)
-            #self._conn.commit()
-            return self._cursor.fetchone() #None or not
-
-    def executeParam(self, sql, param):
-        #try:
-        if self._conn == None:
-            self.connect()
-            self._cursor.execute(sql, param)
-            #self._conn.commit()
-            result = self._cursor.fetchall()  #fetchone(), fetchmany(n)
-            return result  #return a tuple ((),())
-        else:
-            self._cursor.execute(sql, param)
-            #self._conn.commit()
-            result = self._cursor.fetchall()  #fetchone(), fetchmany(n)
-            return result  #return a tuple ((),())
-        #finally:
-            #self.close()
 
     def connect(self):
 

@@ -360,10 +360,10 @@ CREATE TABLE IF NOT EXISTS uspto.USCLASS_C (
 );
 
 -- -----------------------------------------------------
--- Table uspto.CPCClASS_C
+-- Table uspto.CPCCLASS_C
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS uspto.CPCClASS_C (
+CREATE TABLE IF NOT EXISTS uspto.CPCCLASS_C (
   Section VARCHAR(15) DEFAULT NULL,
   Class VARCHAR(15) DEFAULT NULL,
   SubClass VARCHAR(15) DEFAULT NULL,
@@ -376,7 +376,6 @@ CREATE TABLE IF NOT EXISTS uspto.CPCClASS_C (
 -- -----------------------------------------------------
 -- Table uspto.USCPC_C
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS uspto.USCPC_C ;
 
 CREATE TABLE IF NOT EXISTS uspto.USCPC_C (
   USClass VARCHAR(15) NOT NULL,
@@ -388,11 +387,11 @@ CREATE TABLE IF NOT EXISTS uspto.USCPC_C (
 -- -----------------------------------------------------
 -- Table `uspto`.`WIPOST3_C`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS uspto.WIPOST3_C ;
 
 CREATE TABLE IF NOT EXISTS uspto.WIPOST3_C (
   Country VARCHAR(100) NOT NULL,
   Code VARCHAR(2) NOT NULL,
+  FileName VARCHAR(45) NOT NULL,
   PRIMARY KEY (Code));
 
 -- -----------------------------------------------------

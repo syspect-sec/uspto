@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License along with thi
 **Github Repository:** https://github.com/rippledj/uspto
 
 ## **Description:**
-This python script is based on a project from University of Illinois (http://abel.lis.illinois.edu/UPDC/Downloads.html). Several parts of the script have been improved to increase the data integrity and performance of the original script.  The script requires Python 3.6 or higher and will not work properly with Python 2.
+This python script is based on a project from University of Illinois (http://abel.lis.illinois.edu/UPDC/Downloads.html). Several parts of the script have been improved to increase the data integrity and performance of the original script.  The script has been tested with Python 3.6.  It should work with Python 3.6 through 3.8, but will not work with any versions of Python 2 or Python 3.9 or higher.
 
 The script is run from the command line and will populate a PostgreSQL or MySQL database with the USPTO patent grant and patent application red-book bulk-data. It is recommended to use PostgreSQL since PG provides better performance over the large data-set.
 

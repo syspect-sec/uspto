@@ -31,14 +31,14 @@ def process_class_content(args_array):
 
     # Check the classification filetype code and process accordingly
     if args_array['uspto_xml_format'] == "USCLS":
-
         # Open file in read mode
         with open(args_array['url_link'], 'r') as read_obj:
             # Iterate over each row in the csv using reader object
             for line in read_obj:
                 #print(line)
                 # Extract the line into array
-                processed_data_array = return_US_class_dict(line)
+                processed_data_array = return_US_class_dict(line.strip())
+                #print(processed_data_array)
                 processed_data_array['FileName'] = args_array['file_name']
                 # Store the array into newly formatted CSV
                 class_id = str(processed_data_array['Class']) + " " + str(processed_data_array['SubClass'])
@@ -46,8 +46,7 @@ def process_class_content(args_array):
 
     # Titles for CPC classifications
     elif args_array['uspto_xml_format'] == "CPCCLS":
-
-        extraction_type = "cpc"
+        #extraction_type = "cpc"
         # Open file in read mode
         with open(args_array['url_link'], 'r') as read_obj:
             # Pass the file object to reader() to get the reader object
@@ -66,7 +65,6 @@ def process_class_content(args_array):
 
     # USPC to CPC classification concordance table
     elif args_array['uspto_xml_format'] == "USCPCCLS":
-
         # Open file in read mode
         with open(args_array['url_link'], 'r') as read_obj:
             # Pass the file object to reader() to get the reader object
@@ -82,6 +80,28 @@ def process_class_content(args_array):
                         class_id = str(processed_data_array[0]['USClass'])
                         USPTOStoreClassificationData.store_classification_data(processed_data_array, args_array, class_id)
                 line_cnt += 1
+
+    # WIPOST3 country classification codes
+    elif args_array['uspto_xml_format'] == "WIPOST3CLS":
+        # Open file in read mode
+        with open(args_array['url_link'], 'r') as read_obj:
+            # Pass the file object to reader() to get the reader object
+            csv_reader = reader(read_obj)
+            # Iterate over each row in the csv using reader object
+            line_cnt = 0
+            for line in csv_reader:
+                if line_cnt != 0:
+                    # Extract the line into array
+                    processed_data_array = extract_WIPOST3_class_dict(line)
+                    # Store the array into newly formatted CSV
+                    processed_data_array['FileName'] = args_array['file_name']
+                    # Store the array into newly formatted CSV
+                    class_id = str(processed_data_array['Code'])
+                    USPTOStoreClassificationData.store_classification_data(processed_data_array, args_array, class_id)
+                line_cnt += 1
+
+    # Close all the open .csv files being written to
+    USPTOCSVHandler.close_csv_files(args_array)
 
     # Set a flag file_processed to ensure that the bulk insert succeeds
     # This should be true, in case the database insertion method is not bulk
@@ -121,6 +141,8 @@ def set_extraction_type(code):
         return "cpcclass"
     elif code == "USCPCCLS":
         return "uscpc"
+    elif code == "WIPOST3CLS":
+        return "wipost3"
 
 # This funtion accepts a line from the class text file and
 # parses it and returns a dictionary to build an sql query string
@@ -148,7 +170,7 @@ def extract_CPC_class_dict(line):
 
     # Build a class dictionary
     class_dictionary = {
-        "table_name" : "uspto.CPCClASS_C",
+        "table_name" : "uspto.CPCCLASS_C",
         "extraction_type" : "cpcclass",
         "Section" : cpc_array[0],
         "Class" : cpc_array[1],
@@ -188,3 +210,16 @@ def extract_USCPC_class_dict(line, file_name):
     #print(class_dict_array)
     # Return the class dictionary
     return class_dict_array
+
+
+# Extract the the data from line of US to CPC concordance
+def extract_WIPOST3_class_dict(line):
+    # Create a dict from single country name and code
+    code_dict = {
+        "table_name" : "uspto.WIPOST3_C",
+        "extraction_type" : "wipost3",
+        "Country" : line[0],
+        "Code" : line[1]
+    }
+    # Return the dict for single country name and code
+    return code_dict

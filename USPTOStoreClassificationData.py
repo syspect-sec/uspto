@@ -40,15 +40,16 @@ def store_classification_data(processed_data_array, args_array, class_id):
         try:
             if type(processed_data_array) == list:
                 for item in processed_data_array:
-                    # Move the table name to temp variable and remove from table
+                    # Move the table name and extraction type to temp variable and remove from table
                     table_name = item['table_name']
                     extraction_type = item['extraction_type']
                     del item['table_name']
                     del item['extraction_type']
                     # Write the dictionary of document data to .csv file
                     args_array['csv_file_array'][extraction_type]['csv_writer'].writerow(item)
+
             else:
-                # Move the table name to temp variable and remove from table
+                # Move the table name and extraction type to temp variables and remove from table
                 table_name = processed_data_array['table_name']
                 extraction_type = processed_data_array['extraction_type']
                 del processed_data_array['table_name']
@@ -67,8 +68,8 @@ def store_classification_data(processed_data_array, args_array, class_id):
 
         # Reset the start time
         start_time = time.time()
-
-        print('- Starting to write {0} to database. Start Time: {1}'.format(file_name, time.strftime("%c")))
+        if args_array['stdout_level'] == 1:
+            print('- Starting to write {0} to database. Start Time: {1}'.format(file_name, time.strftime("%c")))
 
         # Strip the metadata item off the array and process it first
         # Store table name for stdout

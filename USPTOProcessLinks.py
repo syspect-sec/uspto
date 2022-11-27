@@ -187,8 +187,8 @@ def process_link_file(args_array):
         # If the file was processed then
         elif file_processed_success == True:
             # Print to stdout and log
-            print("Finished the data storage process for contents of: " + args_array['url_link'] + " Finished at: " + time.strftime("%c"))
-            logger.info("Finished the data storage process for contents of: " + args_array['url_link'] + " Finished at: " + time.strftime("%c"))
+            print("[*] Finished the data storage process for contents of: " + args_array['url_link'] + " Finished at: " + time.strftime("%c"))
+            logger.info("[*] Finished the data storage process for contents of: " + args_array['url_link'] + " Finished at: " + time.strftime("%c"))
 
 
 # Collect all patent grant and publications data files
@@ -202,7 +202,7 @@ def get_all_links(args_array):
     # PA = Patent Applications
     # PP = PAIR
     # PL = Patent Legal Data
-    # USCLS, CPCCLS, USCPCCLS = Classification Data
+    # USCLS, CPCCLS, USCPCCLS, WIPOST3CLS = Classification Data
     #
     # This function also uses args_array['command_args'] == 'biblio' or 'full'
     # to dermine whether to add the bibliographic or full-text links
@@ -218,43 +218,63 @@ def get_all_links(args_array):
     # Classification url
     url_source_UPC_class = args_array["uspto_classification_data_url"]
 
-    # TODO: Validate the classification parser
-    print('Started grabbing patent classification bulk-data links... ' + time.strftime("%c"))
+    # Create an empty array to hold classification links
     classification_linklist = []
-    classification_linklist.append([args_array['us_classification_text_filename'], "USCLS"])
-    classification_linklist.append([args_array['cpc_classification_text_filename'], "CPCCLS"])
-    classification_linklist.append([args_array['us_cpc_concordance_text_filename'], "USCPCCLS"])
-    print('Finished grabbing patent classification links... ' + time.strftime("%c"))
-    # Log finished building all zip filepaths
-    logger.info('Finished grabbing patent classification bulk-data links: ' + time.strftime("%c"))
+    # If a file does not exist, replace the empty list with populated one
+    if not os.path.isfile(args_array['classification_process_log_file']):
+        # TODO: Validate the classification parser
+        print('Started grabbing patent classification bulk-data links... ' + time.strftime("%c"))
+        classification_linklist.append([args_array['us_classification_text_filename'], "USCLS"])
+        classification_linklist.append([args_array['cpc_classification_text_filename'], "CPCCLS"])
+        classification_linklist.append([args_array['us_cpc_concordance_text_filename'], "USCPCCLS"])
+        classification_linklist.append([args_array['wipost3_text_filename'], "WIPOST3CLS"])
+        print('Finished grabbing patent classification links... ' + time.strftime("%c"))
+        # Log finished building all zip filepaths
+        logger.info('Finished grabbing patent classification bulk-data links: ' + time.strftime("%c"))
 
-    # Get all patent grant data
-    print('Started grabbing patent grant bulk-data links... ' + time.strftime("%c"))
-    grant_linklist = links_parser(args_array, args_array['command_args']['source_type'], "PG", args_array['bulk_data_source'], bulk_data_url)
-    print('Finished grabbing patent grant bibliographic links... ' + time.strftime("%c"))
-    # Log finished building all zip filepaths
-    logger.info('Finished grabbing patent grant bulk-data links: ' + time.strftime("%c"))
+    # Create an empty array to hold grant links
+    grant_linklist = []
+    # If a file does not exist, replace the empty list with populated one
+    if not os.path.isfile(args_array['grant_process_log_file']):
+        # Get all patent grant data
+        print('Started grabbing patent grant bulk-data links... ' + time.strftime("%c"))
+        grant_linklist = links_parser(args_array, args_array['command_args']['source_type'], "PG", args_array['bulk_data_source'], bulk_data_url)
+        print('Finished grabbing patent grant bibliographic links... ' + time.strftime("%c"))
+        # Log finished building all zip filepaths
+        logger.info('Finished grabbing patent grant bulk-data links: ' + time.strftime("%c"))
 
-    # Get all patent application data
-    print('Started grabbing patent application bulk-data links... ' + time.strftime("%c"))
-    application_linklist = links_parser(args_array, args_array['command_args']['source_type'], "PA", args_array['bulk_data_source'], bulk_data_url)
-    print('Finished grabbing patent application bulk-data links... ' + time.strftime("%c"))
-    # Log finished building all zip filepaths
-    logger.info('Finished grabbing patent application bulk-data links: ' + time.strftime("%c"))
+    # Create an empty array to hold application links
+    application_linklist = []
+    # If a file does not exist, replace the empty list with populated one
+    if not os.path.isfile(args_array['application_process_log_file']):
+        # Get all patent application data
+        print('Started grabbing patent application bulk-data links... ' + time.strftime("%c"))
+        application_linklist = links_parser(args_array, args_array['command_args']['source_type'], "PA", args_array['bulk_data_source'], bulk_data_url)
+        print('Finished grabbing patent application bulk-data links... ' + time.strftime("%c"))
+        # Log finished building all zip filepaths
+        logger.info('Finished grabbing patent application bulk-data links: ' + time.strftime("%c"))
 
-    # Get all patent application pair data
-    print('Started grabbing PAIR pair bulk-data links... ' + time.strftime("%c"))
-    pair_linklist = PAIR_links_parser(args_array, args_array['uspto_PAIR_data_url'])
-    print('Finished grabbing PAIR bulk-data links... ' + time.strftime("%c"))
-    # Log finished building all zip filepaths
-    logger.info('Finished grabbing PAIR bulk-data links: ' + time.strftime("%c"))
+    # Create an empty array to hold PAIR links
+    pair_linklist = []
+    # If a file does not exist, replace the empty list with populated one
+    if not os.path.isfile(args_array['pair_process_log_file']):
+        # Get all patent application pair data
+        print('Started grabbing PAIR pair bulk-data links... ' + time.strftime("%c"))
+        pair_linklist = PAIR_links_parser(args_array, args_array['uspto_PAIR_data_url'])
+        print('Finished grabbing PAIR bulk-data links... ' + time.strftime("%c"))
+        # Log finished building all zip filepaths
+        logger.info('Finished grabbing PAIR bulk-data links: ' + time.strftime("%c"))
 
-    # Get all patent legal data
-    print('Started grabbing patent legal bulk-data links... ' + time.strftime("%c"))
-    legal_linklist = legal_links_parser(args_array, args_array['uspto_legal_data_url'])
-    print('Finished grabbing PAIR bulk-data links... ' + time.strftime("%c"))
-    # Log finished building all zip filepaths
-    logger.info('Finished grabbing patent legal bulk-data links: ' + time.strftime("%c"))
+    # Create an empty array to hold legal links
+    legal_linklist = []
+    # If a file does not exist, replace the empty list with populated one
+    if not os.path.isfile(args_array['legal_process_log_file']):
+        # Get all patent legal data
+        print('Started grabbing patent legal bulk-data links... ' + time.strftime("%c"))
+        legal_linklist = legal_links_parser(args_array, args_array['uspto_legal_data_url'])
+        print('Finished grabbing PAIR bulk-data links... ' + time.strftime("%c"))
+        # Log finished building all zip filepaths
+        logger.info('Finished grabbing patent legal bulk-data links: ' + time.strftime("%c"))
 
     # Return the array of arrays of required links
     return {
@@ -314,7 +334,8 @@ def legal_links_parser(args_array, bulk_source_url):
 def links_parser(args_array, source_type, link_type, bulk_data_source, bulk_source_url):
 
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
-    print("Grabbing " + source_type + " " + link_type + " links using " + bulk_data_source + " data source...")
+    if args_array['stdout_level'] == 1:
+        print("Grabbing " + source_type + " " + link_type + " links using " + bulk_data_source + " data source...")
 
     # Define array to hold all links found
     link_array = []
@@ -486,3 +507,30 @@ def is_parsable_legal_link(link):
     link = link.split("/")[-1]
     if link in parsable_links: return True
     else: return False
+
+
+# Print iterations progress
+def printProgressBar (iteration, total, prefix = 'Progress:', suffix = 'Complete', decimals = 1, length = None, fill = '█', printEnd = "\r\n"):
+    """
+    Call in a loop to create terminal progress bar
+    @params:
+        iteration   - Required  : current iteration (Int)
+        total       - Required  : total iterations (Int)
+        prefix      - Optional  : prefix string (Str)
+        suffix      - Optional  : suffix string (Str)
+        decimals    - Optional  : positive number of decimals in percent complete (Int)
+        length      - Optional  : character length of bar (Int)
+        fill        - Optional  : bar fill character (Str)
+        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
+    """
+    if length is None:
+        term_width = os.get_terminal_size()[0]
+        length = term_width - len(prefix) - len(suffix) - 25
+    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
+    filledLength = int(length * iteration // total)
+    bar = fill * filledLength + '-' * (length - filledLength)
+    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
+    # Print New Line on Complete
+    if iteration == total:
+        print()
+        return False

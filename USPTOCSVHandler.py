@@ -248,6 +248,14 @@ def open_csv_files(file_type, file_name, csv_directory, extraction_type=None):
             csv_writer_array['uscpc']['file'] = open(csv_writer_array['uscpc']['csv_file_name'], 'w', encoding='utf-8-sig')
             csv_writer_array['uscpc']['csv_writer'] = csv.DictWriter(csv_writer_array['uscpc']['file'], fieldnames = field_names_array['uscpc'], delimiter = '|', lineterminator = "\n")
             csv_writer_array['uscpc']['csv_writer'].writeheader()
+        elif extraction_type == "wipost3":
+            field_names_array['wipost3'] = ['Country', 'Code', 'FileName']
+            csv_writer_array['wipost3'] = {}
+            csv_writer_array['wipost3']['csv_file_name'] = csv_directory + 'CSV_C/' + csv_file_name
+            csv_writer_array['wipost3']['file'] = open(csv_writer_array['wipost3']['csv_file_name'], 'w', encoding='utf-8-sig')
+            csv_writer_array['wipost3']['csv_writer'] = csv.DictWriter(csv_writer_array['wipost3']['file'], fieldnames = field_names_array['wipost3'], delimiter = '|', lineterminator = "\n")
+            csv_writer_array['wipost3']['csv_writer'].writeheader()
+
 
     # If the legal CSV file will be written
     elif file_type == "legal":

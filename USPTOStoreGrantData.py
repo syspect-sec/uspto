@@ -216,8 +216,9 @@ def store_grant_data(processed_data_array, args_array):
 
         # Reset the start time
         start_time = time.time()
-        
-        print('- Starting to write {0} to database. Start Time: {1}'.format(file_name, time.strftime("%c")))
+        # Print to stdout if verbose set
+        if args_array['stdout_level'] == 1:
+            print('- Starting to write {0} to database. Start Time: {1}'.format(file_name, time.strftime("%c")))
 
         # Strip the processed_grant item off the array and process it first
         processed_grant = processed_data_array['processed_grant']

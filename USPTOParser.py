@@ -140,15 +140,16 @@ def start_thread_processes(links_array, args_array, database_args):
     print("All " + str(number_of_threads) + " initial " + action + " process(es) have been loaded... ")
     logger.info("All " + str(number_of_threads) + " initial " + action + " process(es) have been loaded... ")
 
-    # This .join() function prevents the script from progressing further.
+    # This .join() function prevents the script from progressing further
     for p in processes:
         p.join()
 
 # Verification function for multiprocessing
 def verification_process(link_queue, args_array, database_args, spooling_value):
+
     # Set process start time
     process_start_time = time.time()
-
+    # Fetch global logging object
     logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
 
     # Check the delay value in args_array and set a wait time
@@ -186,6 +187,7 @@ def verification_process(link_queue, args_array, database_args, spooling_value):
 
         # file_name is used to keep track of the downloaded file's
         # base filename (no file extension)
+        # SECURITY_FIX = This needs to verify the file_name is sanitized
         args_array['file_name'] = os.path.basename(args_array['url_link']).replace(".zip", "").replace(".csv", "").replace(".txt", "")
 
         print("-- Verifying " + args_array['uspto_xml_format'] + " file: " + args_array['file_name'] + " Started at: " + time.strftime("%c"))
@@ -263,6 +265,7 @@ def main_process(link_queue, args_array, database_args, spooling_value):
         args_array['document_type'] = item[3]
         # file_name is used to keep track of the downloaded file's
         # base filename (no file extension)
+        # SECURITY_FIX = This needs to verify the file_name is sanitized
         args_array['file_name'] = os.path.basename(args_array['url_link']).replace(".zip", "").replace(".csv", "").replace(".txt", "")
 
         print("Processing " + args_array['uspto_xml_format'] + " file: " + args_array['url_link'] + " Started at: " + time.strftime("%c"))
@@ -643,7 +646,7 @@ if __name__=="__main__":
 
     # Log levels
     log_level = 3 # Log levels 1 = error, 2 = warning, 3 = info
-    stdout_level = 1 # Stdout levels 1 = verbose, 0 = non-verbose
+    stdout_level = 0 # Stdout levels 1 = verbose, 0 = non-verbose
 
     # Declare some core startup variables
     start_time = time.time()
@@ -680,6 +683,7 @@ if __name__=="__main__":
     us_classification_text_filename = working_directory + "/installation/CLS/usclass.txt"
     cpc_classification_text_filename = working_directory + "/installation/CLS/cpcclass.csv"
     us_cpc_concordance_text_filename = working_directory + "/installation/CLS/uspc-cpc.csv"
+    wipost3_text_filename = working_directory + "/installation/CLS/WIPO_ST_3.csv"
     mysql_database_reset_filename = working_directory + "/installation/uspto_create_database_mysql.sql"
     postgresql_database_reset_filename = working_directory + "/installation/uspto_create_database_postgres.sql"
     if sandbox: sandbox_downloads_dirpath = "/Volumes/Thar/uspto/TMP/downloads/"
@@ -742,6 +746,7 @@ if __name__=="__main__":
         "us_classification_text_filename" : us_classification_text_filename,
         "cpc_classification_text_filename" : cpc_classification_text_filename,
         "us_cpc_concordance_text_filename" : us_cpc_concordance_text_filename,
+        "wipost3_text_filename" : wipost3_text_filename,
         "grant_process_log_file" : grant_process_log_file,
         "application_process_log_file" : application_process_log_file,
         "application_pair_process_log_file" : application_pair_process_log_file,

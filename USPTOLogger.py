@@ -225,30 +225,33 @@ def write_link_arrays_to_file(all_links_array, args_array):
     logger.info('Writing all required links to file ' + time.strftime("%c"))
 
     # Write all required links into file
-    grant_process_file = open(args_array['grant_process_log_file'], "w")
-    application_process_file = open(args_array['application_process_log_file'], "w")
-    classification_process_file = open(args_array['classification_process_log_file'], "w")
-    pair_process_file = open(args_array['pair_process_log_file'], "w")
-    legal_process_file = open(args_array['legal_process_log_file'], "w")
 
     # Write all grant and application links to separate files
-    for item in all_links_array["grants"]:
-        grant_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
-    for item in all_links_array["applications"]:
-        application_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
-    for item in all_links_array["classifications"]:
-        classification_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
-    for item in all_links_array["PAIR"]:
-        pair_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
-    for item in all_links_array["legal"]:
-        legal_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
-
-    # Close files
-    grant_process_file.close()
-    application_process_file.close()
-    classification_process_file.close()
-    pair_process_file.close()
-    legal_process_file.close()
+    if not os.path.isfile(args_array['grant_process_log_file']):
+        grant_process_file = open(args_array['grant_process_log_file'], "w")
+        for item in all_links_array["grants"]:
+            grant_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+        grant_process_file.close()
+    if not os.path.isfile(args_array['application_process_log_file']):
+        application_process_file = open(args_array['application_process_log_file'], "w")
+        for item in all_links_array["applications"]:
+            application_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+        application_process_file.close()
+    if not os.path.isfile(args_array['classification_process_log_file']):
+        classification_process_file = open(args_array['classification_process_log_file'], "w")
+        for item in all_links_array["classifications"]:
+            classification_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+        classification_process_file.close()
+    if not os.path.isfile(args_array['pair_process_log_file']):
+        pair_process_file = open(args_array['pair_process_log_file'], "w")
+        for item in all_links_array["PAIR"]:
+            pair_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+        pair_process_file.close()
+    if not os.path.isfile(args_array['legal_process_log_file']):
+        legal_process_file = open(args_array['legal_process_log_file'], "w")
+        for item in all_links_array["legal"]:
+            legal_process_file.write(item[0] + "," + item[1] + ",Unprocessed\n")
+        legal_process_file.close()
 
     # Write finished message to log
     logger.info('Finished writing all patent data links to files. Finshed Time: ' + time.strftime("%c"))
@@ -356,28 +359,32 @@ def collect_all_required_links_from_file(args_array):
         # Read all required grant links into array
         with open(args_array['grant_process_log_file'], "r") as grant_process_file:
             for line in grant_process_file:
-                # If doing verification, collect processed files that are not verified already
-                if "verify" in args_array['command_args']:
-                    if line.strip() != "" and line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
-                        grant_temp_array.append(line.split(","))
-                # If parsing bulk-data, collect all unprocessed files
-                else:
-                    if line.strip() != "" and line.split(",")[2].replace("\n", "") != "Processed":
-                        grant_temp_array.append(line.split(","))
+                # Ignore empty lines
+                if line.strip() != "":
+                    # If doing verification, collect processed files that are not verified already
+                    if "verify" in args_array['command_args']:
+                        if line.strip() != "" and line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
+                            grant_temp_array.append(line.split(","))
+                    # If parsing bulk-data, collect all unprocessed files
+                    else:
+                        if line.strip() != "" and line.split(",")[2].replace("\n", "") != "Processed":
+                            grant_temp_array.append(line.split(","))
 
         print('Reading all required application links ' + time.strftime("%c"))
         logger.info('Reading all required application links ' + time.strftime("%c"))
         # Read all required applicaton links into array
         with open(args_array['application_process_log_file'], "r") as application_process_file:
             for line in application_process_file:
-                # If doing verification, collect processed files that are not verified already
-                if "verify" in args_array['command_args']:
-                    if line.split(",")[2].replace("\n", "") == "Processed"  and len(line.split(",")) == 3:
-                        application_temp_array.append(line.split(","))
-                # If parsing bulk-data, collect all unprocessed files
-                else:
-                    if line.split(",")[2].replace("\n", "") != "Processed":
-                        application_temp_array.append(line.split(","))
+                # Ignore empty lines
+                if line.strip() != "":
+                    # If doing verification, collect processed files that are not verified already
+                    if "verify" in args_array['command_args']:
+                        if line.split(",")[2].replace("\n", "") == "Processed"  and len(line.split(",")) == 3:
+                            application_temp_array.append(line.split(","))
+                    # If parsing bulk-data, collect all unprocessed files
+                    else:
+                        if line.split(",")[2].replace("\n", "") != "Processed":
+                            application_temp_array.append(line.split(","))
 
         print('Reading all required classification links ' + time.strftime("%c"))
         logger.info('Reading all required classification links ' + time.strftime("%c"))
@@ -398,28 +405,32 @@ def collect_all_required_links_from_file(args_array):
         # Read all required PAIR links into array
         with open(args_array['pair_process_log_file'], "r") as pair_process_file:
             for line in pair_process_file:
-                # If doing verification, collect processed files
-                if "verify" in args_array['command_args']:
-                    if line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
-                        pair_temp_array.append(line.split(","))
-                # If parsing bulk-data, collect all unprocessed files
-                else:
-                    if line.split(",")[2].replace("\n", "") != "Processed":
-                        pair_temp_array.append(line.split(","))
+                # Ignore empty lines
+                if line.strip() != "":
+                    # If doing verification, collect processed files
+                    if "verify" in args_array['command_args']:
+                        if line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
+                            pair_temp_array.append(line.split(","))
+                    # If parsing bulk-data, collect all unprocessed files
+                    else:
+                        if line.split(",")[2].replace("\n", "") != "Processed":
+                            pair_temp_array.append(line.split(","))
 
         print('Reading all required legal links ' + time.strftime("%c"))
         logger.info('Reading all required legal links ' + time.strftime("%c"))
         # Read all required legal links into array
         with open(args_array['legal_process_log_file'], "r") as legal_process_file:
             for line in legal_process_file:
-                # If doing verification, collect processed files
-                if "verify" in args_array['command_args']:
-                    if line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
-                        legal_temp_array.append(line.split(","))
-                # If parsing bulk-data, collect all unprocessed files
-                else:
-                    if line.split(",")[2].replace("\n", "") != "Processed":
-                        legal_temp_array.append(line.split(","))
+                # Ignore empty lines
+                if line.strip() != "":
+                    # If doing verification, collect processed files
+                    if "verify" in args_array['command_args']:
+                        if line.split(",")[2].replace("\n", "") == "Processed" and len(line.split(",")) == 3:
+                            legal_temp_array.append(line.split(","))
+                    # If parsing bulk-data, collect all unprocessed files
+                    else:
+                        if line.split(",")[2].replace("\n", "") != "Processed":
+                            legal_temp_array.append(line.split(","))
 
         print('Finished reading all required links to download and parse ' + time.strftime("%c"))
         logger.info('Finished reading all required links to download and parse ' + time.strftime("%c"))
@@ -449,8 +460,12 @@ def build_or_update_link_files(args_array):
 
     # Check if link log files exists already
     # If not exists, then find and write all links to file
-    #TODO: what if only one log file is missing??  How could that happen??
-    if not os.path.isfile(args_array['grant_process_log_file']) or not os.path.isfile(args_array['application_process_log_file']) or not os.path.isfile(args_array['classification_process_log_file']) or not os.path.isfile(args_array['legal_process_log_file']):
+    #TODO: what if only one log file is missing because I deleted it
+    if (not os.path.isfile(args_array['grant_process_log_file'])
+        or not os.path.isfile(args_array['application_process_log_file'])
+        or not os.path.isfile(args_array['classification_process_log_file'])
+        or not os.path.isfile(args_array['legal_process_log_file'])
+        or not os.path.isfile(args_array['pair_process_log_file'])):
 
         # If verification is command then files need to be there already.
         # If they are not, exit execution
@@ -465,7 +480,7 @@ def build_or_update_link_files(args_array):
         try:
             # Get List of all links
             all_links_array = USPTOProcessLinks.get_all_links(args_array)
-            if args_array['stdout_level'] == 1: print(all_links_array)
+            if args_array['stdout_level'] == 3: print(all_links_array)
             write_link_arrays_to_file(all_links_array, args_array)
         except Exception as e:
             print("Failed to get all links from USPTO bulk data site " + time.strftime("%c"))

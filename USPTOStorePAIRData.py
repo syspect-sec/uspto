@@ -60,8 +60,8 @@ def store_PAIR_data(processed_data_array, args_array):
 
         # Reset the start time
         start_time = time.time()
-
-        print('- Starting to write {0} to database. Start Time: {1}'.format(file_name, time.strftime("%c")))
+        if args_array['stdout_level'] == 1:
+            print('- Starting to write {0} to database. Start Time: {1}'.format(file_name, time.strftime("%c")))
 
         # Strip the metadata item off the array and process it first
         # Store table name for stdout

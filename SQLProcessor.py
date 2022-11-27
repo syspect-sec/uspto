@@ -6,8 +6,6 @@
 # Website: www.ripplesoftware.ca
 # Github: www.github.com/rippledj/uspto
 
-import MySQLdb
-import psycopg2
 import traceback
 import time
 import sys
@@ -17,6 +15,10 @@ from pprint import pprint
 # Import USPTO Parser Functions
 import USPTOLogger
 import USPTOSanitizer
+
+# Import the required datbase packages
+import MySQLdb
+import psycopg2
 
 class SQLProcess:
 
@@ -51,7 +53,8 @@ class SQLProcess:
                         passwd = self._password,
                         db = self._dbname,
                         port = self._port,
-                        charset = self._charset
+                        charset = self._charset,
+                        local_infile = 1
                     )
                     print("Connection to MySQL database established.")
                     logger.info("Connection to MySQL database established.")
@@ -127,8 +130,8 @@ class SQLProcess:
 
         if "table_name" in csv_file_obj:
             # Print message to stdout and log about which table is being inserted
-            print("Database bulk load query started for: " + data_type + " from filename: " + csv_file_obj['csv_file_name'])
-            logger.info("Database bulk load query started for: " + data_type + " from filename: " + csv_file_obj['csv_file_name'])
+            print("[*] Database bulk load query started for: " + data_type + " from filename: " + csv_file_obj['csv_file_name'])
+            logger.info("[*] Database bulk load query started for: " + data_type + " from filename: " + csv_file_obj['csv_file_name'])
 
             # If postgresql build query
             if self.database_type == "postgresql":
@@ -201,8 +204,8 @@ class SQLProcess:
 
                         # Increment the failed counter
                         bulk_insert_failed_attempts += 1
-                        print("Database bulk load query attempt " + str(bulk_insert_failed_attempts) + " failed... " + csv_file_obj['csv_file_name'] + " into table: " + csv_file_obj['table_name'])
-                        logger.error("Database bulk load query attempt " + str(bulk_insert_failed_attempts) + " failed..." + csv_file_obj['csv_file_name'] + " into table: " + csv_file_obj['table_name'])
+                        print("[X] Database bulk load query attempt " + str(bulk_insert_failed_attempts) + " failed... " + csv_file_obj['csv_file_name'] + " into table: " + csv_file_obj['table_name'])
+                        logger.error("[X] Database bulk load query attempt " + str(bulk_insert_failed_attempts) + " failed..." + csv_file_obj['csv_file_name'] + " into table: " + csv_file_obj['table_name'])
                         print("Query string: " + bulk_insert_sql)
                         logger.error("Query string: " + bulk_insert_sql)
                         traceback.print_exc()
@@ -216,22 +219,6 @@ class SQLProcess:
         # Return a successfull message from the database query insert.
         return True
 
-    # Used to retrieve ID by matching fields of values
-    def query(self,sql):
-        #try:
-        if self._conn == None:
-            self.connect()
-            self._cursor.execute(sql)
-            #self._conn.commit()
-            result = self._cursor.fetchone()
-            return int(result[0])
-        else:
-            self._cursor.execute(sql)
-            #self._conn.commit()
-            result = self._cursor.fetchone()
-            return int(result[0])
-        #finally:
-            #self.close()
 
     # Used to remove records from database when a file previously
     # started being processed and did not finish. (when insert duplicate ID error happens)
@@ -252,11 +239,11 @@ class SQLProcess:
         table_name = "STARTED_FILES"
 
         # Build query to check the STARTED_FILES table to see if this file has been started already.
-        check_file_started_sql = "SELECT COUNT(*) as count FROM " + self._dbname + "." + table_name + " WHERE FileName = '" + file_name + "' LIMIT 1"
-
+        check_file_started_sql = "SELECT COUNT(*) as count FROM " + self._dbname + "." + table_name + " WHERE FileName = %s LIMIT 1"
+        params = (file_name,)
         # Execute the query to check if file has been stared before
         try:
-            self._cursor.execute(check_file_started_sql)
+            self._cursor.execute(check_file_started_sql, params)
             # Check the count is true or false.
             check_file_started = self._cursor.fetchone()
 
@@ -268,8 +255,8 @@ class SQLProcess:
             if self.database_type == "postgresql":
                 self._conn.rollback()
 
-            print("Database check if " + call_type + " file started failed... " + file_name + " from table: " + self._dbname + ".STARTED_FILES")
-            logger.error("Database check if " + call_type + " file started failed... " + file_name + " from table: " + self._dbname + ".STARTED_FILES")
+            print("[X] Database check if " + call_type + " file started failed... " + file_name + " from table: " + self._dbname + ".STARTED_FILES")
+            logger.error("[X] Database check if " + call_type + " file started failed... " + file_name + " from table: " + self._dbname + ".STARTED_FILES")
             traceback.print_exc()
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -277,26 +264,41 @@ class SQLProcess:
 
         # If no previous attempts to process the file have been found
         if check_file_started[0] == 0:
-            # Insert the file_name into the table keeping track of STARTED_FILES
-            if self.database_type == "postgresql":
-                insert_file_started_sql = "INSERT INTO " + self._dbname + "." + table_name + "  (FileName) VALUES($$" + file_name + "$$)"
-            elif self.database_type == "mysql":
-                insert_file_started_sql = "INSERT INTO " + self._dbname + "." + table_name + " (FileName) VALUES('" + file_name + "')"
 
-            print("No previous attempt found to process the " + call_type + " file: " + file_name + " in table: " + self._dbname + ".STARTED_FILES")
-            logger.info("No previous attempt found to process the " + call_type + " file:" + file_name + " in table: " + self._dbname + ".STARTED_FILES")
 
-            # Insert the record into the database that the file has been started.
+            # Insert the record into the database
+            # that the file has been started
             try:
-                self._cursor.execute(insert_file_started_sql)
 
+                # If using postgresql database
+                if self.database_type == "postgresql":
+                    # Create the query to insert file into STARTED_FILES
+                    insert_file_started_sql = "INSERT INTO " + self._dbname + "." + table_name + "  (FileName) VALUES(%s)"
+                    # SECURITY_FIX = paramaterize the query
+                    # Paramaterize the query
+                    params = (file_name,)
+                    # Insert the file_name into the table keeping track of STARTED_FILES
+                    self._cursor.execute(insert_file_started_sql, params)
+
+                # If using mysql database
+                elif self.database_type == "mysql":
+                    # Create the query to insert file into STARTED_FILES
+                    insert_file_started_sql = "INSERT INTO " + self._dbname + "." + table_name + " (FileName) VALUES(%s)"
+                    # Paramaterize the query
+                    params = (file_name,)
+                    # Insert the file_name into the table keeping track of STARTED_FILES
+                    self._cursor.execute(insert_file_started_sql, params)
+                print("- No previous attempt found to process the " + call_type + " file: " + file_name + " in table: " + self._dbname + ".STARTED_FILES")
+                logger.info("- No previous attempt found to process the " + call_type + " file:" + file_name + " in table: " + self._dbname + ".STARTED_FILES")
+
+            # If there was an exception adding the filename to STARTED_FILES
             except Exception as e:
                 # If there is an error and using databse postgresql
                 # Then rollback the commit??
                 if self.database_type == "postgresql":
                     self._conn.rollback()
-                print("Database check for previous attempt to process " + call_type + " file failed... " + file_name + " into table: " + self._dbname + ".STARTED_FILES")
-                logger.error("Database check for previous attempt to process " + call_type + " file failed... " + file_name + " into table: " + self._dbname + ".STARTED_FILES")
+                print("[X] Database check for previous attempt to process " + call_type + " file failed... " + file_name + " into table: " + self._dbname + ".STARTED_FILES")
+                logger.error("[X] Database check for previous attempt to process " + call_type + " file failed... " + file_name + " into table: " + self._dbname + ".STARTED_FILES")
                 traceback.print_exc()
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -307,8 +309,8 @@ class SQLProcess:
         # delete all the records of that file in all tables.
         elif check_file_started[0] != 0:
 
-            print("Found previous attempt to process the " + call_type + " file: " + file_name + " in table: " + self._dbname + ".STARTED_FILES")
-            logger.info("Found previous attempt to process the " + call_type + " file:" + file_name + " in table: " + self._dbname + ".STARTED_FILES")
+            print("- Found previous attempt to process the " + call_type + " file: " + file_name + " in table: " + self._dbname + ".STARTED_FILES")
+            logger.info("- Found previous attempt to process the " + call_type + " file:" + file_name + " in table: " + self._dbname + ".STARTED_FILES")
 
             # Build array to hold all table names to have
             # records deleted for patent grants
@@ -373,14 +375,16 @@ class SQLProcess:
                     "PARTY_L"
                 ]
 
-            print("Starting to remove previous attempt to process the " + call_type + " file: " + file_name + " in table: " + self._dbname + ".STARTED_FILES")
-            logger.info("Starting to remove previous attempt to process the " + call_type + " file:" + file_name + " in table: " + self._dbname + ".STARTED_FILES")
+            print("- Starting to remove previous attempt to process the " + call_type + " file: " + file_name + " in table: " + self._dbname + ".STARTED_FILES")
+            logger.info("- Starting to remove previous attempt to process the " + call_type + " file:" + file_name + " in table: " + self._dbname + ".STARTED_FILES")
 
             # Loop through each table_name defined by call_type
             for table_name in table_name_array:
 
                 # Build the SQL query here
-                remove_previous_record_sql = "DELETE FROM " + self._dbname + "." + table_name + " WHERE FileName = '" + file_name + "'"
+                remove_previous_record_sql = "DELETE FROM " + self._dbname + "." + table_name + " WHERE FileName = %s"
+                # Create query params
+                params = (file_name,)
 
                 # Set flag to determine if the query was successful
                 records_deleted = False
@@ -390,12 +394,12 @@ class SQLProcess:
                 while records_deleted == False and records_deleted_failed_attempts < 10:
                     # Execute the query pass into funtion
                     try:
-                        self._cursor.execute(remove_previous_record_sql)
+                        self._cursor.execute(remove_previous_record_sql, params)
                         records_deleted = True
                         #TODO: check the numer of records deleted from each table and log/print
                         # Print and log finished check for previous attempt to process file
-                        print("Finished database delete of previous attempt to process the " + call_type + " file: " + file_name + " table: " + table_name)
-                        logger.info("Finished database delete of previous attempt to process the " + call_type + " file:" + file_name + " table: " + table_name)
+                        print("- Finished database delete of previous attempt to process the " + call_type + " file: " + file_name + " table: " + table_name)
+                        logger.info("- Finished database delete of previous attempt to process the " + call_type + " file:" + file_name + " table: " + table_name)
 
                     except Exception as e:
 
@@ -403,8 +407,8 @@ class SQLProcess:
                         # Then rollback the commit??
                         if self.database_type == "postgresql":
                             self._conn.rollback()
-                        print("Database delete attempt " + str(records_deleted_failed_attempts) + " failed... " + file_name + " from table: " + table_name)
-                        logger.error("Database delete attempt " + str(records_deleted_failed_attempts) + " failed..." + file_name + " from table: " + table_name)
+                        print("[X] Database delete attempt " + str(records_deleted_failed_attempts) + " failed... " + file_name + " from table: " + table_name)
+                        logger.error("[X] Database delete attempt " + str(records_deleted_failed_attempts) + " failed..." + file_name + " from table: " + table_name)
                         # Increment the failed attempts
                         records_deleted_failed_attempts += 1
                         traceback.print_exc()
@@ -412,34 +416,6 @@ class SQLProcess:
                         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                         logger.error("Exception: " + str(exc_type) + " in Filename: " + str(fname) + " on Line: " + str(exc_tb.tb_lineno) + " Traceback: " + traceback.format_exc())
 
-
-    # Used to verify whether the applicationID is in the current table APPLICATION
-    def verify(self,sql):
-        if self._conn == None:
-            self.connect()
-            self._cursor.execute(sql)
-            #self._conn.commit()
-            return self._cursor.fetchone()
-        else:
-            self._cursor.execute(sql)
-            #self._conn.commit()
-            return self._cursor.fetchone() #None or not
-
-    def executeParam(self, sql, param):
-        #try:
-        if self._conn == None:
-            self.connect()
-            self._cursor.execute(sql, param)
-            #self._conn.commit()
-            result = self._cursor.fetchall()  #fetchone(), fetchmany(n)
-            return result  #return a tuple ((),())
-        else:
-            self._cursor.execute(sql, param)
-            #self._conn.commit()
-            result = self._cursor.fetchall()  #fetchone(), fetchmany(n)
-            return result  #return a tuple ((),())
-        #finally:
-            #self.close()
 
     # Get a list of all tables in the uspto database
     def get_list_of_all_uspto_tables(self):
@@ -466,7 +442,7 @@ class SQLProcess:
                 table_list = self._cursor.fetchall()
                 # Print list of tables found
                 for item in table_list:
-                    print("--  Table Found: " + item[1])
+                    print("-- Table Found: " + item[1])
             # MySQL
             elif self.database_type == "mysql":
                 # Build query to get list of all tables in uspto database
@@ -476,7 +452,7 @@ class SQLProcess:
                 table_list = self._cursor.fetchall()
                 # Print list of tables found
                 for item in table_list:
-                    print("--  Table Found: " + item[1])
+                    print("-- Table Found: " + item[1])
 
         except Exception as e:
             # If there is an error and using databse postgresql
@@ -485,8 +461,8 @@ class SQLProcess:
                 self._conn.rollback()
 
             # Print and log general fail comment
-            print("Database check for table list failed...")
-            logger.error("Database check for table list failed")
+            print("[X] Database check for table list failed...")
+            logger.error("[X] Database check for table list failed")
             traceback.print_exc()
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -503,8 +479,8 @@ class SQLProcess:
             self._conn.close()
             self._conn = None
 
-        print('Connection to database closed successfully.')
-        logger.info('Connection to database closed successfully.')
+        print('[*] Connection to database closed successfully.')
+        logger.info('[*] Connection to database closed successfully.')
 
     # Searches a csv file and extracts any items with the ID in traceback string
     def remove_item_from_csv(self, traceback_array, csv_file_name, violation_type):
@@ -524,8 +500,8 @@ class SQLProcess:
                 # Get the error line number
                 error_line = line.split("line")[1].strip()
                 if not error_line.isnumeric(): error_line = error_line.split(":")[0]
-                print("Error line number in file " + csv_file_name + " identified as line number " + error_line)
-                logger.warning("Error line number in file " + csv_file_name + " identified as line number " + error_line)
+                print("- Error line number in file " + csv_file_name + " identified as line number " + error_line)
+                logger.warning("- Error line number in file " + csv_file_name + " identified as line number " + error_line)
 
                 # Open original file in read only mode and dummy file in write mode
                 with open(csv_file_name, 'r') as read_file:
@@ -539,8 +515,8 @@ class SQLProcess:
                     for line in csv_file_array:
                         write_file.write(line)
 
-                print("Error line " + error_line + " has been found and removed from: " + csv_file_name)
-                logger.warning("Error line " + error_line + " has been found and removed from: " + csv_file_name)
+                print("- Error line " + error_line + " has been found and removed from: " + csv_file_name)
+                logger.warning("- Error line " + error_line + " has been found and removed from: " + csv_file_name)
 
     # This function will open the csv file and then
     # load it into the database item by item
@@ -605,7 +581,7 @@ class SQLProcess:
     def build_sql_insert_query(self, insert_data_array, args_array):
 
         logger = USPTOLogger.logging.getLogger("USPTO_Database_Construction")
-
+        # Get the XML format
         uspto_xml_format = args_array['uspto_xml_format']
 
         # Set a length counter used to find when the last item is appended to query string
@@ -868,10 +844,14 @@ class SQLProcess:
                 check_exists = """
                 SELECT count(*) as count
                 FROM """ + self._dbname + """.PARSER_VERIFICATION
-                WHERE FileName = '""" + file_name + """'
-                AND TableName = '""" + table_name + """';"""
+                WHERE FileName = %s
+                AND TableName = %s;"""
+                # Create params for query
+                params = (file_name, table_name)
+                # Print query if verbose
                 if args_array['stdout_level'] == 1: print(check_exists)
-                self._cursor.execute(check_exists)
+                # Execute query and fetch result
+                self._cursor.execute(check_exists, params)
                 result = self._cursor.fetchone()
 
                 # Insert or update depending on result of count
@@ -880,21 +860,27 @@ class SQLProcess:
                     tag_count_sql = """
                     INSERT INTO """ + self._dbname + """.PARSER_VERIFICATION
                     (FileName, TableName, Count, Expected)
-                    VALUES ('""" + file_name + """', '""" + table_name + """', 0, """ + str(count) + """);"""
-
+                    VALUES (%s, %s, 0, %s);"""
+                    # Create params for query
+                    params = (file_name, table_name, str(count))
+                    # Print query if verbose
                     if args_array['stdout_level'] == 1: print(tag_count_sql)
-                    self._cursor.execute(tag_count_sql)
+                    # Execute insert query
+                    self._cursor.execute(tag_count_sql, params)
 
                 else:
 
                     tag_count_sql = """
                     UPDATE """ + self._dbname + """.PARSER_VERIFICATION
-                    SET expected = """ + str(count) +  """
-                    WHERE FileName = '""" + file_name + """'
-                    AND TableName = '""" + table_name + """';"""
-
+                    SET expected = %s
+                    WHERE FileName = %s
+                    AND TableName = %s;"""
+                    # Create params for query
+                    params = (str(count), file_name, table_name)
+                    # Print query if verbose
                     if args_array['stdout_level'] == 1: print(tag_count_sql)
-                    self._cursor.execute(tag_count_sql)
+                    # Execute update query
+                    self._cursor.execute(tag_count_sql, params)
 
             except Exception as e:
                 # If there is an error and using databse postgresql
@@ -938,7 +924,7 @@ class SQLProcess:
                 (GrantID, Position, Section, Class, SubClass, MainGroup, SubGroup, Malformed, FileName)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
-                values = (
+                params = (
                     grant_id,
                     position,
                     cpc_code['Section'],
@@ -950,7 +936,7 @@ class SQLProcess:
                     "big_query"
                 )
                 if args_array['stdout_level'] == 1: print(insert_CPC_sql)
-                self._cursor.execute(insert_CPC_sql, values)
+                self._cursor.execute(insert_CPC_sql, params)
                 print('-- Finished inserting ' + publication_number + ' into CPCCLASS_G table. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
                 logger.info('-- Finished inserting ' + publication_number + ' into CPCCLASS_G table. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
 
@@ -994,7 +980,7 @@ class SQLProcess:
                 (GrantID, Position, Section, Class, SubClass, MainGroup, SubGroup, Malformed, FileName)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
-                values = (
+                params = (
                     grant_id,
                     position,
                     cpc_code['Section'],
@@ -1006,7 +992,7 @@ class SQLProcess:
                     "big_query"
                 )
                 if args_array['stdout_level'] == 1: print(insert_IPC_sql)
-                self._cursor.execute(insert_IPC_sql, values)
+                self._cursor.execute(insert_IPC_sql, params)
                 print('-- Finished inserting ' + publication_number + ' into IPCCLASS_G table. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
                 logger.info('-- Finished inserting ' + publication_number + ' into IPCCLASS_G table. Time consuming:{0} Time Finished: {1}'.format(time.time() - start_time, time.strftime("%c")))
 

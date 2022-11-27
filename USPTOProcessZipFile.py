@@ -58,22 +58,22 @@ def extract_xml_file_from_zip(args_array):
 
     # The zip file has failed using python's ZipFile
     except:
-        print('[Zip file ' + args_array['temp_zip_file_name'] + ' failed to unzip with Python module...]')
-        logger.warning('Zip file ' + args_array['temp_zip_file_name'] + ' failed to unzip with Python module')
+        print('[X] Zip file ' + args_array['temp_zip_file_name'] + ' failed to unzip with Python module...')
+        logger.warning('[X] Zip file ' + args_array['temp_zip_file_name'] + ' failed to unzip with Python module...')
         traceback.print_exc()
 
         # Attempt to download the file again
         try:
             # Print message to stdout
-            print('[Removing corrupted zip file ' + args_array['temp_zip_file_name'] + ']')
+            print('[Removing corrupted zip file ' + args_array['temp_zip_file_name'])
             logger.warning('Removing corrupted file ' + args_array['temp_zip_file_name'])
             # Remove the corrupted zip file
             delete_zip_file(args_array['temp_zip_file_name'])
             # Return None to signal failed status
             return None
         except:
-            print('[Failed to remove zip file ' + args_array['temp_zip_file_name'] + ' ]')
-            logger.warning('Failed to remove zip file ' + args_array['temp_zip_file_name'])
+            print('[X] Failed to remove zip file ' + args_array['temp_zip_file_name'])
+            logger.warning('[X] Failed to remove zip file ' + args_array['temp_zip_file_name'])
             traceback.print_exc()
             # Return False to signify that zip file could not be deleted
             return False
@@ -111,22 +111,22 @@ def extract_csv_file_from_zip(args_array):
 
     # The zip file has failed using python's ZipFile
     except:
-        print('[Zip file ' + args_array['temp_zip_file_name'] + ' failed to unzip with Python module...]')
-        logger.warning('Zip file ' + args_array['temp_zip_file_name'] + ' failed to unzip with Python module')
+        print('[zip file failed to unzip with Python module: ' + args_array['temp_zip_file_name'])
+        logger.warning('[zip file failed to unzip with Python module: ' + args_array['temp_zip_file_name'])
         traceback.print_exc()
 
         # Attempt to download the file again
         try:
             # Print message to stdout
-            print('[Removing corrupted zip file ' + args_array['temp_zip_file_name'] + ']')
-            logger.warning('Removing corrupted file ' + args_array['temp_zip_file_name'])
+            print('[Removing corrupted zip file: ' + args_array['temp_zip_file_name'])
+            logger.warning('Removing corrupted file: ' + args_array['temp_zip_file_name'])
             # Remove the corrupted zip file
             delete_zip_file(args_array['temp_zip_file_name'])
             # Return None to signal failed status
             return None
         except:
-            print('[Failed to remove zip file ' + args_array['temp_zip_file_name'] + ' ]')
-            logger.warning('Failed to remove zip file ' + args_array['temp_zip_file_name'])
+            print('[Failed to remove zip file: ' + args_array['temp_zip_file_name'])
+            logger.warning('Failed to remove zip file: ' + args_array['temp_zip_file_name'])
             traceback.print_exc()
             # Return False to signify that zip file could not be deleted
             return False
